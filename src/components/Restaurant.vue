@@ -1,85 +1,182 @@
 <template>
-  <div id="restaurantpage">
-    <h1>Restaurant</h1>
-    <div><option>Restaurant</option><div>Mission Chinese Food</div></div><div><option>Address</option><div>171 E Broadway, New York, NY 10002</div></div><div><li><div>Monday : 5:30 pm - 11:00 pm</div></li><li><div>Tuesday : 5:30 pm - 12:00 am</div></li><li><div>Wednesday : 5:30 pm - 12:00 am</div></li><li><div>Thursday : 5:30 pm - 12:00 am</div></li><li><div>Friday : 5:30 pm - 12:00 am</div></li><li><div>Saturday : 12:00 pm - 4:00 pm, 5:30 pm - 12:00 am</div></li><li><div>Sunday : 12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm</div></li></div><div><option>Cuisine</option><div>Asian</div></div><div><option>Tel</option><div>546 678 234</div></div><div><option>Itinéraire</option><div>itinéraire</div></div><div><option>Price</option><div>45 $</div></div><div><option>Rate</option><div>4.5/5</div></div>
-    </div>
+<body>
+	<div id="restaurantpage">
+		<div class="ligne">
+   <option>Restaurant</option>
+   <div>Mission Chinese Food</div>
+</div>
+<div class="listimgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"></div>
+<div class="ligne">
+   <option>Address</option>
+   <div>171 E Broadway, New York, NY 10002</div>
+</div>
+<div class="ligne">
+   <option>Cuisine</option>
+   <div>Asian</div>
+</div>
+<div class="ligne">
+   <option>Tel</option>
+   <div>546 678 234</div>
+</div>
+<div class="ligne">
+   <option>Price</option>
+   <div>10 $ - 45 $</div>
+</div>
+<div class="ligne">
+   <option>Rate</option>
+   <div>4/5</div>
+</div>
+<canvas id="canvas" height="50" width="400"></canvas>
+<div class="operating_hours">
+   <option>Operating Hours</option>
+   <li class="hours">
+      <div class="day">Monday</div>
+      <div class="hour">5:30 pm - 11:00 pm</div>
+   </li>
+   <li class="hours">
+      <div class="day">Tuesday</div>
+      <div class="hour">5:30 pm - 12:00 am</div>
+   </li>
+   <li class="hours">
+      <div class="day">Wednesday</div>
+      <div class="hour">5:30 pm - 12:00 am</div>
+   </li>
+   <li class="hours">
+      <div class="day">Thursday</div>
+      <div class="hour">5:30 pm - 12:00 am</div>
+   </li>
+   <li class="hours">
+      <div class="day">Friday</div>
+      <div class="hour">5:30 pm - 12:00 am</div>
+   </li>
+   <li class="hours">
+      <div class="day">Saturday</div>
+      <div class="hour">12:00 pm - 4:00 pm, 5:30 pm - 12:00 am</div>
+   </li>
+   <li class="hours">
+      <div class="day">Sunday</div>
+      <div class="hour">12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm</div>
+   </li>
+</div>
+</div>
+ <div id="map_canvas"></div>
+</body>
+
 </template>
 
 <style>
 
-pageres{
-    display:flex;
-    align-content:center;
-    justify-items:center;
-    flex-direction:column;
-   
-    margin-right:10%;
+/*page restaurant*/
+
+
+html, body {
+  height: 100%;
+
+  background-color: rgb(255, 218, 182);
+  font-family: 'Montserrat';
+
 }
 
 
-
-
-  
-   /* Dropdown button on hover & focus */
-   #restaurantpage li:hover,  #restaurantpage li:focus, #restaurantpage li:hover,  #restaurantpage li {
-    background-color:  rgb(13, 80, 80);
-    color:white;
-
-  }
-
- .onlyone {
-    background-color:  rgb(13, 80, 80) !important;
-    color:white !important;
-
-  }
-
- 
-
   #restaurantpage  {
-  
-    display:flexbox;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none; 
     list-style-type: none;
-    color:rgb(29, 24, 24);
-  
-    padding: 0;
-    margin: 0;
+    margin:5%;
+    width:80%;
+    
+  }
+
+  .ligne div {
+    display:flex;
+    padding:20px;
+ 
+  }
+  .ligne {
+    display:flex;
+    padding:20px;
+    text-decoration: none; 
     width:100%;
-    overflow: auto;
-   
-    position: absolute;
-    
-    box-shadow: 0% 5% 10% 0% rgba(0,0,0,0.2);
-    z-index: 1;
-
+  
   }
 
-  #restaurantpage div {
-   
-    position: relative;
-    padding: 2%; /* Add some padding */
-    text-decoration: none; /* Remove default text underline */
-    
-  }
-  #restaurantpage div div {
-    flex:5;
-    position: relative;
+ .ligne div {
+    flex:2;
     background-color: #f1f1f1;
+    align-items: center;
+    border-bottom-right-radius: 10px;
  
   }
-
+  .ligne option {
+    flex:1;
+    background-color: #f1f1f1;
+    align-items: center;
+    border-top-left-radius: 10px;
+ 
+  }
   #restaurantpage div option {
-    flex:5;
     color:white;
-    position: relative;
+    padding:10px;
     background-color: rgb(20, 56, 56);
+    font-size: 20px;
  
   }
 
-  #restaurantpage div li {
-    flex:5;
-    color:rgb(179, 59, 59);
-    
-    background-color: rgb(20, 56, 56);
- 
+.operating_hours {
+  width:100%;
+  padding:20px;
+  display:flex;
+  flex-direction: column;
+}
+
+.operating_hours option {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
+.operating_hours li {
+ display:flex;
+ flex-direction:row;
+
+
+ }
+
+  .day {
+    background-color: rgb(79, 109, 109);
+    color:white;
+    flex:2;
+    padding:20px;
   }
+
+  .hour {
+    background-color:#f1f1f1;
+    color: rgb(79, 109, 109);
+    flex:6;
+    padding:20px;
+  }
+
+  .imgres {
+    flex:1;
+    width: 20%;
+    height: 20%;
+    padding:2px;
+
+  align-content: center;
+}
+
+.listimgres {
+  display:flex;
+  padding-left:20px;
+  padding-right: 20px;
+  flex-flow: row wrap;
+  justify-content: center;
+  width:100%;
+  align-content: center;
+}
+
+canvas {
+  width:100%;
+}
 </style>
