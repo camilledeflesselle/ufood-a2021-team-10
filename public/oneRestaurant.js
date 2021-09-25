@@ -207,9 +207,6 @@ function loadScript() {
 loadScript();
 initialisationlocalisation();
 
-
-
-
-
 }
 
+export default oneRestaurant;

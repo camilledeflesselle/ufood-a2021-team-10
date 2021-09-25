@@ -6,10 +6,7 @@
    <div>Mission Chinese Food</div>
 </div>
 <div class="listimgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"><img src="https://source.unsplash.com/1000x1000/?food,Asian" class="imgres"></div>
-<div class="ligne">
-   <option>Address</option>
-   <div>171 E Broadway, New York, NY 10002</div>
-</div>
+
 <div class="ligne">
    <option>Cuisine</option>
    <div>Asian</div>
@@ -24,9 +21,13 @@
 </div>
 <div class="ligne">
    <option>Rate</option>
-   <div>4/5</div>
+   <div><Stars /></div>
+
 </div>
-<canvas id="canvas" height="50" width="400"></canvas>
+
+  
+  
+
 <div class="operating_hours">
    <option>Operating Hours</option>
    <li class="hours">
@@ -58,12 +59,32 @@
       <div class="hour">12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm</div>
    </li>
 </div>
+<div class="ligne">
+   <option>Address</option>
+   <div>171 E Broadway, New York, NY 10002</div>
+    
 </div>
- <div id="map_canvas"></div>
+<div class="localisation">
+    <Map />
+ </div>
+
+</div>
+
 </body>
 
 </template>
 
+<script>
+import Map from './map.vue'
+import Stars from './stars.vue'
+export default {
+ name: 'Restaurant',
+ components: {
+   Map,
+   Stars
+ }
+}
+</script>
 <style>
 
 /*page restaurant*/
@@ -178,5 +199,9 @@ html, body {
 
 canvas {
   width:100%;
+}
+.localisation{
+  width:100%;
+  align-content: center !important;
 }
 </style>
