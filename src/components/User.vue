@@ -2,7 +2,7 @@
   <div>
     <h1>User Profile</h1>
     <div class="flex-container bg">
-      <div class="item">Very long name</div>
+      <div class="item">name place holder</div>
       <div class="item">5/5</div>
     </div>
     <div class="item bold">Restaurant Visited</div>
@@ -16,7 +16,6 @@
         <div class="item">3 visistes</div>
       </div>
     </div>
-    <div id="testee">Allo</div>
     <div>
       no recent visits
       <router-link to="/">Home</router-link>
