@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <!-- Fichiers CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+        <link rel="stylesheet" href="css/styles.css">
+   
+<!-- Ces deux balises link sont à insérer entre les deux balises existantes -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+<link rel="stylesheet" href="css/styles.css">
+
+    </head>
+    <body>
+        <div id="carte"></div>
+
+        <!-- Fichiers JS -->
+        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+        <script src="js/scripts.js"></script>
+        <!-- Fichiers JS -->
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+
+<!-- Ces deux balises script sont à insérer entre les deux balises existantes -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script src="js/scripts.js"></script>
+
+    </body>
+</html>
+
+<style>
+    #carte{
+    height: 80vh;
+}
+</style>
+
+<script>
+    // On s'assure que la page est chargée
+window.onload = function(){
+    // On initialise la carte sur les coordonnées GPS de Paris
+    let macarte = L.map('carte').setView([46.7766, -71.2706], 5)
+    // Cette méthode est à insérer juste après avoir initialisé la carte
+
+
+    // On charge les tuiles depuis un serveur au choix, ici OpenStreetMap France
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+        minZoom: 1,
+        maxZoom: 20
+    }).addTo(macarte)
+    L.Routing.control({
+    waypoints: [
+        L.latLng(46.7766, -71.2706),
+        L.latLng(40.713829, -73.989667 )
+    ],
+    routeWhileDragging: true,
+    geocoder: L.Control.Geocoder.nominatim()
+}).addTo(macarte);
+
+}
+</script>

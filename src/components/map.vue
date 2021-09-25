@@ -12,6 +12,8 @@
          :url="url"
          >
       </l-tile-layer>
+
+<l-polyline :lat-lngs="polyline.latlngs" :color="polyline.color"></l-polyline>
       <l-marker
          :lat-lng="markers"
          >
@@ -23,22 +25,27 @@
    </div>
 </template>
 <script>
-   import { LMap, LTileLayer, LMarker, LIcon } from 'vue2-leaflet';
+   import {LMap, LTileLayer, LMarker, LIcon, LPolyline } from 'vue2-leaflet';
    import 'leaflet/dist/leaflet.css';
-   
+  
    export default {
     components: {
       LMap,
       LTileLayer,
       LMarker,
-      LIcon
+      LIcon,
+      LPolyline
     },
     data () {
       return {
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         center: [ 40.713829, -73.989667 ],
-        zoom: 7,
+        zoom: 15,
         markers:  [ 40.713829, -73.989667 ],
+         polyline: {
+        latlngs: [[40.713829, -73.989667 ], [46.7766, -71.2706]],
+        color: 'red'
+      },
    imageUrl:'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png'
       }
     },
