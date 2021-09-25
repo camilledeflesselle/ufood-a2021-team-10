@@ -45,19 +45,21 @@
 
   <div id="restaurant-container">
     <div class="item-container">
-      <h1>Restaurant #1</h1>
-      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <h1>Mission Chinese Food</h1>
+      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food,Asian">
       <div>
         <p>
-          Pizza, Pasta, Lasagna...
+          Best chinese food in town
         </p>
-        <button>More...</button>
+        <router-link to="/restaurant" tag="div">
+          <button>More...</button>
+        </router-link>
       </div>
     </div>
 
     <div class="item-container">
       <h1>Restaurant #2</h1>
-      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
       <div>
         <p>
           Pizza, Pasta, Lasagna...
@@ -68,7 +70,7 @@
 
     <div class="item-container">
       <h1>Restaurant #3</h1>
-      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
       <div>
         <p>
           Pizza, Pasta, Lasagna...
@@ -79,7 +81,7 @@
 
     <div class="item-container">
       <h1>Restaurant #4</h1>
-      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
       <div>
         <p>
           Pizza, Pasta, Lasagna...
@@ -90,7 +92,7 @@
 
     <div class="item-container">
       <h1>Restaurant #5</h1>
-      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
       <div>
         <p>
           Pizza, Pasta, Lasagna...
@@ -101,7 +103,7 @@
 
     <div class="item-container">
       <h1>Restaurant #6</h1>
-      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
       <div>
         <p>
           Pizza, Pasta, Lasagna...
