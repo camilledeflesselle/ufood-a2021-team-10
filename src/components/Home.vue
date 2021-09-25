@@ -24,21 +24,102 @@
           <input type="checkbox" name="type" value="Pub"> Pub
         </div>
       </div>
+      <div class="filter-option">
+        <div class="filter-title">
+          Cuisine
+        </div>
+        <div id="cuisine">
+          <input type="checkbox" name="type" value="Chic"> Italian
+          <input type="checkbox" name="type" value="Casual"> Chinese
+          <input type="checkbox" name="type" value="Cafe"> Thai
+          <input type="checkbox" name="type" value="Pub"> Mexican
+          <input type="checkbox" name="type" value="Pub"> American
+        </div>
+      </div>
     </div>
     <div id="apply-filters">
       <button>Apply filters</button>
     </div>
 
   </div>
+
+  <div id="restaurant-container">
+    <div class="item-container">
+      <h1>Restaurant #1</h1>
+      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <div>
+        <p>
+          Pizza, Pasta, Lasagna...
+        </p>
+        <button>More...</button>
+      </div>
+    </div>
+
+    <div class="item-container">
+      <h1>Restaurant #2</h1>
+      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <div>
+        <p>
+          Pizza, Pasta, Lasagna...
+        </p>
+        <button>More...</button>
+      </div>
+    </div>
+
+    <div class="item-container">
+      <h1>Restaurant #3</h1>
+      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <div>
+        <p>
+          Pizza, Pasta, Lasagna...
+        </p>
+        <button>More...</button>
+      </div>
+    </div>
+
+    <div class="item-container">
+      <h1>Restaurant #4</h1>
+      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <div>
+        <p>
+          Pizza, Pasta, Lasagna...
+        </p>
+        <button>More...</button>
+      </div>
+    </div>
+
+    <div class="item-container">
+      <h1>Restaurant #5</h1>
+      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <div>
+        <p>
+          Pizza, Pasta, Lasagna...
+        </p>
+        <button>More...</button>
+      </div>
+    </div>
+
+    <div class="item-container">
+      <h1>Restaurant #6</h1>
+      <img class="item-image" src="https://th.bing.com/th/id/R.7bd94ee2ef29d000c77dfbb35f85c341?rik=LR06Elwmkeedhg&pid=ImgRaw&r=0">
+      <div>
+        <p>
+          Pizza, Pasta, Lasagna...
+        </p>
+        <button>More...</button>
+      </div>
+    </div>
+
+    </div>
   </body>
 </template>
 
 <style>
 #search {
-  background-color: peachpuff;
+  background-color: lightblue;
   display: flex;
   flex-direction: column;
-  padding-left: 3rem;
+  padding-left: 1rem;
   padding-right: 3rem;
 }
 #search-bar{
@@ -54,6 +135,7 @@
 }
 .filter-option {
   padding-left: 1rem;
+  padding-right: 1rem;
 }
 .filter-title {
   font-size: 1.2rem;
@@ -70,6 +152,25 @@
   #search-filter {
     flex-direction: column;
   }
+}
+
+#restaurant-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item-container {
+  width: 30%;
+  padding: 1rem;
+
+}
+
+.item-image {
+  width: 100%;
+}
+
+.item-container{
+  width: 30%;
 }
 
 </style>
