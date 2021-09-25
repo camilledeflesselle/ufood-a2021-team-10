@@ -3,19 +3,18 @@
     <div id="navLeft">
       <!-- <div>UFood</div> -->
       <router-link to="/" id="titleText">UFood</router-link>
-      <router-link to="/restaurant"  id="restaurantLink" class="menuItem" tag="div">
-        <div class="menuItemText">Restaurant</div>
-      </router-link>
     </div>
     <div id="searchBar">
       <input id="searchBarInput" type="search" placeholder="Search">
       <button id="searchBarButton">Search</button>
     </div>
     <div id="navRight">
-      <router-link to="/" id="Login" class="menuItemText">Log in/Log out</router-link>
+      <!-- TODO: lier à la page de connexion quand ce sera implémenté -->
+      <router-link class="menuItemText">Log in/Log out</router-link>
       <router-link to="/user" class="menuItem" tag="div">
-        <div class="menuItemText">User</div>
+        <div class="menuItemText">Username</div>
       </router-link>
+      <div class="menuItemText">Guest</div>
     </div>
   </nav>
 </template>
@@ -64,7 +63,7 @@
 
 #searchBarInput {
   /*
-  * TODO: trouver comment étirer l'input sur une large résolution
+  * trouver comment étirer l'input sur une large résolution
   */
   border: solid 1px;
   border-top-left-radius: 5px;
@@ -112,6 +111,8 @@
 
 .menuItemText {
   color: rgb(0, 0, 0);
+  margin-left: 2px;
+  margin-right: 2px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }
@@ -122,17 +123,12 @@
     max-height: 5rem;
   }
 
-  /* #restaurantLink {
-    display: none;
-    visibility: hidden;
-  } */
-
   #searchBarInput {
     max-width: 125px;
   }
 
   #navRight {
-    flex-flow: column-reverse wrap;
+    flex-flow: column-reverse nowrap;
     min-width: 80px;
   }
 }
