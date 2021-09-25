@@ -6,7 +6,7 @@
       <div class="item">5/5</div>
     </div>
     <div class="item bold">Restaurant Visited</div>
-    <div class="padding">
+    <div class="padding" id="vistedContainer">
       <div class="flex-container">
         <div class="item">Normandin</div>
         <div class="item">8 visistes</div>
@@ -16,12 +16,16 @@
         <div class="item">3 visistes</div>
       </div>
     </div>
+    <div id="testee">Allo</div>
     <div>
       no recent visits
       <router-link to="/">Home</router-link>
     </div>
   </div>
 </template>
+<script>
+
+</script>
 
 <style>
 .flex-container {
