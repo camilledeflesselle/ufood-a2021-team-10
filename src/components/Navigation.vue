@@ -3,9 +3,6 @@
     <div id="navLeft">
       <!-- <div>UFood</div> -->
       <router-link to="/" id="titleText">UFood</router-link>
-      <router-link to="/restaurant"  id="restaurantLink" class="menuItem" tag="div">
-        <div class="menuItemText">Restaurant</div>
-      </router-link>
     </div>
     <div id="searchBar">
       <input id="searchBarInput" type="search" placeholder="Search">
@@ -16,6 +13,7 @@
       <router-link to="/user" class="menuItem" tag="div">
         <div class="menuItemText">User</div>
       </router-link>
+      <div class="menuItemText">Guest</div>
     </div>
   </nav>
 </template>
@@ -132,7 +130,7 @@
   }
 
   #navRight {
-    flex-flow: column-reverse wrap;
+    flex-flow: column-reverse nowrap;
     min-width: 80px;
   }
 }
