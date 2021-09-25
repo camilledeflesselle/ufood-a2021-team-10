@@ -2,11 +2,11 @@
   <div>
     <h1>User Profile</h1>
     <div class="flex-container bg">
-      <div class="item">Very long name</div>
+      <div class="item">name place holder</div>
       <div class="item">5/5</div>
     </div>
     <div class="item bold">Restaurant Visited</div>
-    <div class="padding">
+    <div class="padding" id="vistedContainer">
       <div class="flex-container">
         <div class="item">Normandin</div>
         <div class="item">8 visistes</div>
@@ -22,6 +22,9 @@
     </div>
   </div>
 </template>
+<script>
+
+</script>
 
 <style>
 .flex-container {
