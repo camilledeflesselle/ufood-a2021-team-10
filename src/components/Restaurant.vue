@@ -25,9 +25,6 @@
 
 </div>
 
-  
-  
-
 <div class="operating_hours">
    <option>Operating Hours</option>
    <li class="hours">
@@ -67,10 +64,16 @@
 <div class="localisation">
     <Map />
  </div>
+ </div>
 
-</div>
+
+
 
 </body>
+
+
+
+ 
 
 </template>
 
@@ -202,6 +205,7 @@ canvas {
 }
 .localisation{
   width:100%;
-  align-content: center !important;
+  height:100%;
+  margin-bottom: 10%;
 }
 </style>

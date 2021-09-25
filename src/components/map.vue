@@ -1,76 +1,48 @@
 <template>
-<div>
-   <l-map
-      :center="center"
-      :zoom="zoom"
-      class="map"
-      ref="map"
-      @update:zoom="zoomUpdated"
-      @update:center="centerUpdated"
-      >
-      <l-tile-layer
-         :url="url"
-         >
-      </l-tile-layer>
-
-<l-polyline :lat-lngs="polyline.latlngs" :color="polyline.color"></l-polyline>
-      <l-marker
-         :lat-lng="markers"
-         >
-         <l-icon ref="icon">
-     <img class="restaurant-icon" :src="imageUrl"/>
-   </l-icon>
-         </l-marker>
-   </l-map>
-   </div>
-</template>
-<script>
-   import {LMap, LTileLayer, LMarker, LIcon, LPolyline } from 'vue2-leaflet';
-   import 'leaflet/dist/leaflet.css';
+  <div id="map" class="map"></div>
   
-   export default {
-    components: {
-      LMap,
-      LTileLayer,
-      LMarker,
-      LIcon,
-      LPolyline
-    },
-    data () {
-      return {
-        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        center: [ 40.713829, -73.989667 ],
-        zoom: 15,
-        markers:  [ 40.713829, -73.989667 ],
-         polyline: {
-        latlngs: [[40.713829, -73.989667 ], [46.7766, -71.2706]],
-        color: 'red'
-      },
-   imageUrl:'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-512.png'
-      }
-    },
-    methods: {
-      zoomUpdated (zoom) {
-        this.zoom = zoom;
-        console.log(this.markers)
-      },
-      centerUpdated (center) {
-        this.center = center;
-      }
-    }
-   }
+</template>
+
+<script>
+import mapboxgl from "mapbox-gl";
+
+export default {
+  name: "BaseMap",
+  
+  mounted() {
+   mapboxgl.accessToken = 'pk.eyJ1IjoiZGVmbGVzc2MiLCJhIjoiY2t0enFiY2RoM2EyajJwcGl6enp5MG95biJ9.HJiHufyLG-7K-8DwOCL-cw';
+const map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: [-73.989667 ,40.713829 ],
+zoom: 7,
+});
+
+// Set marker options.
+const marker = new mapboxgl.Marker({
+    color: "#3887be",
+}).setLngLat([  -73.989667 ,40.713829 ])
+    .addTo(map);
+ 
+map.addControl(
+new MapboxDirections({
+accessToken: mapboxgl.accessToken
+}),
+'top-right'
+);
+  }
+}
+ 
 </script>
+
 <style>
-   .map {
+ .map {
     position:absolute;
     
-    width:70% !important;
-    height:30% !important;
-    margin-left:2%;
-    margin-right:2%;
-    flex:1;
-    border-radius:10%;
-    padding-bottom:10%;
+    width:80% !important;
+    height:80% !important;
+   
+    border-radius:20px;
 
    align-content: center;
    }
@@ -79,4 +51,12 @@
    width: auto;
 
  }
+ .marker {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #3887be;
+  pointer-events: none;
+}
 </style>
