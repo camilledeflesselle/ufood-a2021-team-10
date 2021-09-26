@@ -1,5 +1,5 @@
 <template>
-   <canvas id="price_number" height="50" width="500"></canvas>
+   <canvas id="price_number" height="50" weight="400"></canvas>
 </template>
 <script>
    export default {

@@ -2,16 +2,47 @@
    <body>
       <div id="restaurantpage">
          <div class="ligne">
-            <option>Price</option>
-            <div>
+            <div class=desc>Price</div>
+            <div class = "name">
                <Price/>
             </div>
          </div>
          <div class="ligne">
-            <option>Rate</option>
-            <div>
+            <div class=desc>Rate</div>
+            <div class="name">
                <Stars/>
             </div>
+         </div>
+         <div class="operating_hours">
+            <div class= "desc">Operating Hours</div>
+            <li class="hours">
+               <div class="day">Monday</div>
+               <div class="hour">5:30 pm - 11:00 pm</div>
+            </li>
+            <li class="hours">
+               <div class="day">Tuesday</div>
+               <div class="hour">5:30 pm - 12:00 am</div>
+            </li>
+            <li class="hours">
+               <div class="day">Wednesday</div>
+               <div class="hour">5:30 pm - 12:00 am</div>
+            </li>
+            <li class="hours">
+               <div class="day">Thursday</div>
+               <div class="hour">5:30 pm - 12:00 am</div>
+            </li>
+            <li class="hours">
+               <div class="day">Friday</div>
+               <div class="hour">5:30 pm - 12:00 am</div>
+            </li>
+            <li class="hours">
+               <div class="day">Saturday</div>
+               <div class="hour">12:00 pm - 4:00 pm, 5:30 pm - 12:00 am</div>
+            </li>
+            <li class="hours">
+               <div class="day">Sunday</div>
+               <div class="hour">12:00 pm - 4:00 pm, 5:30 pm - 11:00 pm</div>
+            </li>
          </div>
       </div>
       <div class="localisation">
@@ -33,7 +64,7 @@
    mounted() {
       //remise1();
    
-   let restaurant = {
+   const restaurant = {
    "id": 1,
    "name": "Mission Chinese Food",
    "neighborhood": "Manhattan",
@@ -77,10 +108,12 @@
           let pageres = document.getElementById('restaurantpage');
                   let ligne = document.createElement('div');
                   let name=document.createElement('div');
-                  let desc=document.createElement('option');
+                  let desc=document.createElement('div');
    
                   name.innerHTML = text ;  
+                  name.className = "name" ;  
                   desc.innerHTML = className ; 
+                  desc.className = "desc";
                   ligne.appendChild(desc); 
                   ligne.appendChild(name); 
                   ligne.className = 'ligne';
@@ -88,45 +121,10 @@
                   else {pageres.appendChild(ligne); }
                                             
       
-      }
-   
-   
-      function operatingHours(data, className, i, listhours){
-              let operatingHours = document.createElement('div');
-              let day=document.createElement('div');
-              let hour=document.createElement('div');
-              let li = document.createElement('li');
-                
-              day.innerHTML = i;
-              day.classList = 'day';
-              hour.innerHTML = data[i] ;
-              hour.classList = 'hour';
-              li.className = 'hours';
-              li.appendChild(day); 
-              li.appendChild(hour); 
-              operatingHours.appendChild(li);
-              listhours.appendChild(li);   
-                                            
-      
-      }
-      
-    function weekHours(){
-      let jours = Object.keys(restaurant.operating_hours);
-   
-      let listhours = document.createElement('div');
-      let desc = document.createElement('option');
-      desc.innerHTML = 'Operating Hours' ; 
-      listhours.appendChild(desc); 
-      for (let i in jours){
-          j = jours[i]
-          operatingHours(restaurant.operating_hours, 'hour', j, listhours);
       };
-    
-      let pageres = document.getElementById('restaurantpage');
+   
       
-      listhours.className = 'operating_hours';
-      pageres.appendChild(listhours); 
-    }
+   
     function addImage(className, link){
    
       let pageres = document.getElementById('restaurantpage');
@@ -139,30 +137,24 @@
         imglist.className = 'list'+className;
       }
       
-      pageres.appendChild(imglist);
+      pageres.prepend(imglist);
     }
    
       // create name
      
       describeRestaurant(restaurant.cuisine_type, 'Cuisine', 1);
       
-      
+       addImage('imgres', "https://source.unsplash.com/1000x1000/?food,"+restaurant.cuisine_type);
+       
         describeRestaurant(restaurant.name, 'Restaurant', 1);
    
-        addImage('imgres', "https://source.unsplash.com/1000x1000/?food,"+restaurant.cuisine_type);
        
-   describeRestaurant("546 678 234", 'Tel', 0);
-      describeRestaurant(restaurant.address, 'Address', 0);
+       
+      describeRestaurant("546 678 234", 'Tel', 0);
      
-      let pageres = document.getElementById('restaurantpage');
-      let cv = document.createElement('canvas');
-      cv.setAttribute('id', 'canvas');
-      cv.height = '50';
-      cv.width = '400';
-      pageres.appendChild(cv);
-      
+      describeRestaurant(restaurant.address, 'Address', 0);
     
-      weekHours();
+      
    
    }
    }
@@ -191,49 +183,21 @@
    text-decoration: none; 
    width:100%;
    }
-   .ligne div {
-   flex:2;
-   background-color: #f1f1f1;
-   align-items: center;
-   border-bottom-right-radius: 10px;
-   }
-   .ligne option {
+   .ligne .desc {
    flex:1;
-   background-color: #f1f1f1;
-   align-items: center;
-   border-top-left-radius: 10px;
-   }
-   #restaurantpage div option {
    color:white;
    padding:10px;
    background-color: rgb(20, 56, 56);
+   align-items: center;
    font-size: 20px;
-   }
-   .operating_hours {
-   width:100%;
-   padding:20px;
-   display:flex;
-   flex-direction: column;
-   }
-   .operating_hours option {
    border-top-left-radius: 10px;
-   border-top-right-radius: 10px;
    }
-   .operating_hours li {
-   display:flex;
-   flex-direction:row;
-   }
-   .day {
-   background-color: rgb(79, 109, 109);
-   color:white;
+   .ligne .name {
    flex:2;
-   padding:20px;
-   }
-   .hour {
-   background-color:#f1f1f1;
-   color: rgb(79, 109, 109);
-   flex:6;
-   padding:20px;
+   display:flex;
+   background-color: #f1f1f1;
+   align-items: center;
+   border-bottom-right-radius: 10px;
    }
    .imgres {
    flex:1;
@@ -250,6 +214,38 @@
    justify-content: center;
    width:100%;
    align-content: center;
+   }
+   .operating_hours {
+   width:100%;
+   padding:20px;
+   display:flex;
+   flex-direction: column;
+   }
+   .operating_hours .desc {
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   flex:1;
+   color:white;
+   padding:10px;
+   background-color: rgb(20, 56, 56);
+   align-items: center;
+   font-size: 20px;
+   }
+   .operating_hours li {
+   display:flex;
+   flex-direction:row;
+   }
+   .day {
+   background-color: rgb(79, 109, 109);
+   color:white;
+   flex:2;
+   padding:20px;
+   }
+   .hour {
+   background-color:#f1f1f1;
+   color: rgb(79, 109, 109);
+   flex:6;
+   padding:20px;
    }
    canvas {
    width:100%;
