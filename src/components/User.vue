@@ -3,7 +3,7 @@
     <h1>User Profile</h1>
     <div class="flex-container bg">
       <div class="item">name place holder</div>
-      <div class="item">5/5</div>
+      <div class="item">3.8</div>
     </div>
     <div class="item bold">Restaurant Visited</div>
     <div class="padding" id="vistedContainer">

@@ -11,6 +11,7 @@
     <div id="navRight">
       <!-- TODO: lier à la page de connexion quand ce sera implémenté -->
       <router-link class="menuItemText">Log in/Log out</router-link>
+      <div class="menuItemText">Log in/Log out</div>
       <router-link to="/user" class="menuItem" tag="div">
         <div class="menuItemText">Username</div>
       </router-link>
