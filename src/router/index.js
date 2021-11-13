@@ -4,7 +4,6 @@ import Home from "@/components/Home";
 import Restaurant from "@/components/Restaurant";
 import User from "@/components/User";
 
-
 Vue.use(Router);
 
 export default new Router({
@@ -26,4 +25,3 @@ export default new Router({
     },
   ],
 });
-
