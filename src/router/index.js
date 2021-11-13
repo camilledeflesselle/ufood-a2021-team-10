@@ -6,11 +6,7 @@ import User from "@/components/User";
 //import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 //import { LMap, LTileLayer, LMarker } from 'vue2-leaflet';
 
-
-
 Vue.use(Router);
-
-
 
 export default new Router({
   routes: [
@@ -31,4 +27,3 @@ export default new Router({
     },
   ],
 });
-
