@@ -19,21 +19,23 @@
           </b-input-group-append>
         </b-input-group>
       
-      <b-button block v-b-toggle.sidebar-variant>View Restaurants</b-button>
-      <b-sidebar id="sidebar-variant" :title="list.name + 
-          ', list of ' + list.restaurants.length + ' restaurant(s)'" bg-variant="dark" text-variant="light" shadow right width = "30%" >
+      <b-button block v-b-toggle="'test-'+list.id">View Restaurants</b-button>
+      <b-collapse :id="'test-'+list.id" :title="list.name + 
+          ', list of ' + list.restaurants.length + ' restaurant(s)'" bg-variant="dark" text-variant="light" shadow  >
+          <h3>List : {{list.name}}</h3>
+          Total : {{list.restaurants.length}}
         <div class="px-2 py-1">
           <ul v-for="restaurant in list.restaurants" v-bind:key="restaurant.id">
             <li>
               <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                  {{restaurantInfo(restaurant.id).name}}
+                  first{{restaurantInfo(restaurant.id).name}}
               </router-link>
                           
               <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>
               </li>
           </ul>
         </div>
-      </b-sidebar>
+      </b-collapse>
     </div>
   </div>
       <div class = "item">
@@ -47,12 +49,15 @@
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
       <div class= "flex-container" v-for="restaurant in restaurants" :key="restaurant.id">
-        <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+        
           <div class = "item" >
             <b-img class = "meanimg" :src="restaurant.pictures[0]" img-alt="Card image" left > </b-img>
-            {{restaurantInfo(restaurant.id).name}}
-          </div>
-        </router-link>
+            {{restaurant.name}}
+          
+        <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+                  first{{restaurant.name}}
+              </router-link>
+              </div>
         <div class = "item">
           1 visite
         </div>
@@ -129,12 +134,10 @@
               this.$store.state.ListFavorites = await getListFavorites();
           },
           async restaurantInfo(idRestaurant) {
-            console.log(idRestaurant)
             if (idRestaurant){
               const res = await restaurantInfo(idRestaurant)
-              this.$store.state.restaurantInfo = {...res}
-              console.log ({...res})
-              return res
+              this.$store.state.restaurantInfo = {...res.name}
+              
             }
           }
     },
