@@ -3,29 +3,40 @@
     <h1>User Profile</h1>
     <div class="flex-container bg">
       <div class="item">name place holder</div>
-      <div class="item">5/5</div>
+      <div class="item">3.8</div>
     </div>
     <div class="item bold">Restaurant Visited</div>
     <div class="padding" id="vistedContainer">
-      <div class="flex-container">
-        <div class="item">Normandin</div>
-        <div class="item">8 visistes</div>
-      </div>
-      <div class="flex-container">
-        <div class="item">La Tanière</div>
-        <div class="item">3 visistes</div>
+       <div class= "flex-container" v-for="restaurant in restaurants" :key="restaurant.id">
+        <div class = "item">
+          {{restaurant.name}}
+        </div>
+        <div class = "item">
+          8 visites
+        </div>
       </div>
     </div>
     <div>
-      no recent visits
       <router-link to="/">Home</router-link>
+    </div>
+    <div>
+      <router-link to="/user/best">lists of favorite restaurants</router-link>
     </div>
   </div>
 </template>
 <script>
+export default{
+  name: 'App', computed: {
+    restaurants(){
+      return this.$store.state.restaurants
+    }
+  },
+  mounted(){
+    this.$store.dispatch("getrestaurants")
 
+  }
+}
 </script>
-
 <style>
 .flex-container {
   display: flex;
