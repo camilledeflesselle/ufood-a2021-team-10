@@ -104,6 +104,7 @@ const store = new Vuex.Store({
 
 export default {
   name: "Restaurant",
+  props: ["restaurantId"],
   components: {
     Map,
     Stars,

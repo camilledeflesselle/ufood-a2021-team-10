@@ -116,17 +116,14 @@ export const viewListFavorites = async (id) => {
     return await response.json();
 };
 
-export const addRestaurantToList = async (name, Listid, restaurantId) => {
+export const addRestaurantToList = async (Listid, restaurantId) => {
     const request = new Request(
         `${endpoint}/favorites/${Listid}/restaurants/${restaurantId}`,
         {
             method: "PUT",
             headers:{
                 "Content-Type": "application/json",
-            },
-            body:JSON.stringify({
-                name: name
-            })
+            }
         }
     );
 

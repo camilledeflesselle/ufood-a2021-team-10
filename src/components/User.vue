@@ -1,4 +1,5 @@
 <template>
+
   <div id="user">
     <h1>User Profile</h1>
     <div class="flex-container bg">
@@ -7,45 +8,65 @@
     </div>
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
+      
+      
       <div class= "flex-container" v-for="restaurant in restaurants" :key="restaurant.id">
-        <router-link to="./restaurant" >
+        <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
           <div >{{restaurant.name}}</div>
         </router-link>
         <div class = "item">
           1 visite
         </div>
+<select id="chosenLists" name="cars" v-model="selected" multiple>
+          <option :key="list.id" v-for="list in ListFavorites.items">{{list.name}}</option>
+        </select>
+    
       </div>
     </div>
     
     <div class="item bold">Favorites restaurants</div>
       <div class = "ListFavoritesContainer padding">
         <div class = "item">
-          <span> New list :
-		<input v-model="inputValue" placeholder="Choose a name..." id="inputValue">
-		<button :disabled="inputValue === ''" @click="createListFavorites" id = "submit">Create</button>
-		 </span>
-        </div>
-        <div class = "item">
-          <div >
-</div>
+        Your lists :
 			<div v-for="list in ListFavorites.items" :key="list.id" class="list-group" >
-        <div class = "onelist">
-        <input v-model="list.name" placeholder="Change name..." id="inputValue">
-          
-				<button @click="updateListFavorites(list)" class = "update">Change name</button>
-				<button @click="deleteListFavorites(list.id)" class = "delete">Delete List</button>
 
-        <div class="dropdown">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View Restaurants
-  <span class="caret"></span></button>
-  <ul class="dropdown-menu">
-    <li><a v-for="restaurant in restaurants" :key="restaurant.id" v-bind:href="'./restaurantpage' + restaurant.name">{{restaurant.name}}</a></li>
-  </ul>
-</div>
-        </div>
-			</div>
+          <b-input-group size="lg" class="mt-4">
+    <b-form-input v-model="list.name" placeholder="Change name..." id="inputValue"></b-form-input>
+    <b-input-group-append>
+      <b-button size ="lg" @click="updateListFavorites(list)" variant="outline-success">Change name</b-button>
+      <b-button size = "lg" @click="deleteListFavorites(list.id)" variant="danger">X</b-button>
+    </b-input-group-append>
+
+  </b-input-group>
+      <b-dropdown text="View Restaurants" variant="primary" block
+    
+    class="mt-1"
+    menu-class="w-100">
+        <b-dropdown-item v-for="restaurant in restaurants" :key="restaurant.id">
+          
+           <b-input-group size="lg" class="mt-3">
+    <b-form-input v-model="restaurant.name"></b-form-input>
+    
+      <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">X</b-button>
+    
+    </b-input-group>
+          </b-dropdown-item>
+      </b-dropdown>
+     
+     
       </div>
+      
+      	</div>
+        	<div class = "item">
+      Create a new list :
+             <b-input-group size = "lg" prepend="New list" >
+		<b-form-input v-model="inputValue" placeholder="Choose a name..." variant="success"></b-form-input>
+		<b-button size = "lg" :disabled="inputValue === ''" @click="createListFavorites" variant = "success">Create</b-button>
+    
+    </b-input-group>
+		 
 		</div>
+    	</div>
 
     <div>
       <router-link to="/">Home</router-link>
@@ -81,9 +102,6 @@ export default{
     }
    },
   methods: {
-      clickHome() {
-        this.$router.push('home', () => {})
-      },
        async createListFavorites() {
             await createListFavorites(this.inputValue);
             this.inputValue = "";
@@ -97,13 +115,13 @@ export default{
             await deleteListFavorites(id);
             this.$store.state.ListFavorites = await getListFavorites();
         },
-          async addRestaurantToList(id) {
-            await addRestaurantToList(id);
+        async addRestaurantToList(listId, restaurantId) {
+            await addRestaurantToList(listId, restaurantId);
             this.$store.state.ListFavorites = await getListFavorites();
         },
           async deleteRestaurantFromList(restaurantId, ListId) {
             await deleteRestaurantFromList(restaurantId, ListId);
-            this.$store.state.oneListRest = await getListFavorites();
+            this.$store.state.ListFavorites = await getListFavorites();
         },
           async viewListFavorites(id) {
             await viewListFavorites(id);
@@ -125,7 +143,7 @@ export default{
   justify-content: space-between;
   }
   .item {
-  font-size: 24px;
+  font-size: 30px;
   padding: 1rem;
   padding-right: 4rem;
   flex-direction: column;

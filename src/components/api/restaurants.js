@@ -16,7 +16,6 @@ const request = new Request(`${endpoint}/restaurants/${id}`,
     await response.json();
 }
 
-// get all list of restaurants favorite of the user
 export const getVisitesOneRestaurant = async (id) => {
     const request = new Request(
         `${endpoint}/restaurants/${id}/visits`,
@@ -34,7 +33,6 @@ export const getVisitesOneRestaurant = async (id) => {
     const response = await fetch(request);
     return (await response.json());
 };
-
 
 export const visitesRestaurantOfUser = async (owner, userId) => {
     const request = new Request(
