@@ -8,9 +8,9 @@
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
       <div class= "flex-container" v-for="restaurant in restaurants" :key="restaurant.id">
-        <div class = "item">
-          {{restaurant.name}}
-        </div>
+        <router-link to="./restaurant" >
+          <div >{{restaurant.name}}</div>
+        </router-link>
         <div class = "item">
           1 visite
         </div>
@@ -34,9 +34,15 @@
           
 				<button @click="updateListFavorites(list)" class = "update">Change name</button>
 				<button @click="deleteListFavorites(list.id)" class = "delete">Delete List</button>
+
+        <div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">View Restaurants
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a v-for="restaurant in restaurants" :key="restaurant.id" v-bind:href="'./restaurantpage' + restaurant.name">{{restaurant.name}}</a></li>
+  </ul>
+</div>
         </div>
-				<a v-bind:href="'#' + list.name" class="list-group-item"> View Restaurants </a>
-        
 			</div>
       </div>
 		</div>
