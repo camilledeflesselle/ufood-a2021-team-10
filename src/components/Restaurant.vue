@@ -53,7 +53,7 @@
 <script>
    import Map from './map.vue'
    import Stars from './stars.vue'
-    import Price from './price.vue'
+   import Price from './price.vue'
    export default {
     name: 'Restaurant',
     components: {
