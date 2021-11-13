@@ -9,11 +9,14 @@ export const restaurantInfo = async (id) => {
 
 const request = new Request(`${endpoint}/restaurants/${id}`, 
 {
-    method: "GET"
+    method: "GET",
+    headers:{
+        "Content-Type": "application/json",
+    }
 }
 )
     const response = await fetch(request);
-    await response.json();
+    return await response.json();
 }
 
 export const getVisitesOneRestaurant = async (id) => {
@@ -75,7 +78,7 @@ export const oneVisitOfUser = async (userId, visitId) => {
     const response = await fetch(request);
     return await response.json();
 };
-/*
+
 export const createVisit = async (userId) => {
     const request = new Request(
         `${endpoint}/${userId}/restaurants/visits/`,
@@ -118,4 +121,3 @@ export const deleteRestaurantFromList = async (restaurantId, Listid) => {
 
     const response = await fetch(request);
 };
-*/

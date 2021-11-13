@@ -1,41 +1,48 @@
 <template>
   <div id="user">
-    <h1>User Profile</h1>
-    <div class="flex-container bg">
-      <div class="item">name place holder</div>
-      <div class="item">3.8</div>
+  <h1>User Profile</h1>
+  <div class="flex-container bg">
+    <div class="item">name place holder</div>
+    <div class="item">3.8</div>
+  </div>
+  <div class="item bold">Favorites restaurants</div>
+  <div class = "ListFavoritesContainer padding">
+  <div class = "item">
+    Your lists :
+  </div>
+  <div v-for="list in ListFavorites.items" :key="list.id" class="list-group" >
+    <b-input-group size="lg" class="mt-4">
+      <b-form-input v-model="list.name" placeholder="Change name..." id="inputValue"></b-form-input>
+      <b-input-group-append>
+        <b-button size ="lg" @click="updateListFavorites(list)" variant="outline-success">Change name</b-button>
+        <b-button size = "lg" @click="deleteListFavorites(list.id)" variant="danger">X</b-button>
+      </b-input-group-append>
+    </b-input-group>
     </div>
-    <div class="item bold">Favorites restaurants</div>
-    <div class = "ListFavoritesContainer padding">
-      <div class = "item">
-        Your lists :
-      
-      <div v-for="list in ListFavorites.items" :key="list.id" class="list-group" >
-        <b-input-group size="lg" class="mt-4">
-          <b-form-input v-model="list.name" placeholder="Change name..." id="inputValue"></b-form-input>
-          <b-input-group-append>
-            <b-button size ="lg" @click="updateListFavorites(list)" variant="outline-success">Change name</b-button>
-            <b-button size = "lg" @click="deleteListFavorites(list.id)" variant="danger">X</b-button>
-          </b-input-group-append>
-        </b-input-group>
-      
-      <b-button block v-b-toggle.sidebar-variant>View Restaurants</b-button>
-      <b-sidebar id="sidebar-variant" :title="list.name + 
-          ', list of ' + list.restaurants.length + ' restaurant(s)'" bg-variant="dark" text-variant="light" shadow right width = "30%" >
-        <div class="px-2 py-1">
-          <ul v-for="restaurant in list.restaurants" v-bind:key="restaurant.id">
-            <li>
-              <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                  {{restaurantInfo(restaurant.id).name}}
-              </router-link>
-                          
-              <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>
-              </li>
+
+    <div class="panbnel-group">
+      <div class="panekjvl panel-default">
+        <div class="pagjnel-heading">
+          <h4 class="panel-title">
+            <b-button block data-toggle="collapse" v-bind:href="'#collapse1-'+ list.name">View restaurants</b-button>
+          </h4>
+        </div>
+        <div :id="'collapse1-'+ list.name" class="panel-collapse collapse">
+          <ul class="list-group">
+            <li class="list-group-item" v-for="restaurant in restaurants" :key="restaurant.id">
+                <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+                  
+                    {{restaurant.name}}
+                  
+                </router-link>
+             
+                <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>
+             
+            </li>
           </ul>
         </div>
-      </b-sidebar>
-    </div>
-  </div>
+      </div>
+      </div>
       <div class = "item">
         Create a new list :
         <b-input-group size = "lg" prepend="New list" >
@@ -50,19 +57,20 @@
         <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
           <div class = "item" >
             <b-img class = "meanimg" :src="restaurant.pictures[0]" img-alt="Card image" left > </b-img>
-            {{restaurantInfo(restaurant.id).name}}
+            {{restaurantInfo(restaurant.id)}}
           </div>
         </router-link>
         <div class = "item">
           1 visite
         </div>
-        <div id="chosenLists" name="cars">
+        <select id="chosenLists" name="cars" v-model="selected" multiple>
           <option :key="list.id" v-for="list in ListFavorites.items">{{list.name}}</option>
-        </div>
+        </select>
       </div>
     </div>
+    <div>
       <router-link to="/">Home</router-link>
-    
+    </div>
   </div>
   
 </template>
@@ -113,29 +121,19 @@
               this.$store.state.ListFavorites = await getListFavorites();
           },
           async addRestaurantToList(listId, restaurantId) {
-            if (restaurantId ){
               await addRestaurantToList(listId, restaurantId);
               this.$store.state.ListFavorites = await getListFavorites();
-            }
           },
             async deleteRestaurantFromList(restaurantId, ListId) {
-              if (restaurantId ){
-                await deleteRestaurantFromList(restaurantId, ListId);
-                this.$store.state.ListFavorites = await getListFavorites();
-              }
+              await deleteRestaurantFromList(restaurantId, ListId);
+              this.$store.state.ListFavorites = await getListFavorites();
           },
             async viewListFavorites(id) {
               await viewListFavorites(id);
               this.$store.state.ListFavorites = await getListFavorites();
           },
           async restaurantInfo(idRestaurant) {
-            console.log(idRestaurant)
-            if (idRestaurant){
-              const res = await restaurantInfo(idRestaurant)
-              this.$store.state.restaurantInfo = {...res}
-              console.log ({...res})
-              return res
-            }
+              this.$store.state.restaurantInfo = await restaurantInfo(idRestaurant);
           }
     },
     async mounted(){
