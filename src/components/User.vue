@@ -9,74 +9,32 @@
     <div class="ListFavoritesContainer padding">
       <div class="item">
         Your lists :
-
-        <div
-          v-for="list in ListFavorites.items"
-          :key="list.id"
-          class="list-group"
-        >
-          <b-input-group size="lg" class="mt-4">
-            <b-form-input
-              v-model="list.name"
-              placeholder="Change name..."
-              id="inputValue"
-            ></b-form-input>
-            <b-input-group-append>
-              <b-button
-                size="lg"
-                @click="updateListFavorites(list)"
-                variant="outline-success"
-                >Change name</b-button
-              >
-              <b-button
-                size="lg"
-                @click="deleteListFavorites(list.id)"
-                variant="danger"
-                >X</b-button
-              >
-            </b-input-group-append>
-          </b-input-group>
-
-          <b-button block v-b-toggle="'test-' + list.id"
-            >View Restaurants</b-button
-          >
-          <b-collapse
-            :id="'test-' + list.id"
-            :title="
-              list.name +
-              ', list of ' +
-              list.restaurants.length +
-              ' restaurant(s)'
-            "
-            bg-variant="dark"
-            text-variant="light"
-            shadow
-          >
-            <h3>List : {{ list.name }}</h3>
-            Total : {{ list.restaurants.length }}
-            <div class="px-2 py-1">
-              <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
-                <li>
-                  <router-link
-                    :to="{
-                      name: 'Restaurant',
-                      params: { restaurantId: restaurant.id },
-                    }"
-                  >
-                    Name :
-                    {{ restaurantsName[restaurant.id] }}
-                  </router-link>
-                  <option>Id : {{ restaurant }}</option>
-                  <b-button
-                    size="lg"
-                    @click="deleteRestaurantFromList(restaurant.id, list.id)"
-                    variant="danger"
-                    >Delete X</b-button
-                  >
-                </li>
-              </ul>
-            </div>
-          </b-collapse>
+      <div v-for="list in ListFavorites.items" :key="list.id" class="list-group" >
+        <b-input-group size="lg" class="mt-4">
+          <b-form-input v-model="list.name" placeholder="Change name..." id="inputValue"></b-form-input>
+          <b-input-group-append>
+            <b-button size ="lg" @click="updateListFavorites(list)" variant="outline-success">Change name</b-button>
+            <b-button size = "lg" @click="deleteListFavorites(list.id)" variant="danger">X</b-button>
+          </b-input-group-append>
+        </b-input-group>
+      
+      <b-button block v-b-toggle="'test-'+list.id">View Restaurants</b-button>
+      <b-collapse :id="'test-'+list.id" :title="list.name + 
+          ', list of ' + list.restaurants.length + ' restaurant(s)'" bg-variant="dark" text-variant="light" shadow  >
+          <h3>List : {{list.name}}</h3>
+          Total : {{list.restaurants.length}}
+        <div class="px-2 py-1">
+          <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
+            <li>
+              <router-link  :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+                Name :{{restaurantsName[restaurant.id]}}
+                 
+              </router-link>
+               <option>Id : {{restaurant}}</option>
+               <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>         
+              
+              </li>
+          </ul>
         </div>
       </div>
       <div class="item">
@@ -155,82 +113,100 @@ import {
   addRestaurantToList,
   viewListFavorites,
 } from "./api/favorites.js";
+   import{
+      restaurantInfo,
+      visitesRestaurantOfUser,
+      visitesOfOneRestaurantByUser
+  }
+  from "./api/restaurants.js";
 
-import { restaurantInfo } from "./api/restaurants.js";
+  export default{
+    name: 'App', 
+    data: () => ({
+      inputValue: ''
+    }),
+    computed: {
+      
+      ListFavorites(){
+        return this.$store.state.ListFavorites
+      },
+      restaurants(){
+        return this.$store.state.restaurants
+      },
+      restaurantsVisited(){
+        return this.$store.state.restaurantsVisited
+      }
+     },
+    methods: {
+         async createListFavorites() {
+              await createListFavorites(this.inputValue);
+              this.inputValue = "";
+              this.$store.state.ListFavorites = await getListFavorites();
+          },
+          async updateListFavorites(list) {
+              await updateListFavorites(list);
+              this.$store.state.ListFavorites = await getListFavorites();
+          },
+          async deleteListFavorites(id) {
+              await deleteListFavorites(id);
+              this.$store.state.ListFavorites = await getListFavorites();
+          },
+          async addRestaurantToList(listId, restaurantId) {
+            if (restaurantId ){
+              // be sure that list doens't have duplicated keys
+              let res = await restaurantInfo(restaurantId);
+              this.restaurantsName[restaurantId] = res.name;
+              let oldList = await viewListFavorites(listId);
+              oldList = oldList.restaurants;
+              let obj = Object.values(oldList)
+              for (let i=0; i<oldList.length; i++){
+                obj[i] = oldList[i].id
+              }
+              if(obj.indexOf(restaurantId) == -1 ){
+                await addRestaurantToList(listId, restaurantId);
+              }
+              this.$store.state.ListFavorites = await getListFavorites();
+            }
+            
+          },
+            async deleteRestaurantFromList(restaurantId, ListId) {
+              if (restaurantId ){
+                await deleteRestaurantFromList(restaurantId, ListId);
+                this.$store.state.ListFavorites = await getListFavorites();
+              }
+          },
+            async viewListFavorites(id) {
+              return await viewListFavorites(id);
 
-export default {
-  name: "App",
-  data: () => ({
-    inputValue: "",
-    restaurantsName: {},
-  }),
-  computed: {
-    ListFavorites() {
-      return this.$store.state.ListFavorites;
+          },
+          async restaurantInfo(idRestaurant) {
+           
+            if (idRestaurant){
+              let res = await restaurantInfo(idRestaurant)
+              console.log(res)
+              return res
+
+            }
+          },
+          async visitesOfOneRestaurantByUser(restaurantId){
+             if (restaurantId ){
+                await visitesOfOneRestaurantByUser(restaurantId);
+              }
+          }
+
     },
-    restaurants() {
-      return this.$store.state.restaurants;
-    },
-  },
-  methods: {
-    async createListFavorites() {
-      await createListFavorites(this.inputValue);
-      this.inputValue = "";
-      this.$store.state.ListFavorites = await getListFavorites();
-    },
-    async updateListFavorites(list) {
-      await updateListFavorites(list);
-      this.$store.state.ListFavorites = await getListFavorites();
-    },
-    async deleteListFavorites(id) {
-      await deleteListFavorites(id);
-      this.$store.state.ListFavorites = await getListFavorites();
-    },
-    async restaurantInfoFromId(idRestaurant) {
-      // console.log(this.$store.state.ListFavorites);
-      if (idRestaurant) {
-        let res = await restaurantInfo(idRestaurant);
-        this.restaurantsName[idRestaurant] = res.name;
-      }
-    },
-    async addRestaurantToList(listId, restaurantId) {
-      if (restaurantId) {
-        let res = await restaurantInfo(restaurantId);
-        this.restaurantsName[restaurantId] = res.name;
-        // be sure that list doens't have duplicated keys
-        let oldList = await viewListFavorites(listId);
-        oldList = oldList.restaurants;
-        let obj = Object.values(oldList);
-        for (let i = 0; i < oldList.length; i++) {
-          obj[i] = oldList[i].id;
-        }
-        if (obj.indexOf(restaurantId) == -1) {
-          await addRestaurantToList(listId, restaurantId);
-        }
-        this.$store.state.ListFavorites = await getListFavorites();
-      }
-    },
-    async deleteRestaurantFromList(restaurantId, ListId) {
-      if (restaurantId) {
-        await deleteRestaurantFromList(restaurantId, ListId);
-        this.$store.state.ListFavorites = await getListFavorites();
-      }
-    },
-    async viewListFavorites(id) {
-      return await viewListFavorites(id);
-    },
-  },
-  async mounted() {
-    this.$store.dispatch("getList");
-    await this.$store.dispatch("getRestaurants");
-    this.$store.state.ListFavorites.items.forEach(async (list) => {
+    async mounted(){
+      this.$store.dispatch("getList")
+      this.$store.dispatch("getRestaurantsVisited")
+      await this.$store.dispatch("getRestaurants");
+      this.$store.state.ListFavorites.items.forEach(async (list) => {
       list.restaurants.forEach(async (resto) => {
         let res = await restaurantInfo(resto.id);
         this.restaurantsName[resto.id] = res.name;
       });
     });
-  },
-};
+    }
+  }
 </script>
 <style>
 .flex-container {
