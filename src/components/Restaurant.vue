@@ -89,7 +89,8 @@ import Map from "./map.vue";
 import Stars from "./stars.vue";
 import Price from "./price.vue";
 import {addRestaurantToList,
-        viewListFavorites
+        viewListFavorites,
+        getListFavorites
  } from "./api/favorites"
 Vue.use(Vuex);
 

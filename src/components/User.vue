@@ -25,13 +25,15 @@
           <h3>List : {{list.name}}</h3>
           Total : {{list.restaurants.length}}
         <div class="px-2 py-1">
-          <ul v-for="restaurant in list.restaurants" v-bind:key="restaurant.id">
+          <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
             <li>
-              <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                  first{{restaurantInfo(restaurant.id).name}}
+              <router-link  :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+                Name :{{restaurant.name}}
+                 
               </router-link>
-                          
-              <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>
+               <option>Id : {{restaurant}}</option>
+               <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>         
+              
               </li>
           </ul>
         </div>
@@ -159,13 +161,14 @@
               }
           },
             async viewListFavorites(id) {
-              await viewListFavorites(id);
+              return await viewListFavorites(id);
+
           },
           async restaurantInfo(idRestaurant) {
+           
             if (idRestaurant){
-              const res = await restaurantInfo(idRestaurant)
-              this.$store.state.restaurantInfo = {...res.name}
-              
+              let res = await restaurantInfo(idRestaurant)
+              this.$store.state.ListFavorites.restaurants[idRestaurant] = res
             }
           }
     },
