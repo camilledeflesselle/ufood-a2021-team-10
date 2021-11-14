@@ -9,9 +9,10 @@ import { endpoint } from "./url.js"
 Vue.use(Vuex)
 
 const owner = { 
-    "email": "test1@test.com", 
-    "id": "5fa837737b90c80004f6c0d7" }
-
+    "email": "test", 
+    "name": "test",
+    "id": "5f766f6dad626a0004ba134f" 
+}
 export const store = new Vuex.Store({
     state: {
         ListFavorites: [],

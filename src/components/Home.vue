@@ -44,78 +44,35 @@
   </div>
 
   <div id="restaurant-container">
-    <div class="item-container">
-      <h1>Mission Chinese Food</h1>
-      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food,Asian">
+    <div class="item-container" v-for ="restaurant in restaurants" :key ="restaurant.id">
+      <h1>{{restaurant.name}}</h1>
+      <img class="item-image" :src="restaurant.pictures[0]">
       <div>
         <p>
-          Best chinese food in town
+          restaurant
         </p>
-        <router-link to="/restaurant" tag="div">
-          <button>More...</button>
-        </router-link>
+        <router-link tag = "div" :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+                  <button>More...</button>
+              </router-link>
       </div>
     </div>
-
-    <div class="item-container">
-      <h1>Restaurant #2</h1>
-      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
-      <div>
-        <p>
-          Pizza, Pasta, Lasagna...
-        </p>
-        <button>More...</button>
-      </div>
-    </div>
-
-    <div class="item-container">
-      <h1>Restaurant #3</h1>
-      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
-      <div>
-        <p>
-          Pizza, Pasta, Lasagna...
-        </p>
-        <button>More...</button>
-      </div>
-    </div>
-
-    <div class="item-container">
-      <h1>Restaurant #4</h1>
-      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
-      <div>
-        <p>
-          Pizza, Pasta, Lasagna...
-        </p>
-        <button>More...</button>
-      </div>
-    </div>
-
-    <div class="item-container">
-      <h1>Restaurant #5</h1>
-      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
-      <div>
-        <p>
-          Pizza, Pasta, Lasagna...
-        </p>
-        <button>More...</button>
-      </div>
-    </div>
-
-    <div class="item-container">
-      <h1>Restaurant #6</h1>
-      <img class="item-image" src="https://source.unsplash.com/1000x1000/?food">
-      <div>
-        <p>
-          Pizza, Pasta, Lasagna...
-        </p>
-        <button>More...</button>
-      </div>
-    </div>
-
     </div>
   </body>
 </template>
+<script>
 
+  export default{
+    name: 'App', 
+    computed: {
+      restaurants(){
+        return this.$store.state.restaurants
+      }
+     },
+    async mounted(){
+      this.$store.dispatch("getRestaurants")
+    }
+  }
+</script>
 <style>
 #search {
   background-color: lightblue;
