@@ -5,6 +5,27 @@ const owner = {
   id: "5f766f6dad626a0004ba134f",
 };
 
+export const restaurantsFiltered = async (body) => {
+  const request = new Request(`${endpoint}/restaurants`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    params: {
+      limit: body.limit,
+      page: body.page,
+      q: body.searchTerm,
+      genres: body.genres,
+      lon: body.lon,
+      lat: body.lat
+    },
+  });
+  const response = await fetch(request).then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+  return await response.json();
+};
+
 export const restaurantInfo = async (id) => {
   const request = new Request(`${endpoint}/restaurants/${id}`, {
     method: "GET",

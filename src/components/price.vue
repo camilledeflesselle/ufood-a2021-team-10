@@ -31,7 +31,7 @@ export default {
       }
     }
     strokePrice(this.priceTag, 1);
-    strokePrice(3, 0);
+    strokePrice(4, 0);
 
     this.vueCanvas = ctx;
   },

@@ -12,31 +12,19 @@
       <div id="search-filter">
         <div class="filter-option">
           <div class="filter-title">Price range</div>
-          <div id="price">
-            <input type="checkbox" name="price" value="$" /> $
-            <input type="checkbox" name="price" value="$$" /> $$
-            <input type="checkbox" name="price" value="$$$" /> $$$
-          </div>
+          <span v-for="price_range in PriceRanges" id="price" v-bind:key="price_range">
+            <input type="checkbox" v-model="checkedPriceRange" v-bind:value="price_range"/> {{representPrice(price_range)}}
+          </span>
         </div>
         <div class="filter-option">
-          <div class="filter-title">Type</div>
+          <div class="filter-title">Genre</div>
           <div id="type">
-            <input type="checkbox" name="type" value="Chic" /> Chic
-            <input type="checkbox" name="type" value="Casual" /> Casual
-            <input type="checkbox" name="type" value="Cafe" /> Cafe
-            <input type="checkbox" name="type" value="Pub" /> Pub
+            <span v-for="genre in genres" id="genres" v-bind:key="genre">
+            <input type="checkbox" v-model="checkedGenres" v-bind:value="genre"/> {{genre}}
+          </span>
           </div>
         </div>
-        <div class="filter-option">
-          <div class="filter-title">Cuisine</div>
-          <div id="cuisine">
-            <input type="checkbox" name="type" value="Chic" /> Italian
-            <input type="checkbox" name="type" value="Casual" /> Chinese
-            <input type="checkbox" name="type" value="Cafe" /> Thai
-            <input type="checkbox" name="type" value="Pub" /> Mexican
-            <input type="checkbox" name="type" value="Pub" /> American
-          </div>
-        </div>
+         
       </div>
     </div>
     <!-- here -->
@@ -106,7 +94,7 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { createVisit, visitesOfOneRestaurantByUser, visitesRestaurantOfUser } from "./api/restaurants.js";
+import { restaurantsFiltered, createVisit, visitesOfOneRestaurantByUser, visitesRestaurantOfUser } from "./api/restaurants.js";
 
 export default {
   name: "App",
@@ -117,14 +105,15 @@ export default {
   data: function () {
     return {
       isModalVisible: false,
-      filterGenres: [],
-      filterPriceRange: [],
-      filterCuisine: [],
+      checkedGenres: [],
+      checkedPriceRange: [],
       searchTerm:"",
       comment: "",
       rating: 0,
       date: Date.now(),
       currentRestaurantId: "",
+      limit: undefined,
+      page: undefined,
     };
   },
   methods: {
@@ -138,6 +127,9 @@ export default {
       this.rating = "3";
       this.date = Date.now();
       this.currentRestaurantId = "";
+    },
+    representPrice: function(range){
+      return "$".repeat(range)
     },
     submitVisit: async function () {
       const visitDate = new Date(this.date);
@@ -160,6 +152,7 @@ export default {
       return this.$store.state.restaurants;
     },
     restaurantsFiltered() {
+      
       if (this.$store.state.restaurants && this.searchTerm !== ""){
         return Object.values(this.$store.state.restaurants).filter(restaurant => {
         return restaurant.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
@@ -168,8 +161,24 @@ export default {
         return this.$store.state.restaurants
       }
     },
-    
-      
+    filteredPriceRange(){
+    if (!this.checkedPriceRange.length)
+       return this.restaurantsFiltered
+
+     return Object.values(this.$store.state.restaurants).filter(restaurant => this.checkedPriceRange.includes(restaurant.price_range))
+    },
+    PriceRanges(){
+      const array = Object.values(this.$store.state.restaurants)
+      const unique = [...new Set(array.map(array => array.price_range))];
+      return unique
+    },
+     genres(){
+      let array = Object.values(this.$store.state.restaurants)
+      let arrays = [...new Set(array.map(array => array.genres))];
+      console.log(arrays)
+      array = [...new Set(arrays.flat(1))]
+      return array
+    },
     
   },
   async mounted() {
