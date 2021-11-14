@@ -48,7 +48,6 @@ export default {
     if (this.rating - (Math.ceil(this.rating) - 1) > 0.5) {
       strokeStar(xi + p * (Math.ceil(this.rating) - 1), 25, 5, 5, 2, 1, 1);
     }
-    console.log(this.rating);
     this.vueCanvas = ctx;
   },
 };

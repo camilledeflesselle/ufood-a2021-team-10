@@ -1,7 +1,20 @@
 <template>
   <body>
     <footer>
-      <button class="button">Ajouter favoris</button>
+      <b-dropdown
+        text="Ajouter Favoris"
+        variant="primary"
+        class="m-2"
+        size="lg"
+      >
+        <b-dropdown-item
+          v-for="list in listResto"
+          :key="list.id"
+          @click="ajouterRestoList(list.id)"
+        >
+          {{ list.name }}
+        </b-dropdown-item>
+      </b-dropdown>
       <button class="button">Entrer visiste</button>
     </footer>
     <div id="restaurantpage">
@@ -78,7 +91,7 @@ import Price from "./price.vue";
 
 Vue.use(Vuex);
 
-const store = new Vuex.Store({
+const storeRes = new Vuex.Store({
   state: {
     info: undefined,
   },
@@ -88,16 +101,12 @@ const store = new Vuex.Store({
     },
   },
   actions: {
-    async getInfo({ commit }) {
+    async getInfo({ commit }, id) {
       const response = await axios.get(
-        "https://ufoodapi.herokuapp.com/unsecure/restaurants",
-        {
-          params: {
-            limit: 4,
-          },
-        }
+        `https://ufoodapi.herokuapp.com/unsecure/restaurants/${id}`,
+        {}
       );
-      commit("setInfo", response.data.items[1]);
+      commit("setInfo", response.data);
     },
   },
 });
@@ -112,18 +121,19 @@ export default {
   },
   computed: {
     restaurant() {
-      return store.state.info;
+      return storeRes.state.info;
+    },
+    listResto() {
+      return this.$store.state.ListFavorites.items;
+    },
+  },
+  methods: {
+    async ajouterRestoList(ListId) {
+      console.log(ListId);
     },
   },
   mounted() {
-    store.dispatch("getInfo");
-
-    let pageres = document.getElementById("restaurantpage");
-    let cv = document.createElement("canvas");
-    cv.setAttribute("id", "canvas");
-    cv.height = "50";
-    cv.width = "400";
-    pageres.appendChild(cv);
+    storeRes.dispatch("getInfo", this.restaurantId);
   },
 };
 </script>
@@ -139,12 +149,13 @@ footer {
   align-items: right;
   justify-content: right;
 }
-button {
+.button {
   background-color: rgb(20, 56, 56);
   color: white;
   font-family: "Montserrat";
   border-radius: 4px;
-  margin-right: 10px;
+  font-size: 15px;
+  margin-right: 15px;
 }
 #restaurantpage {
   display: flex;
