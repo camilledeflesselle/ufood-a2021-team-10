@@ -28,7 +28,7 @@
           <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
             <li>
               <router-link  :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                Name :{{restaurantInfo(restaurant.id)}}
+                Name :{{restaurantInfo1(restaurant.id)}}
                  
               </router-link>
                <option>Id : {{restaurant}}</option>
@@ -51,7 +51,7 @@
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
       <div id="restaurant-container">
-    <div class="item-container" v-for ="restaurant in restaurantsVisited" :key ="restaurant.id">
+    <div class="item-container" v-for ="restaurant in restaurants" :key ="restaurant.id">
       <h1>{{restaurant.name}}</h1>
       <img class="item-image" :src="restaurant.pictures[0]">
       <div>
@@ -108,8 +108,7 @@
    import{
       restaurantInfo,
       visitesRestaurantOfUser,
-      visitesOfOneRestaurantByUser,
-      createVisit
+      visitesOfOneRestaurantByUser
   }
   from "./api/restaurants.js";
 
@@ -178,23 +177,6 @@
               return res
 
             }
-          },
-          async addRestaurantToVisited(restaurantId) {
-           /*
-            if (restaurantId ){
-              // be sure that list doens't have duplicated keys
-              let oldList = this.$store.state.restaurantsVisited;
-              console.log(restaurantsVisited)
-              oldList = oldList.restaurants;
-              let obj = Object.values(oldList)
-              for (let i=0; i<oldList.length; i++){
-                obj[i] = oldList[i].id
-              }
-              if(obj.indexOf(restaurantId) == -1 ){
-               // await addRestaurantToList(listId, restaurantId);
-              }
-              this.$store.state.restaurantsVisited = await visitesRestaurantOfUser();
-            }*/
           },
           async visitesOfOneRestaurantByUser(restaurantId){
              if (restaurantId ){

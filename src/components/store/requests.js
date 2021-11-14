@@ -59,12 +59,7 @@ export const store = new Vuex.Store({
         },
         async getRestaurantsVisited({commit}){
             const response = await axios.get(
-                `${endpoint}/users/${owner.id}/restaurants/visits`, 
-                 {
-                params: {
-                    limit: 10
-                }
-            })
+                `${endpoint}/users/${owner.id}/restaurants/visits`)
             commit("SET_restaurantsVisited", response.data)
         }
 

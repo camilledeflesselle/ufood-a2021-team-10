@@ -106,7 +106,7 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { createVisit } from "./api/restaurants.js";
+import { createVisit, visitesOfOneRestaurantByUser } from "./api/restaurants.js";
 
 export default {
   name: "App",
@@ -147,8 +147,10 @@ export default {
       };
       // TODO Quel est l'id du user?
       const userId = "5f766f6dad626a0004ba134f";
+      console.log(body)
       await createVisit(userId, body);
       this.closeModal();
+      this.$store.state.restaurantsVisited = visitesOfOneRestaurantByUser(userId);
     },
   },
   computed: {
