@@ -107,7 +107,7 @@
       restaurantInfo
   }
   from "./api/restaurants.js";
-  
+
   export default{
     name: 'App', 
     data: () => ({

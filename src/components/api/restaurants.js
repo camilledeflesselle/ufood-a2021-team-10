@@ -92,32 +92,3 @@ export const createVisit = async (userId) => {
     const response = await fetch(request);
     return await response.json();
 };
-
-export const addRestaurantToList = async (name, Listid, restaurantId) => {
-    const request = new Request(
-        `${endpoint}/favorites/${Listid}/restaurants/${restaurantId}`,
-        {
-            method: "PUT",
-            headers:{
-                "Content-Type": "application/json",
-            },
-            body:JSON.stringify({
-                name: name
-            })
-        }
-    );
-
-    const response = await fetch(request);
-    return await response.json();
-};
-
-export const deleteRestaurantFromList = async (restaurantId, Listid) => {
-    const request = new Request(
-        `${endpoint}/favorites/${Listid}/restaurants/${restaurantId}`,
-        {
-            method: "DELETE"
-        }
-    );
-
-    const response = await fetch(request);
-};

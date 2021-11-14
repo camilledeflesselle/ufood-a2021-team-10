@@ -10,7 +10,7 @@
         <b-dropdown-item
           v-for="list in listResto"
           :key="list.id"
-          @click="ajouterRestoList(list.id)"
+          @click="addRestaurantToList(list.id, restaurant.id)"
         >
           {{ list.name }}
         </b-dropdown-item>
@@ -88,7 +88,9 @@ import axios from "axios";
 import Map from "./map.vue";
 import Stars from "./stars.vue";
 import Price from "./price.vue";
-
+import {addRestaurantToList,
+        viewListFavorites
+ } from "./api/favorites"
 Vue.use(Vuex);
 
 const storeRes = new Vuex.Store({
@@ -128,9 +130,22 @@ export default {
     },
   },
   methods: {
-    async ajouterRestoList(ListId) {
-      console.log(ListId);
-    },
+    async addRestaurantToList(listId, restaurantId) {
+            if (restaurantId ){
+              // be sure that list doens't have duplicated keys
+              let oldList = await viewListFavorites(listId);
+              oldList = oldList.restaurants;
+              let obj = Object.values(oldList)
+              for (let i=0; i<oldList.length; i++){
+                obj[i] = oldList[i].id
+              }
+              if(obj.indexOf(restaurantId) == -1 ){
+                await addRestaurantToList(listId, restaurantId);
+              }
+              this.$store.state.ListFavorites = await getListFavorites();
+            }
+            
+          },
   },
   mounted() {
     storeRes.dispatch("getInfo", this.restaurantId);
