@@ -159,14 +159,13 @@ export default {
         res = Object.values(res).filter(restaurant => this.checkedPriceRange.includes(restaurant.price_range))
       }
       if (this.checkedGenres.length){
-        res = Object.values(res).filter(restaurant => restaurant.genres.includes(this.checkedGenres))
-
+        res = Object.values(res).filter(restaurant => this.checkedGenres.includes(restaurant.genres[0]))
       }
       return res
     },
     PriceRanges(){
       const array = Object.values(this.$store.state.restaurants)
-      const unique = [...new Set(array.map(array => array.price_range))];
+      const unique = [...new Set(array.map(array => array.price_range))].sort();
       return unique
     },
      genres(){
