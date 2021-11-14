@@ -52,8 +52,7 @@
         <h1>{{ restaurant.name }}</h1>
         <img class="item-image" :src="restaurant.pictures[0]" />
         <div>
-          <p>restaurant</p>
-            <router-link
+          <router-link
             tag="div"
             :to="{
               name: 'Restaurant',
