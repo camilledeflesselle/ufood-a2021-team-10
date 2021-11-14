@@ -38,17 +38,16 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: black;
-  opacity: 0.2;
+  background-color: rgba(0, 0, 0, 50);
 }
 
 .modal-container {
+    margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  background: white;
+  background-color: rgba(255, 255, 255, 255);
   width: 50%;
   height: 40%;
-  opacity: 1;
   border-color: black;
 }
 /* .modal-header,

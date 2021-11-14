@@ -65,7 +65,7 @@
             </span>
           </router-link>
           <span>
-            <button @click="openModal">Add to visited</button>
+            <button @click="openModal(restaurant.id)">Add to visited</button>
           </span>
         </div>
         <Modal v-if="isModalVisible">
@@ -106,7 +106,7 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { createVisit } from "./api/restaurants.js"
+import { createVisit } from "./api/restaurants.js";
 
 export default {
   name: "App",
@@ -122,26 +122,33 @@ export default {
       comment: "",
       rating: 0,
       date: Date.now(),
+      currentRestaurantId: "",
     };
   },
   methods: {
-    openModal: function () {
+    openModal: function (id) {
       this.isModalVisible = true;
+      this.currentRestaurantId = id;
     },
     closeModal: function () {
       this.isModalVisible = false;
+      this.comment = "";
+      this.rating = "3";
+      this.date = Date.now();
+      this.currentRestaurantId = "";
     },
     submitVisit: async function () {
+      const visitDate = new Date(this.date);
       const body = {
-        restaurant_id: "",
+        restaurant_id: this.currentRestaurantId,
         comment: this.comment,
-        rating: this.rating,
-        date: this.date.toISOString()
-      }
+        rating: parseInt(this.rating),
+        date: visitDate.toISOString()
+      };
       // TODO Quel est l'id du user?
-      await createVisit(userId, body)
-      this.isModalVisible = false
-    }
+      await createVisit(userId, body);
+      this.closeModal();
+    },
   },
   computed: {
     restaurants() {
@@ -213,5 +220,4 @@ export default {
 .item-image {
   width: 100%;
 }
-
 </style>
