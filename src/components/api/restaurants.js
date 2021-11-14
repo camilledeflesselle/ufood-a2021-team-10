@@ -33,7 +33,7 @@ export const getVisitesOneRestaurant = async (id) => {
   return await response.json();
 };
 
-export const visitesRestaurantOfUser = async (owner, userId) => {
+export const visitesRestaurantOfUser = async (userId) => {
   const request = new Request(
     `${endpoint}/users/${userId}/restaurants/visits`,
     {

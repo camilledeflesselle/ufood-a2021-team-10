@@ -24,11 +24,25 @@ export const store = new Vuex.Store({
     SET_LIST(state, data) {
       state.ListFavorites = data;
     },
+<<<<<<< HEAD
     SET_restaurants(state, data) {
       state.restaurants = { ...data.items };
     },
     SET_restaurants_visited(state, data) {
       state.getRestaurantsVisited = { ...data.items };
+=======
+    mutations: {
+        SET_LIST(state, data){
+            state.ListFavorites = data
+        },
+        SET_restaurants(state, data){
+            state.restaurants = {...data.items}
+        },
+        SET_restaurantsVisited(state, data){
+            state.restaurantsVisited = {...data.items}
+        }
+
+>>>>>>> e7c6d8794e4789d1ee1ce54e29b91298f7dbc49f
     },
     actions: {
       async getList({ commit }) {
