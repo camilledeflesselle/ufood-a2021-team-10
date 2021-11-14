@@ -28,7 +28,7 @@
           <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
             <li>
               <router-link  :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                Name :{{restaurant.name}}
+                Name :{{restaurantInfo(restaurant.id)}}
                  
               </router-link>
                <option>Id : {{restaurant}}</option>
@@ -51,7 +51,7 @@
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
       <div id="restaurant-container">
-    <div class="item-container" v-for ="restaurant in restaurants" :key ="restaurant.id">
+    <div class="item-container" v-for ="restaurant in restaurantsVisited" :key ="restaurant.id">
       <h1>{{restaurant.name}}</h1>
       <img class="item-image" :src="restaurant.pictures[0]">
       <div>
@@ -122,6 +122,9 @@
       },
       restaurants(){
         return this.$store.state.restaurants
+      },
+      restaurantsVisited(){
+        return this.$store.state.restaurantsVisited
       }
      },
     methods: {
@@ -168,13 +171,16 @@
            
             if (idRestaurant){
               let res = await restaurantInfo(idRestaurant)
-              this.$store.state.ListFavorites.restaurants[idRestaurant] = res
+              console.log(res)
+              return res
+
             }
           }
     },
     async mounted(){
       this.$store.dispatch("getList")
       this.$store.dispatch("getRestaurants")
+      this.$store.dispatch("getRestaurantsVisited")
     }
   }
 </script>

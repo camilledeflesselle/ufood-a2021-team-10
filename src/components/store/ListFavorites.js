@@ -17,6 +17,7 @@ export const store = new Vuex.Store({
     state: {
         ListFavorites: [],
         restaurants: undefined,
+        getRestaurantsVisited: undefined
     },
     mutations: {
         SET_LIST(state, data){
@@ -24,6 +25,9 @@ export const store = new Vuex.Store({
         },
         SET_restaurants(state, data){
             state.restaurants = {...data.items}
+        },
+        SET_restaurants_visited(state, data){
+            state.restaurantsVisited = {...data.items}
         }
 
     },
@@ -51,6 +55,17 @@ export const store = new Vuex.Store({
                 }
             })
             commit("SET_restaurants", response.data)
-        }
+        },
+        async getRestaurantsVisited({commit}){
+            const response = await axios.get(
+                `${endpoint}/users/${owner.id}/restaurants/visits`, 
+                 {
+                params: {
+                    limit: 10
+                }
+            })
+            commit("SET_restaurantsVisited", response.data)
+        },
+
     },
 })
