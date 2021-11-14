@@ -1,24 +1,29 @@
 /* this file permits to extract data from the api described in url.js file
-*/
+ */
 
 import Vue from "vue";
-import Vuex from "vuex"
-import axios from "axios"
-import { endpoint } from "./url.js"
+import Vuex from "vuex";
+import axios from "axios";
+import { endpoint } from "./url.js";
 import { addRestaurantToList } from "../api/favorites.js";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-const owner = { 
-    "email": "test", 
-    "name": "test",
-    "id": "5f766f6dad626a0004ba134f" 
-}
+const owner = {
+  email: "test",
+  name: "test",
+  id: "5f766f6dad626a0004ba134f",
+};
 export const store = new Vuex.Store({
-    state: {
-        ListFavorites: [],
-        restaurants: undefined,
-        getRestaurantsVisited: undefined
+  state: {
+    ListFavorites: {},
+    nameRestaurant: {},
+    restaurants: undefined,
+    getRestaurantsVisited: undefined,
+  },
+  mutations: {
+    SET_LIST(state, data) {
+      state.ListFavorites = data;
     },
     mutations: {
         SET_LIST(state, data){
@@ -33,35 +38,34 @@ export const store = new Vuex.Store({
 
     },
     actions: {
-        async getList({commit}){
-            const response = await axios.get(
-                `${endpoint}/users/${owner.id}/favorites`,
-                {
-                    headers:{
-                        "Content-Type": "application/json",
-                    },
-                    params:{
-                        limit:"5"
-                    }
-                }
-            )
-            commit("SET_LIST", response.data)
-        },
-        async getRestaurants({commit}){
-            const response = await axios.get(
-                `${endpoint}/restaurants`, 
-                 {
-                params: {
-                    limit: 10
-                }
-            })
-            commit("SET_restaurants", response.data)
-        },
-        async getRestaurantsVisited({commit}){
-            const response = await axios.get(
-                `${endpoint}/users/${owner.id}/restaurants/visits`)
-            commit("SET_restaurantsVisited", response.data)
-        }
-
+      async getList({ commit }) {
+        const response = await axios.get(
+          `${endpoint}/users/${owner.id}/favorites`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            params: {
+              limit: "5",
+            },
+          }
+        );
+        commit("SET_LIST", response.data);
+      },
+      async getRestaurants({ commit }) {
+        const response = await axios.get(`${endpoint}/restaurants`, {
+          params: {
+            limit: 10,
+          },
+        });
+        commit("SET_restaurants", response.data);
+      },
+      async getRestaurantsVisited({ commit }) {
+        const response = await axios.get(
+          `${endpoint}/users/${owner.id}/restaurants/visits`
+        );
+        commit("SET_restaurantsVisited", response.data);
+      },
     },
-})
+  },
+});

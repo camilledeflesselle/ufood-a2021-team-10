@@ -1,5 +1,35 @@
 <template>
   <body>
+    <Modal v-if="isModalVisible">
+      <template v-slot:m-header> Ajout d'une visite </template>
+      <template v-slot:m-body>
+        <div>Date de la visite</div>
+        <Datepicker v-model="date"></Datepicker>
+        <div>Commentaire:</div>
+        <textarea
+          name="commentArea"
+          id="comment"
+          placeholder="Entrez votre commentaire ici"
+          v-model="comment"
+        ></textarea>
+        <div>
+          <label for="rating">Votre cote :</label>
+          <select name="rating" id="rating" v-model="rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+      </template>
+      <template v-slot:m-footer>
+        <div class="modal-button-area">
+          <span><button @click="submitVisit">Soumettre</button></span>
+          <span><button @click="closeModal">Annuler</button></span>
+        </div>
+      </template>
+    </Modal>
     <footer>
       <b-dropdown
         text="Ajouter Favoris"
@@ -15,7 +45,7 @@
           {{ list.name }}
         </b-dropdown-item>
       </b-dropdown>
-      <button class="button">Entrer visiste</button>
+      <button class="button" @click="openModal()">Entrer visiste</button>
     </footer>
     <div id="restaurantpage">
       <div class="ligne">
@@ -88,10 +118,15 @@ import axios from "axios";
 import Map from "./map.vue";
 import Stars from "./stars.vue";
 import Price from "./price.vue";
-import {addRestaurantToList,
-        viewListFavorites,
-        getListFavorites
- } from "./api/favorites"
+import Modal from "./Modal.vue";
+import Datepicker from "vuejs-datepicker";
+import { createVisit } from "./api/restaurants.js";
+
+import {
+  addRestaurantToList,
+  viewListFavorites,
+  getListFavorites,
+} from "./api/favorites";
 Vue.use(Vuex);
 
 const storeRes = new Vuex.Store({
@@ -121,6 +156,18 @@ export default {
     Map,
     Stars,
     Price,
+    Modal,
+    Datepicker,
+  },
+  data: function () {
+    return {
+      isModalVisible: false,
+      filterGenres: [],
+      filterPriceRange: [],
+      comment: "",
+      rating: 0,
+      date: Date.now(),
+    };
   },
   computed: {
     restaurant() {
@@ -132,24 +179,30 @@ export default {
   },
   methods: {
     async addRestaurantToList(listId, restaurantId) {
-            if (restaurantId ){
-              // be sure that list doens't have duplicated keys
-              let oldList = await viewListFavorites(listId);
-              oldList = oldList.restaurants;
-              let obj = Object.values(oldList)
-              for (let i=0; i<oldList.length; i++){
-                obj[i] = oldList[i].id
-              }
-              if(obj.indexOf(restaurantId) == -1 ){
-                await addRestaurantToList(listId, restaurantId);
-              }
-              this.$store.state.ListFavorites = await getListFavorites();
-            }
-            
-          },
+      if (restaurantId) {
+        // be sure that list doens't have duplicated keys
+        let oldList = await viewListFavorites(listId);
+        oldList = oldList.restaurants;
+        let obj = Object.values(oldList);
+        for (let i = 0; i < oldList.length; i++) {
+          obj[i] = oldList[i].id;
+        }
+        if (obj.indexOf(restaurantId) == -1) {
+          await addRestaurantToList(listId, restaurantId);
+        }
+        this.$store.state.ListFavorites = await getListFavorites();
+      }
+    },
+    openModal: function () {
+      this.isModalVisible = true;
+    },
+    closeModal: function () {
+      this.isModalVisible = false;
+    },
   },
   mounted() {
     storeRes.dispatch("getInfo", this.restaurantId);
+    this.$store.dispatch("getList");
   },
 };
 </script>
