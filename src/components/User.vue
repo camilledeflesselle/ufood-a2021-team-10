@@ -61,20 +61,21 @@
                  <router-link tag = "div" :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
                   <button>More...</button>
               </router-link>
-               
-      <b-button block v-b-toggle="'button-'+restaurant.id">Add to favorites</b-button>
-      <b-collapse :id="'button-'+restaurant.id"  >
-          Add this restaurant to a list...
-        <div class="px-2 py-1">
-          <ul :key="list.id" v-for="list in ListFavorites.items">
-            <li>
-                  
-              <b-button size = "lg" @click="addRestaurantToList(list.id, restaurant.id)" variant="success">Add to <span class = "bold">{{list.name}}</span></b-button>
-              
-              </li>
-          </ul>
-        </div>
-      </b-collapse>
+      <b-dropdown
+        text="Ajouter Favoris"
+        variant="primary"
+        class="m-2"
+        size="sm"
+      >
+        <b-dropdown-item
+          v-for="list in ListFavorites.items"
+          :key="list.id"
+          @click="addRestaurantToList(list.id, restaurant.id)"
+        >
+          {{ list.name }}
+        </b-dropdown-item>
+      </b-dropdown>         
+
 
       <button class="button">Entrer visit</button>
               </div>
@@ -137,9 +138,19 @@
           },
           async addRestaurantToList(listId, restaurantId) {
             if (restaurantId ){
-              await addRestaurantToList(listId, restaurantId);
+              // be sure that list doens't have duplicated keys
+              let oldList = await viewListFavorites(listId);
+              oldList = oldList.restaurants;
+              let obj = Object.values(oldList)
+              for (let i=0; i<oldList.length; i++){
+                obj[i] = oldList[i].id
+              }
+              if(obj.indexOf(restaurantId) == -1 ){
+                await addRestaurantToList(listId, restaurantId);
+              }
               this.$store.state.ListFavorites = await getListFavorites();
             }
+            
           },
             async deleteRestaurantFromList(restaurantId, ListId) {
               if (restaurantId ){
@@ -149,7 +160,6 @@
           },
             async viewListFavorites(id) {
               await viewListFavorites(id);
-              this.$store.state.ListFavorites = await getListFavorites();
           },
           async restaurantInfo(idRestaurant) {
             if (idRestaurant){
