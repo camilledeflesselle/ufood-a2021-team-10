@@ -27,7 +27,7 @@ export const store = new Vuex.Store({
         SET_restaurants(state, data){
             state.restaurants = {...data.items}
         },
-        SET_restaurants_visited(state, data){
+        SET_restaurantsVisited(state, data){
             state.restaurantsVisited = {...data.items}
         }
 

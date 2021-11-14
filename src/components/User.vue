@@ -28,7 +28,7 @@
           <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
             <li>
               <router-link  :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                Name :{{restaurantInfo1(restaurant.id)}}
+                Name :{{}}
                  
               </router-link>
                <option>Id : {{restaurant}}</option>
@@ -51,12 +51,14 @@
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
       <div id="restaurant-container">
+        {{restaurantsVisited}}
     <div class="item-container" v-for ="restaurant in restaurants" :key ="restaurant.id">
+      
       <h1>{{restaurant.name}}</h1>
       <img class="item-image" :src="restaurant.pictures[0]">
       <div>
         <p>
-          1 visite
+          {{viewNumberVisitsRestaurant(restaurant.id)}} visite
         </p>
        
               <div class = "item">
@@ -169,7 +171,7 @@
               return await viewListFavorites(id);
 
           },
-          async restaurantInfo(idRestaurant) {
+           async restaurantInfo(idRestaurant) {
            
             if (idRestaurant){
               let res = await restaurantInfo(idRestaurant)
@@ -182,10 +184,30 @@
              if (restaurantId ){
                 await visitesOfOneRestaurantByUser(restaurantId);
               }
+          },
+          viewNumberVisitsRestaurant(restaurantId){
+            let nb = 0
+            const visits = this.$store.state.restaurantsVisited
+            if (visits){
+              for (let visit in visits){
+              if (visits[visit].restaurant_id == restaurantId){++nb}
+            }
+            
+            }
+            return nb
+          },
+           restaurantsVisitedInfo(){
+            let nb = 0
+            const visits = this.$store.state.restaurantsVisited
+            for (visit in visits){
+              if (visits.id == restaurantId){++nb}
+            }
+            return nb
           }
 
+
     },
-    async mounted(){
+    mounted(){
       this.$store.dispatch("getList")
       this.$store.dispatch("getRestaurants")
       this.$store.dispatch("getRestaurantsVisited")

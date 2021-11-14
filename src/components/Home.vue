@@ -53,7 +53,7 @@
         <img class="item-image" :src="restaurant.pictures[0]" />
         <div>
           <p>restaurant</p>
-          <router-link
+            <router-link
             tag="div"
             :to="{
               name: 'Restaurant',
@@ -106,7 +106,7 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { createVisit, visitesOfOneRestaurantByUser } from "./api/restaurants.js";
+import { createVisit, visitesOfOneRestaurantByUser, visitesRestaurantOfUser } from "./api/restaurants.js";
 
 export default {
   name: "App",
@@ -150,7 +150,7 @@ export default {
       console.log(body)
       await createVisit(userId, body);
       this.closeModal();
-      this.$store.state.restaurantsVisited = visitesOfOneRestaurantByUser(userId);
+      this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);
     },
   },
   computed: {
@@ -160,6 +160,7 @@ export default {
   },
   async mounted() {
     this.$store.dispatch("getRestaurants");
+    this.$store.dispatch("getRestaurantsVisited");
   },
 };
 </script>
