@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="filter-option">
-          <div class="filter-title">Genre</div>
+          <div class="filter-title">Cuisine</div>
           <div id="type">
             <div v-for="genre in genres" id="genres" v-bind:key="genre">
             <input type="checkbox" v-model="checkedGenres" v-bind:value="genre"/> {{genre}}
@@ -159,7 +159,7 @@ export default {
         res = Object.values(res).filter(restaurant => this.checkedPriceRange.includes(restaurant.price_range))
       }
       if (this.checkedGenres.length){
-        res = Object.values(res).filter(restaurant => this.checkedGenres.includes(restaurant.genres))
+        res = Object.values(res).filter(restaurant => restaurant.genres.includes(this.checkedGenres))
 
       }
       return res
@@ -205,6 +205,7 @@ export default {
 .filter-option {
   padding-left: 1rem;
   padding-right: 1rem;
+  width:100%;
 }
 .filter-title {
   font-size: 1.2rem;
@@ -236,7 +237,7 @@ export default {
 }
 
 .item-container {
-  width: 30%;
+  width: 50%;
   padding: 1rem;
 }
 
