@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import {store} from "./components/store/ListFavorites.js";
+import {store} from "./components/store/requests.js";
 import 'leaflet/dist/leaflet.css';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 

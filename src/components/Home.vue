@@ -146,6 +146,7 @@ export default {
         date: visitDate.toISOString()
       };
       // TODO Quel est l'id du user?
+      const userId = "5f766f6dad626a0004ba134f";
       await createVisit(userId, body);
       this.closeModal();
     },

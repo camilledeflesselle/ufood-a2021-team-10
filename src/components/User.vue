@@ -106,7 +106,10 @@
   from "./api/favorites.js";
 
    import{
-      restaurantInfo
+      restaurantInfo,
+      visitesRestaurantOfUser,
+      visitesOfOneRestaurantByUser,
+      createVisit
   }
   from "./api/restaurants.js";
 
@@ -175,7 +178,30 @@
               return res
 
             }
+          },
+          async addRestaurantToVisited(restaurantId) {
+           /*
+            if (restaurantId ){
+              // be sure that list doens't have duplicated keys
+              let oldList = this.$store.state.restaurantsVisited;
+              console.log(restaurantsVisited)
+              oldList = oldList.restaurants;
+              let obj = Object.values(oldList)
+              for (let i=0; i<oldList.length; i++){
+                obj[i] = oldList[i].id
+              }
+              if(obj.indexOf(restaurantId) == -1 ){
+               // await addRestaurantToList(listId, restaurantId);
+              }
+              this.$store.state.restaurantsVisited = await visitesRestaurantOfUser();
+            }*/
+          },
+          async visitesOfOneRestaurantByUser(restaurantId){
+             if (restaurantId ){
+                await visitesOfOneRestaurantByUser(restaurantId);
+              }
           }
+
     },
     async mounted(){
       this.$store.dispatch("getList")

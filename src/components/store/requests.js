@@ -5,6 +5,7 @@ import Vue from "vue";
 import Vuex from "vuex"
 import axios from "axios"
 import { endpoint } from "./url.js"
+import { addRestaurantToList } from "../api/favorites.js";
 
 Vue.use(Vuex)
 
@@ -65,7 +66,7 @@ export const store = new Vuex.Store({
                 }
             })
             commit("SET_restaurantsVisited", response.data)
-        },
+        }
 
     },
 })
