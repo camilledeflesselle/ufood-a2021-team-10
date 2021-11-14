@@ -48,22 +48,40 @@
     </div>
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
-      <div class= "flex-container" v-for="restaurant in restaurants" :key="restaurant.id">
-        
-          <div class = "item" >
-            <b-img class = "meanimg" :src="restaurant.pictures[0]" img-alt="Card image" left > </b-img>
-            {{restaurant.name}}
-          
-        <router-link :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                  first{{restaurant.name}}
-              </router-link>
-              </div>
-        <div class = "item">
+      <div id="restaurant-container">
+    <div class="item-container" v-for ="restaurant in restaurants" :key ="restaurant.id">
+      <h1>{{restaurant.name}}</h1>
+      <img class="item-image" :src="restaurant.pictures[0]">
+      <div>
+        <p>
           1 visite
+        </p>
+       
+              <div class = "item">
+                 <router-link tag = "div" :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
+                  <button>More...</button>
+              </router-link>
+               
+      <b-button block v-b-toggle="'button-'+restaurant.id">Add to favorites</b-button>
+      <b-collapse :id="'button-'+restaurant.id"  >
+          Add this restaurant to a list...
+        <div class="px-2 py-1">
+          <ul :key="list.id" v-for="list in ListFavorites.items">
+            <li>
+                  
+              <b-button size = "lg" @click="addRestaurantToList(restaurant.id, list.id)" variant="success">Add to <span class = "bold">{{list.name}}</span></b-button>
+              
+              </li>
+          </ul>
         </div>
-        <div id="chosenLists" name="cars">
-          <option :key="list.id" v-for="list in ListFavorites.items">{{list.name}}</option>
-        </div>
+      </b-collapse>
+
+      <button class="button">Entrer visit</button>
+              </div>
+        
+      </div>
+    </div>
+        
       </div>
     </div>
       <router-link to="/">Home</router-link>
