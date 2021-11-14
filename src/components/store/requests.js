@@ -17,7 +17,6 @@ const owner = {
 export const store = new Vuex.Store({
   state: {
     ListFavorites: {},
-    nameRestaurant: {},
     restaurants: undefined,
     getRestaurantsVisited: undefined,
   },
@@ -29,7 +28,7 @@ export const store = new Vuex.Store({
       state.restaurants = { ...data.items };
     },
     SET_restaurants_visited(state, data) {
-      state.restaurantsVisited = { ...data.items };
+      state.getRestaurantsVisited = { ...data.items };
     },
     actions: {
       async getList({ commit }) {
