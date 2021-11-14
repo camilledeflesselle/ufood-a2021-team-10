@@ -12,25 +12,23 @@
       <div id="search-filter">
         <div class="filter-option">
           <div class="filter-title">Price range</div>
-          <span v-for="price_range in PriceRanges" id="price" v-bind:key="price_range">
+          <div v-for="price_range in PriceRanges" id="price" v-bind:key="price_range">
             <input type="checkbox" v-model="checkedPriceRange" v-bind:value="price_range"/> {{representPrice(price_range)}}
-          </span>
+          </div>
         </div>
         <div class="filter-option">
           <div class="filter-title">Genre</div>
           <div id="type">
-            <span v-for="genre in genres" id="genres" v-bind:key="genre">
+            <div v-for="genre in genres" id="genres" v-bind:key="genre">
             <input type="checkbox" v-model="checkedGenres" v-bind:value="genre"/> {{genre}}
-          </span>
+          </div>
           </div>
         </div>
          
       </div>
     </div>
     <!-- here -->
-    <div id="apply-filters">
-      <button>Apply filters</button>
-    </div>
+    
     <div id="restaurant-container">
       <div
         class="item-container"
@@ -151,20 +149,20 @@ export default {
       return this.$store.state.restaurants;
     },
     restaurantsFiltered() {
-      
-      if (this.$store.state.restaurants && this.searchTerm !== ""){
-        return Object.values(this.$store.state.restaurants).filter(restaurant => {
+      let res = this.$store.state.restaurants
+      if (this.searchTerm !== ""){
+        res = Object.values(res).filter(restaurant => {
         return restaurant.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
       })}
-      else {
-        return this.$store.state.restaurants
-      }
-    },
-    filteredPriceRange(){
-    if (!this.checkedPriceRange.length)
-       return this.restaurantsFiltered
 
-     return Object.values(this.$store.state.restaurants).filter(restaurant => this.checkedPriceRange.includes(restaurant.price_range))
+      if (this.checkedPriceRange.length){
+        res = Object.values(res).filter(restaurant => this.checkedPriceRange.includes(restaurant.price_range))
+      }
+      if (this.checkedGenres.length){
+        res = Object.values(res).filter(restaurant => this.checkedGenres.includes(restaurant.genres))
+
+      }
+      return res
     },
     PriceRanges(){
       const array = Object.values(this.$store.state.restaurants)
@@ -174,8 +172,7 @@ export default {
      genres(){
       let array = Object.values(this.$store.state.restaurants)
       let arrays = [...new Set(array.map(array => array.genres))];
-      console.log(arrays)
-      array = [...new Set(arrays.flat(1))]
+      array = [...new Set(arrays.flat(1))].sort()
       return array
     },
     

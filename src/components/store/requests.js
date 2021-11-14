@@ -39,10 +39,7 @@ export const store = new Vuex.Store({
           {
             headers: {
               "Content-Type": "application/json",
-            },
-            params: {
-              limit: "5",
-            },
+            }
           }
         );
         commit("SET_LIST", response.data);
