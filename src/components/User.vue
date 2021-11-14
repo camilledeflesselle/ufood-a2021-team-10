@@ -18,7 +18,6 @@
             <b-button size = "lg" @click="deleteListFavorites(list.id)" variant="danger">X</b-button>
           </b-input-group-append>
         </b-input-group>
-      
       <b-button block v-b-toggle="'test-'+list.id">View Restaurants</b-button>
       <b-collapse :id="'test-'+list.id" :title="list.name + 
           ', list of ' + list.restaurants.length + ' restaurant(s)'" bg-variant="dark" text-variant="light" shadow  >
@@ -40,9 +39,8 @@
           </ul>
         </div>
       </b-collapse>
-    </div>
-  </div>
-      <div class = "item">
+      </div>
+      <div class="item">
         Create a new list :
         <b-input-group size = "lg" prepend="New list" >
           <b-form-input v-model="inputValue" placeholder="Choose a name..." variant="success"></b-form-input>
@@ -94,7 +92,7 @@
       <router-link to="/">Home</router-link>
     
   </div>
-  
+  </div>
 </template>
 
 <script>
@@ -120,7 +118,8 @@ import {
     name: 'User', 
     
     data: () => ({
-      inputValue: ''
+      inputValue: '',
+      restaurantsName: {}
     }),
     computed: {
       
@@ -176,7 +175,7 @@ import {
               return await viewListFavorites(id);
 
           },
-           async restaurantInfo(idRestaurant) {
+          async restaurantInfo(idRestaurant) {
            
             if (idRestaurant){
               let res = await restaurantInfo(idRestaurant)
@@ -209,9 +208,8 @@ import {
             return nb
           }
 
-
     },
-    mounted(){
+    async mounted(){
       this.$store.dispatch("getList")
       this.$store.dispatch("getRestaurantsVisited")
       await this.$store.dispatch("getRestaurants");

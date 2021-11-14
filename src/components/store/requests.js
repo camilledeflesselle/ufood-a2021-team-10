@@ -32,7 +32,6 @@ export const store = new Vuex.Store({
         SET_restaurantsVisited(state, data){
             state.restaurantsVisited = {...data.items}
         }
-
     },
     actions: {
       async getList({ commit }) {
