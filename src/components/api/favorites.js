@@ -116,15 +116,24 @@ export const viewListFavorites = async (id) => {
     return await response.json();
 };
 
-export const addRestaurantToList = async (Listid, restaurantId) => {
+export const addRestaurantToList = async (listId, restaurantId) => {
+      
+    var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+myHeaders.append("Cookie", "connect.sid=s%3A75zFyvTZRk7rQ_juDpjNfzmZvkZbe2pe.xaSZI%2BUpGP6nYVCbxbTqoTf%2B6EpxHIFaF%2BKs0VATF3Q");
+
+var urlencoded = new URLSearchParams();
+urlencoded.append("id", restaurantId);
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: urlencoded,
+  redirect: 'follow'
+};
     const request = new Request(
-        `${endpoint}/favorites/${Listid}/restaurants/${restaurantId}`,
-        {
-            method: "PUT",
-            headers:{
-                "Content-Type": "application/json",
-            }
-        }
+        `${endpoint}/favorites/${listId}/restaurants`,
+        requestOptions
     );
 
     const response = await fetch(request);
@@ -132,6 +141,7 @@ export const addRestaurantToList = async (Listid, restaurantId) => {
 };
 
 export const deleteRestaurantFromList = async (restaurantId, Listid) => {
+    
     const request = new Request(
         `${endpoint}/favorites/${Listid}/restaurants/${restaurantId}`,
         {

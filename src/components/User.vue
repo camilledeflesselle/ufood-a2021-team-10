@@ -69,7 +69,7 @@
           <ul :key="list.id" v-for="list in ListFavorites.items">
             <li>
                   
-              <b-button size = "lg" @click="addRestaurantToList(restaurant.id, list.id)" variant="success">Add to <span class = "bold">{{list.name}}</span></b-button>
+              <b-button size = "lg" @click="addRestaurantToList(list.id, restaurant.id)" variant="success">Add to <span class = "bold">{{list.name}}</span></b-button>
               
               </li>
           </ul>
