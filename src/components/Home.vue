@@ -4,9 +4,10 @@
       <div id="search-bar">
         <input
           placeholder="search for restaurants..."
-          id="input"
-          type="search"
+          v-model="searchTerm"
+          type="text"
         />
+
       </div>
       <div id="search-filter">
         <div class="filter-option">
@@ -42,11 +43,10 @@
     <div id="apply-filters">
       <button>Apply filters</button>
     </div>
-
     <div id="restaurant-container">
       <div
         class="item-container"
-        v-for="restaurant in restaurants"
+        v-for="restaurant in restaurantsFiltered"
         :key="restaurant.id"
       >
         <h1>{{ restaurant.name }}</h1>
@@ -119,6 +119,8 @@ export default {
       isModalVisible: false,
       filterGenres: [],
       filterPriceRange: [],
+      filterCuisine: [],
+      searchTerm:"",
       comment: "",
       rating: 0,
       date: Date.now(),
@@ -157,6 +159,18 @@ export default {
     restaurants() {
       return this.$store.state.restaurants;
     },
+    restaurantsFiltered() {
+      if (this.$store.state.restaurants && this.searchTerm !== ""){
+        return Object.values(this.$store.state.restaurants).filter(restaurant => {
+        return restaurant.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
+      })}
+      else {
+        return this.$store.state.restaurants
+      }
+    },
+    
+      
+    
   },
   async mounted() {
     this.$store.dispatch("getRestaurants");
