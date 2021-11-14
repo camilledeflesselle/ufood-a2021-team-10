@@ -18,13 +18,10 @@ export const store = new Vuex.Store({
   state: {
     ListFavorites: {},
     nameRestaurant: {},
-    restaurants: undefined,
-    getRestaurantsVisited: undefined,
+    restaurants: {},
+    getRestaurantsVisited: {},
+    restaurantsFiltered: {}
   },
-  mutations: {
-    SET_LIST(state, data) {
-      state.ListFavorites = data;
-    },
     mutations: {
         SET_LIST(state, data){
             state.ListFavorites = data
@@ -67,5 +64,5 @@ export const store = new Vuex.Store({
         commit("SET_restaurantsVisited", response.data);
       },
     },
-  },
+  
 });

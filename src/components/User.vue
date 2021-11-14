@@ -6,9 +6,10 @@
       <div class="item">3.8</div>
     </div>
     <div class="item bold">Favorites restaurants</div>
-    <div class="ListFavoritesContainer padding">
-      <div class="item">
+    <div class = "ListFavoritesContainer padding">
+      <div class = "item">
         Your lists :
+      
       <div v-for="list in ListFavorites.items" :key="list.id" class="list-group" >
         <b-input-group size="lg" class="mt-4">
           <b-form-input v-model="list.name" placeholder="Change name..." id="inputValue"></b-form-input>
@@ -24,41 +25,34 @@
           <h3>List : {{list.name}}</h3>
           Total : {{list.restaurants.length}}
         <div class="px-2 py-1">
+          {{ListFavorites}}
           <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
             <li>
               <router-link  :to="{ name: 'Restaurant', params: {restaurantId: restaurant.id } }">
-                Name :{{restaurantsName[restaurant.id]}}
+                Name :{{restaurant}}
                  
               </router-link>
+              
                <option>Id : {{restaurant}}</option>
                <b-button size = "lg" @click="deleteRestaurantFromList(restaurant.id, list.id)" variant="danger">Delete X</b-button>         
               
               </li>
           </ul>
         </div>
-      </div>
-      <div class="item">
+      </b-collapse>
+    </div>
+  </div>
+      <div class = "item">
         Create a new list :
-        <b-input-group size="lg" prepend="New list">
-          <b-form-input
-            v-model="inputValue"
-            placeholder="Choose a name..."
-            variant="success"
-          ></b-form-input>
-          <b-button
-            size="lg"
-            :disabled="inputValue === ''"
-            @click="createListFavorites"
-            variant="success"
-            >Create</b-button
-          >
+        <b-input-group size = "lg" prepend="New list" >
+          <b-form-input v-model="inputValue" placeholder="Choose a name..." variant="success"></b-form-input>
+          <b-button size = "lg" :disabled="inputValue === ''" @click="createListFavorites" variant = "success">Create</b-button>
         </b-input-group>
       </div>
     </div>
     <div class="item bold">Recent restaurants Visited</div>
     <div class="padding" id="vistedContainer">
       <div id="restaurant-container">
-<<<<<<< HEAD
         {{restaurantsVisited}}
     <div class="item-container" v-for ="restaurant in restaurants" :key ="restaurant.id">
       
@@ -83,52 +77,26 @@
           v-for="list in ListFavorites.items"
           :key="list.id"
           @click="addRestaurantToList(list.id, restaurant.id)"
-=======
-        <div
-          class="item-container"
-          v-for="restaurant in restaurants"
-          :key="restaurant.id"
->>>>>>> 85ad669e22077962b98916234ba31f6881106c73
         >
-          <h1>{{ restaurant.name }}</h1>
-          <img class="item-image" :src="restaurant.pictures[0]" />
-          <div>
-            <p>1 visite</p>
+          {{ list.name }}
+        </b-dropdown-item>
+      </b-dropdown>         
 
-            <div class="item">
-              <router-link
-                tag="div"
-                :to="{
-                  name: 'Restaurant',
-                  params: { restaurantId: restaurant.id },
-                }"
-              >
-                <button>More...</button>
-              </router-link>
-              <b-dropdown
-                text="Ajouter Favoris"
-                variant="primary"
-                class="m-2"
-                size="sm"
-              >
-                <b-dropdown-item
-                  v-for="list in ListFavorites.items"
-                  :key="list.id"
-                  @click="addRestaurantToList(list.id, restaurant.id)"
-                >
-                  {{ list.name }}
-                </b-dropdown-item>
-              </b-dropdown>
 
-              <button class="button">Entrer visit</button>
-            </div>
-          </div>
-        </div>
+      <button @click="viewModal(restaurantsVisited[0])" class="button">Entrer visit</button>
+              </div>
+        
       </div>
     </div>
-    <router-link to="/">Home</router-link>
+        
+      </div>
+    </div>
+      <router-link to="/">Home</router-link>
+    
   </div>
+  
 </template>
+
 <script>
 import {
   createListFavorites,
@@ -146,9 +114,11 @@ import {
       visitesOfOneRestaurantByUser
   }
   from "./api/restaurants.js";
+  import Modal from "./Modal.vue";
 
   export default{
-    name: 'App', 
+    name: 'User', 
+    
     data: () => ({
       inputValue: ''
     }),
@@ -192,10 +162,10 @@ import {
               if(obj.indexOf(restaurantId) == -1 ){
                 await addRestaurantToList(listId, restaurantId);
               }
-              this.$store.state.ListFavorites = await getListFavorites();
-            }
+                 this.$store.state.ListFavorites = await getListFavorites();
+            }            
             
-          },
+                      },
             async deleteRestaurantFromList(restaurantId, ListId) {
               if (restaurantId ){
                 await deleteRestaurantFromList(restaurantId, ListId);
@@ -210,9 +180,8 @@ import {
            
             if (idRestaurant){
               let res = await restaurantInfo(idRestaurant)
-              console.log(res)
+              //console.log(res)
               return res
-
             }
           },
           async visitesOfOneRestaurantByUser(restaurantId){
@@ -234,7 +203,7 @@ import {
            restaurantsVisitedInfo(){
             let nb = 0
             const visits = this.$store.state.restaurantsVisited
-            for (visit in visits){
+            for (let visit in visits){
               if (visits.id == restaurantId){++nb}
             }
             return nb
