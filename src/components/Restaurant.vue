@@ -1,5 +1,72 @@
 <template>
-  <body>
+  <div id="restaurantpage">
+    <footer>
+      <b-dropdown
+        text="Ajouter Favoris"
+        variant="primary"
+        class="m-2"
+        size="lg"
+      >
+        <b-dropdown-item
+          v-for="list in listResto"
+          :key="list.id"
+          @click="addRestaurantToList(list.id, restaurant.id)"
+        >
+          {{ list.name }}
+        </b-dropdown-item>
+      </b-dropdown>
+      <button class="button" @click="openModal(restaurantId)">
+        Entrer visit
+      </button>
+    </footer>
+    <div class="ligne">
+      <option>Restaurant</option>
+      <div>{{ restaurant.name }}</div>
+    </div>
+    <div class="ligne">
+      <option>Cuisine</option>
+      <div>
+        <ul>
+          <li v-for="genre in restaurant.genres" :key="genre">
+            {{ genre }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="ligne">
+      <option>Price</option>
+      <div>
+        <Price :priceTag="restaurant.price_range"></Price>
+      </div>
+    </div>
+    <div class="ligne">
+      <option>Rate</option>
+      <div>
+        <Stars :rating="restaurant.rating"></Stars>
+      </div>
+    </div>
+    <div class="ligne">
+      <option>Opening hours</option>
+      <div>
+        <ul>
+          <div
+            class="small"
+            v-for="(hour, day) in restaurant.opening_hours"
+            :key="day"
+          >
+            {{ day }} : {{ hour }}
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div class="ligne">
+      <option>Adresse</option>
+      <div>{{ restaurant.address }}</div>
+    </div>
+    <div class="ligne">
+      <option>Telephone</option>
+      <div>{{ restaurant.tel }}</div>
+    </div>
     <Modal v-if="isModalVisible">
       <template v-slot:m-header> Ajout d'une visite </template>
       <template v-slot:m-body>
@@ -111,45 +178,21 @@
     <div class="localisation">
       <Map :coord="restaurant.location.coordinates"></Map>
     </div>
-  </body>
+  </div>
 </template>
 <script>
-import Vue from "vue";
-import Vuex from "vuex";
-import axios from "axios";
+import store from "./store/requests.js";
 import Map from "./map.vue";
 import Stars from "./stars.vue";
 import Price from "./price.vue";
 import Modal from "./Modal.vue";
 import Datepicker from "vuejs-datepicker";
-import { createVisit } from "./api/restaurants.js";
-
 import {
+  getListFavorites,
   addRestaurantToList,
   viewListFavorites,
-  getListFavorites,
-} from "./api/favorites";
-Vue.use(Vuex);
-
-const storeRes = new Vuex.Store({
-  state: {
-    info: undefined,
-  },
-  mutations: {
-    setInfo(state, data) {
-      state.info = { ...data };
-    },
-  },
-  actions: {
-    async getInfo({ commit }, id) {
-      const response = await axios.get(
-        `https://ufoodapi.herokuapp.com/unsecure/restaurants/${id}`,
-        {}
-      );
-      commit("setInfo", response.data);
-    },
-  },
-});
+} from "./api/favorites.js";
+import { createVisit, visitesRestaurantOfUser } from "./api/restaurants.js";
 
 export default {
   name: "Restaurant",
@@ -161,7 +204,7 @@ export default {
     Modal,
     Datepicker,
   },
-  data: function () {
+  data: () => {
     return {
       isModalVisible: false,
       filterGenres: [],
@@ -173,7 +216,7 @@ export default {
   },
   computed: {
     restaurant() {
-      return storeRes.state.info;
+      return this.$store.state.info_restaurant;
     },
     listResto() {
       return this.$store.state.ListFavorites.items;
@@ -195,22 +238,53 @@ export default {
         this.$store.state.ListFavorites = await getListFavorites();
       }
     },
-    openModal: function () {
+    openModal: function (id) {
       this.isModalVisible = true;
+      this.currentRestaurantId = id;
     },
     closeModal: function () {
       this.isModalVisible = false;
+      this.comment = "";
+      this.rating = "3";
+      this.date = Date.now();
+      this.currentRestaurantId = "";
+    },
+    submitVisit: async function () {
+      const visitDate = new Date(this.date);
+      const body = {
+        restaurant_id: this.currentRestaurantId,
+        comment: this.comment,
+        rating: parseInt(this.rating),
+        date: visitDate.toISOString(),
+      };
+      // TODO Quel est l'id du user?
+      const userId = "5f766f6dad626a0004ba134f";
+      console.log(body);
+      await createVisit(userId, body);
+      this.closeModal();
+      this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);
     },
   },
   mounted() {
-    storeRes.dispatch("getInfo", this.restaurantId);
+    if (this.restaurantId) {
+      window.localStorage.setItem("restoId", this.restaurantId);
+      this.$store.dispatch("getInfoRestaurant", this.restaurantId);
+    } else {
+      this.$store.dispatch(
+        "getInfoRestaurant",
+        window.localStorage.getItem("restoId")
+      );
+    }
     this.$store.dispatch("getList");
   },
 };
 </script>
 <style>
 /*page restaurant*/
-
+body {
+  height: 100%;
+  font-family: "Montserrat";
+}
 footer {
   display: flex;
   align-items: right;
@@ -230,7 +304,8 @@ footer {
   text-decoration: none;
   list-style-type: none;
   align-content: center;
-  margin: 10%;
+  margin: 2%;
+  width: 80%;
 }
 .small {
   height: 1px;
