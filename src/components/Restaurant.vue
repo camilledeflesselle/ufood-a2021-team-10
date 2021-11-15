@@ -1,55 +1,25 @@
 <template>
   <body>
-    <Modal v-if="isModalVisible">
-      <template v-slot:m-header> Ajout d'une visite </template>
-      <template v-slot:m-body>
-        <div>Date de la visite</div>
-        <Datepicker v-model="date"></Datepicker>
-        <div>Commentaire:</div>
-        <textarea
-          name="commentArea"
-          id="comment"
-          placeholder="Entrez votre commentaire ici"
-          v-model="comment"
-        ></textarea>
-        <div>
-          <label for="rating">Votre cote :</label>
-          <select name="rating" id="rating" v-model="rating">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </div>
-      </template>
-      <template v-slot:m-footer>
-        <div class="modal-button-area">
-          <span><button @click="submitVisit">Soumettre</button></span>
-          <span><button @click="closeModal">Annuler</button></span>
-        </div>
-      </template>
-    </Modal>
-    <footer>
-      <b-dropdown
-        text="Ajouter Favoris"
-        variant="primary"
-        class="m-2"
-        size="lg"
-      >
-        <b-dropdown-item
-          v-for="list in listResto"
-          :key="list.id"
-          @click="addRestaurantToList(list.id, restaurant.id)"
-        >
-          {{ list.name }}
-        </b-dropdown-item>
-      </b-dropdown>
-      <button class="button" @click="openModal(restaurantId)">
-        Entrer visit
-      </button>
-    </footer>
     <div id="restaurantpage">
+      <footer>
+        <b-dropdown
+          text="Ajouter Favoris"
+          variant="primary"
+          class="m-2"
+          size="lg"
+        >
+          <b-dropdown-item
+            v-for="list in listResto"
+            :key="list.id"
+            @click="addRestaurantToList(list.id, restaurant.id)"
+          >
+            {{ list.name }}
+          </b-dropdown-item>
+        </b-dropdown>
+        <button class="button" @click="openModal(restaurantId)">
+          Entrer visit
+        </button>
+      </footer>
       <div class="ligne">
         <option>Restaurant</option>
         <div>{{ restaurant.name }}</div>
@@ -98,6 +68,36 @@
         <option>Telephone</option>
         <div>{{ restaurant.tel }}</div>
       </div>
+      <Modal v-if="isModalVisible">
+        <template v-slot:m-header> Ajout d'une visite </template>
+        <template v-slot:m-body>
+          <div>Date de la visite</div>
+          <Datepicker v-model="date"></Datepicker>
+          <div>Commentaire:</div>
+          <textarea
+            name="commentArea"
+            id="comment"
+            placeholder="Entrez votre commentaire ici"
+            v-model="comment"
+          ></textarea>
+          <div>
+            <label for="rating">Votre cote :</label>
+            <select name="rating" id="rating" v-model="rating">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+        </template>
+        <template v-slot:m-footer>
+          <div class="modal-button-area">
+            <span><button @click="submitVisit">Soumettre</button></span>
+            <span><button @click="closeModal">Annuler</button></span>
+          </div>
+        </template>
+      </Modal>
     </div>
     <div class="listimgres">
       <img
@@ -122,7 +122,12 @@ import Stars from "./stars.vue";
 import Price from "./price.vue";
 import Modal from "./Modal.vue";
 import Datepicker from "vuejs-datepicker";
-import { createVisit } from "./api/restaurants.js";
+import {
+  restaurantsFiltered,
+  createVisit,
+  visitesOfOneRestaurantByUser,
+  visitesRestaurantOfUser,
+} from "./api/restaurants.js";
 
 import {
   addRestaurantToList,
@@ -205,6 +210,21 @@ export default {
       this.rating = "3";
       this.date = Date.now();
       this.currentRestaurantId = "";
+    },
+    submitVisit: async function () {
+      const visitDate = new Date(this.date);
+      const body = {
+        restaurant_id: this.currentRestaurantId,
+        comment: this.comment,
+        rating: parseInt(this.rating),
+        date: visitDate.toISOString(),
+      };
+      // TODO Quel est l'id du user?
+      const userId = "5f766f6dad626a0004ba134f";
+      console.log(body);
+      await createVisit(userId, body);
+      this.closeModal();
+      this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);
     },
   },
   mounted() {
