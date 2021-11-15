@@ -91,10 +91,10 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { restaurantsFiltered, createVisit, visitesOfOneRestaurantByUser, visitesRestaurantOfUser } from "./api/restaurants.js";
+import { createVisit, visitesRestaurantOfUser } from "./api/restaurants.js";
 
 export default {
-  name: "App",
+  name: "Home",
   components: {
     Datepicker,
     Modal,
@@ -149,7 +149,8 @@ export default {
       return this.$store.state.restaurants;
     },
     restaurantsFiltered() {
-      let res = this.$store.state.restaurants
+      let res = this.$store.state.restaurants;
+      if (!res){ return res}
       if (this.searchTerm !== ""){
         res = Object.values(res).filter(restaurant => {
         return restaurant.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
@@ -164,14 +165,22 @@ export default {
       return res
     },
     PriceRanges(){
-      const array = Object.values(this.$store.state.restaurants)
-      const unique = [...new Set(array.map(array => array.price_range))].sort();
+      let data = this.$store.state.restaurants;
+      let unique = [];
+      if (data) {
+        const array = Object.values(data)
+        unique = [...new Set(array.map(array => array.price_range))].sort();
+      }
       return unique
     },
      genres(){
-      let array = Object.values(this.$store.state.restaurants)
-      let arrays = [...new Set(array.map(array => array.genres))];
-      array = [...new Set(arrays.flat(1))].sort()
+      let data = this.$store.state.restaurants;
+      let array = [];
+      if (data) {
+        array = Object.values(data)
+        let arrays = [...new Set(array.map(array => array.genres))];
+        array = [...new Set(arrays.flat(1))].sort()
+      }
       return array
     },
     
