@@ -7,6 +7,7 @@
     </div>
     <div class="item bold">Favorites restaurants</div>
     <div class = "ListFavoritesContainer padding">
+      
       <div class = "item">
         Your lists :
         <div
@@ -61,7 +62,7 @@
                       params: { restaurantId: restaurant.id },
                     }"
                   >
-                    Name : {{ restaurant.id }}
+                    Name : {{ restaurantInfo(restaurant.id).name }}
                   </router-link>
                   <b-button
                     size="lg"
@@ -106,13 +107,13 @@
                 params: { restaurantId: resto.restaurant_id },
               }"
             >
-              {{ resto.restaurant_id }}
+              {{ restaurantInfo(resto.restaurant_id).name }}
             </router-link>
             <div>Comment : {{ resto.comment }}</div>
             <div>Rating : {{ resto.rating }}</div>
             <!-- <img class="item-image" :src="restaurant.pictures[0]" /> -->
             <div>
-              <p>1 visite</p>
+              <p>{{viewNumberVisitsRestaurant(resto.restaurant_id)}} visite</p>
 
               <div class="item">
                 <b-dropdown
@@ -219,30 +220,38 @@ export default {
     async viewListFavorites(id) {
       return await viewListFavorites(id);
     },
-    async restaurantInfo(idRestaurant) {
-      if (idRestaurant) {
-        let res = await restaurantInfo(idRestaurant);
-        // console.log(res);
+    restaurantInfo(idRestaurant) {
+      const data = this.$store.state.restaurants;
+      if (data && idRestaurant) {
+        let res = Object.values(data).find(restaurant => restaurant.id === idRestaurant)
+        console.log(res)
         return res;
       }
     },
-    async visitesOfOneRestaurantByUser(restaurantId) {
-      if (restaurantId) {
-        await visitesOfOneRestaurantByUser(restaurantId);
-      }
-    },
+    async visitesOfOneRestaurantByUser(restaurantId){
+             if (restaurantId ){
+                await visitesOfOneRestaurantByUser(restaurantId);
+              }
+          },
+     viewNumberVisitsRestaurant(restaurantId){
+            let nb = 0
+            const visits = this.$store.state.restaurantsVisited
+            console.log(visits)
+            if (visits){
+              for (let visit in visits){
+              if (visits[visit].restaurant_id == restaurantId){++nb}
+            }
+            
+            }
+            return nb
+          }
+  
+    
   },
   async mounted() {
     this.$store.dispatch("getList");
     this.$store.dispatch("getRestaurantsVisited");
-    await this.$store.dispatch("getRestaurants");
-    this.$store.state.ListFavorites.items.forEach(async (list) => {
-      list.restaurants.forEach(async (resto) => {
-        let res = await restaurantInfo(resto.id);
-        this.restaurantsName[resto.id] = { name: res.name, id: resto.id };
-      });
-    });
-    // console.log(this.restaurantsName);
+    this.$store.dispatch("getRestaurants");
   },
 };
 </script>
