@@ -54,8 +54,10 @@
             <div class="px-2 py-1">
               <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
                 <li>
-
-                <img class="item-img" :src="restaurantInfo(restaurant.id).pictures[0]">
+                  <img
+                    class="item-img"
+                    :src="restaurantInfo(restaurant.id).pictures[0]"
+                  />
                   <router-link
                     :to="{
                       name: 'Restaurant',
@@ -93,59 +95,59 @@
           </b-input-group>
         </div>
       </div>
-      </div>
-      <div class="item bold">Recent restaurants Visited</div>
-      <div class="padding" id="vistedContainer">
-        <div id="restaurant-container">
-          <div
-            class="item-container"
-            v-for="resto in restaurantsVisited"
-            :key="resto.id"
+    </div>
+    <div class="item bold">Recent restaurants Visited</div>
+    <div class="padding" id="vistedContainer">
+      <div id="restaurant-container">
+        <div
+          class="item-container"
+          v-for="resto in restaurantsVisited"
+          :key="resto.id"
+        >
+          <router-link
+            :to="{
+              name: 'Restaurant',
+              params: { restaurantId: resto.restaurant_id },
+            }"
           >
-            <router-link
-              :to="{
-                name: 'Restaurant',
-                params: { restaurantId: resto.restaurant_id },
-              }"
-            >
-              {{ restaurantInfo(resto.restaurant_id).name }}
-            </router-link>
+            {{ restaurantInfo(resto.restaurant_id).name }}
+          </router-link>
 
-      <img class="mean-img" :src="restaurantInfo(resto.restaurant_id).pictures[0]">
-            <div>Comment : {{ resto.comment }}</div>
-            <div>Rating : {{ resto.rating }}</div>
-            <!-- <img class="item-image" :src="restaurant.pictures[0]" /> -->
-            <div>
-              <p>
-                {{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite
-              </p>
+          <img
+            class="mean-img"
+            :src="restaurantInfo(resto.restaurant_id).pictures[0]"
+          />
+          <div>Comment : {{ resto.comment }}</div>
+          <div>Rating : {{ resto.rating }}</div>
+          <!-- <img class="item-image" :src="restaurant.pictures[0]" /> -->
+          <div>
+            <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
 
-              <div class="item">
-                <b-dropdown
-                  text="Ajouter Favoris"
-                  variant="primary"
-                  class="m-2"
-                  size="sm"
+            <div class="item">
+              <b-dropdown
+                text="Ajouter Favoris"
+                variant="primary"
+                class="m-2"
+                size="sm"
+              >
+                <b-dropdown-item
+                  v-for="list in ListFavorites.items"
+                  :key="list.id"
+                  @click="addRestaurantToList(list.id, resto.restaurant_id)"
                 >
-                  <b-dropdown-item
-                    v-for="list in ListFavorites.items"
-                    :key="list.id"
-                    @click="addRestaurantToList(list.id, resto.restaurant_id)"
-                  >
-                    {{ list.name }}
-                  </b-dropdown-item>
-                </b-dropdown>
+                  {{ list.name }}
+                </b-dropdown-item>
+              </b-dropdown>
 
-                <button
-                  class="button"
-                  @click="openModal(resto.restaurant_id, resto)"
-                >
-                  Entrer visit
-                </button>
-              </div>
+              <button
+                class="button"
+                @click="openModal(resto.restaurant_id, resto)"
+              >
+                Entrer visit
+              </button>
             </div>
           </div>
-        
+        </div>
       </div>
       <router-link to="/">Home</router-link>
       <Modal v-if="isModalVisible">
@@ -257,7 +259,9 @@ export default {
     restaurantInfo(idRestaurant) {
       const data = this.$store.state.restaurants;
       if (data && idRestaurant) {
-        let res = Object.values(data).find(restaurant => restaurant.id === idRestaurant)
+        let res = Object.values(data).find(
+          (restaurant) => restaurant.id === idRestaurant
+        );
         return res;
       }
     },
