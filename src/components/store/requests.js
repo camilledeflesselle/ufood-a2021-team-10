@@ -20,6 +20,7 @@ export const store = new Vuex.Store({
     restaurants: undefined,
     restaurantsVisited: {},
     nameRestaurant: {},
+    info_restaurant: undefined,
   },
   mutations: {
     SET_LIST(state, data) {
@@ -30,6 +31,9 @@ export const store = new Vuex.Store({
     },
     SET_restaurantsVisited(state, data) {
       state.restaurantsVisited = { ...data.items };
+    },
+    SET_info_restaurant(state, data) {
+      state.info_restaurant = data;
     },
   },
   actions: {
@@ -57,6 +61,13 @@ export const store = new Vuex.Store({
         `${endpoint}/users/${owner.id}/restaurants/visits`
       );
       commit("SET_restaurantsVisited", response.data);
+    },
+    async getInfoRestaurant({ commit }, id) {
+      const response = await axios.get(
+        `https://ufoodapi.herokuapp.com/unsecure/restaurants/${id}`,
+        {}
+      );
+      commit("SET_info_restaurant", response.data);
     },
   },
 });
