@@ -95,33 +95,29 @@
           </b-input-group>
         </div>
       </div>
-    </div>
-    <div class="item bold">Recent restaurants Visited</div>
-    <div class="padding" id="vistedContainer">
-      <div id="restaurant-container">
-        <div
-          class="item-container"
-          v-for="resto in restaurantsVisited"
-          :key="resto.id"
-        >
-          <router-link
-            :to="{
-              name: 'Restaurant',
-              params: { restaurantId: resto.restaurant_id },
-            }"
-          >
-            {{ restaurantInfo(resto.restaurant_id).name }}
-          </router-link>
+      </div>
+      <div class="item bold">Recent restaurants Visited</div>
+      <div class=" flex-container padding">
+      <div class="flex-container">
+        <div 
+            v-for="resto in restaurantsVisited"
+            :key="resto.id" class="card" style="width: 30%;">
+  <img class="card-img-top" :src="restaurantInfo(resto.restaurant_id).pictures[0]" alt="Card image cap">
+  <div class="card-body">
 
-          <img
-            class="mean-img"
-            :src="restaurantInfo(resto.restaurant_id).pictures[0]"
-          />
-          <div>Comment : {{ resto.comment }}</div>
-          <div>Rating : {{ resto.rating }}</div>
-          <!-- <img class="item-image" :src="restaurant.pictures[0]" /> -->
-          <div>
-            <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
+            <router-link
+              :to="{
+                name: 'Restaurant',
+                params: { restaurantId: resto.restaurant_id },
+              }"
+            >
+             <h5 class="card-title"> {{ restaurantInfo(resto.restaurant_id).name }}</h5>
+             
+            </router-link>
+   
+    <p class="card-text"> <div>Comment : {{ resto.comment }}</div>
+            <div>Rating : {{ resto.rating }}</div>
+    <p>{{viewNumberVisitsRestaurant(resto.restaurant_id)}} visite</p>
 
             <div class="item">
               <b-dropdown
@@ -139,15 +135,16 @@
                 </b-dropdown-item>
               </b-dropdown>
 
-              <button
-                class="button"
-                @click="openModal(resto.restaurant_id, resto)"
-              >
-                Entrer visit
-              </button>
-            </div>
-          </div>
-        </div>
+                <b-btn
+                  class="m-2"
+                  size="sm" 
+                   @click="openModal(resto.restaurant_id, resto)">Entrer visit
+                  
+                   </b-btn>
+  </div>
+</div>
+</div>
+        
       </div>
       <router-link to="/">Home</router-link>
       <Modal v-if="isModalVisible">
@@ -161,7 +158,7 @@
         </template>
         <template v-slot:m-footer>
           <div class="modal-button-area">
-            <span><button @click="closeModal">Annuler</button></span>
+            <span><button @click="closeModal">Close</button></span>
           </div>
         </template>
       </Modal>
