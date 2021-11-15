@@ -315,13 +315,18 @@ export default {
   align-content: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  margin-bottom:10px;
+ 
+  
 }
 .item {
   font-size: 20px;
   padding: 1rem;
   padding-right: 4rem;
-  flex-direction: column;
+  flex-direction: column wrap;
   display: flex;
+  margin-bottom:10px;
+  padding:10px;
 }
 .padding {
   padding: 2rem;

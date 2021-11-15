@@ -35,11 +35,12 @@
                v-for="restaurant in restaurantsFiltered"
                :key="restaurant.id"
                >
-               <b-body>
+               <b-card-body>
                   <b-card-img :src="restaurant.pictures[0]" img-alt="Image" overlay></b-card-img>
                   <b-card-text>
-                     <b-button-toolbar>
-                        <b-btn>
+                    <p>
+                      <div>
+                        <b-btn class = "btn-success" size="sm">
                            <router-link
                               tag="div"
                               :to="{
@@ -50,8 +51,11 @@
                               More...
                            </router-link>
                         </b-btn>
-                        <b-btn @click="openModal(restaurant.id)">Add to visited</b-btn>
-                     </b-button-toolbar>
+                        </div>
+                      
+                        <div>
+                        <b-btn size = "sm" @click="openModal(restaurant.id)">Add to visited</b-btn>
+                     </div>
                      <Modal v-if="isModalVisible">
                         <template v-slot:m-header> Ajout d'une visite </template>
                         <template v-slot:m-body>
@@ -86,8 +90,9 @@
                            </div>
                         </template>
                      </Modal>
+                    
                   </b-card-text>
-               </b-body>
+               </b-card-body>
             </b-card>
          </b-card-group>
       </div>
@@ -219,6 +224,24 @@
    padding-right: 1rem;
    width:100%;
    }
+   .flex-container {
+  display: flex;
+  align-content: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  margin-bottom:10px;
+ 
+  
+}
+.item {
+  font-size: 20px;
+  padding: 1rem;
+  padding-right: 4rem;
+  flex-direction: column wrap;
+  display: flex;
+  margin-bottom:10px;
+  padding:10px;
+}
    .filter-title {
    font-size: 1.2rem;
    font-weight: bold;
