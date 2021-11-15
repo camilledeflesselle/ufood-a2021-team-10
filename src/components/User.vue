@@ -7,8 +7,7 @@
     </div>
     <div class="item bold">Favorites restaurants</div>
     <div class="ListFavoritesContainer padding">
-      <div class="item">
-        Your lists :
+      
         <div
           v-for="list in ListFavorites.items"
           :key="list.id"
@@ -36,7 +35,8 @@
             </b-input-group-append>
           </b-input-group>
           <b-button block v-b-toggle="'test-' + list.id"
-            >View Restaurants</b-button
+            >View Restaurants 
+            (total : {{ list.restaurants.length }})</b-button
           >
           <b-collapse
             :id="'test-' + list.id"
@@ -50,28 +50,36 @@
             text-variant="light"
             shadow
           >
-            Total : {{ list.restaurants.length }}
-            <div class="px-2 py-1">
-              <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
-                <li>
-
-                <img class="item-img" :src="restaurantInfo(restaurant.id).pictures[0]">
-                  <router-link
+            <div >
+              
+                <b-card v-for="restaurant in list.restaurants" :key="restaurant.id"  no-body class="overflow-hidden"  style="max-width: 100%;">
+    <b-row no-gutters>
+      <b-col md="3">
+        <b-card-img :src="restaurantInfo(restaurant.id).pictures[0]" alt="Image" width="20%"></b-card-img>
+      </b-col>
+      <b-col md="9">
+        <b-card-body :title="restaurantInfo(restaurant.id).name">
+          <b-card-text>
+            <router-link
                     :to="{
                       name: 'Restaurant',
                       params: { restaurantId: restaurant.id },
                     }"
-                  >
-                    {{ restaurantInfo(restaurant.id).name }}
+                  > 
+                    More...
+
                   </router-link>
-                  <b-button
-                    size="lg"
+                  
+          </b-card-text>
+          <b-button right="true"
+                    size="sm"
                     @click="deleteRestaurantFromList(restaurant.id, list.id)"
                     variant="danger"
-                    >Delete X</b-button
-                  >
-                </li>
-              </ul>
+                    >Delete X</b-button>
+        </b-card-body>
+      </b-col>
+    </b-row>
+  </b-card>
             </div>
           </b-collapse>
         </div>
@@ -91,7 +99,7 @@
               >Create</b-button
             >
           </b-input-group>
-        </div>
+        
       </div>
       </div>
       <div class="item bold">Recent restaurants Visited</div>
@@ -101,7 +109,7 @@
             v-for="resto in restaurantsVisited"
             :key="resto.id" class="card" style="width: 30%;">
   <img class="card-img-top" :src="restaurantInfo(resto.restaurant_id).pictures[0]" alt="Card image cap">
-  <div class="card-body">
+  <div class="card-body-right">
 
             <router-link
               :to="{
@@ -113,13 +121,11 @@
              
             </router-link>
    
-    <p class="card-text"> <div>Comment : {{ resto.comment }}</div>
-            <div>Rating : {{ resto.rating }}</div>
+    <p class="card-text"> 
     <p>{{viewNumberVisitsRestaurant(resto.restaurant_id)}} visite</p>
 
-              <div class="item">
                 <b-dropdown
-                  text="Ajouter Favoris"
+                  text="Add to a list of favorites"
                   variant="primary"
                   class="m-2"
                   size="sm"
@@ -128,6 +134,7 @@
                     v-for="list in ListFavorites.items"
                     :key="list.id"
                     @click="addRestaurantToList(list.id, resto.restaurant_id)"
+                    tooltip="add to list"
                   >
                     {{ list.name }}
                   </b-dropdown-item>
@@ -136,10 +143,10 @@
                 <b-btn
                   class="m-2"
                   size="sm" 
-                   @click="openModal(resto.restaurant_id, resto)">Entrer visit
+                   @click="openModal(resto.restaurant_id, resto)">View visit information
                   
                    </b-btn>
-  </div>
+
 </div>
 </div>
         
