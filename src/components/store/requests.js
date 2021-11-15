@@ -18,47 +18,47 @@ export const store = new Vuex.Store({
   state: {
     ListFavorites: {},
     restaurants: undefined,
-    getRestaurantsVisited: undefined,
+    restaurantsVisited: {},
   },
-    mutations: {
-        SET_LIST(state, data){
-            state.ListFavorites = data
-        },
-        SET_restaurants(state, data){
-            state.restaurants = {...data.items}
-        },
-        SET_restaurantsVisited(state, data){
-            state.restaurantsVisited = {...data.items}
-        }
+  mutations: {
+    SET_LIST(state, data) {
+      state.ListFavorites = data;
     },
-    actions: {
-      async getList({ commit }) {
-        const response = await axios.get(
-          `${endpoint}/users/${owner.id}/favorites`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            params: {
-              limit: "5",
-            },
-          }
-        );
-        commit("SET_LIST", response.data);
-      },
-      async getRestaurants({ commit }) {
-        const response = await axios.get(`${endpoint}/restaurants`, {
-          params: {
-            limit: 10,
+    SET_restaurants(state, data) {
+      state.restaurants = { ...data.items };
+    },
+    SET_restaurantsVisited(state, data) {
+      state.restaurantsVisited = { ...data.items };
+    },
+  },
+  actions: {
+    async getList({ commit }) {
+      const response = await axios.get(
+        `${endpoint}/users/${owner.id}/favorites`,
+        {
+          headers: {
+            "Content-Type": "application/json",
           },
-        });
-        commit("SET_restaurants", response.data);
-      },
-      async getRestaurantsVisited({ commit }) {
-        const response = await axios.get(
-          `${endpoint}/users/${owner.id}/restaurants/visits`
-        );
-        commit("SET_restaurantsVisited", response.data);
-      },
+          params: {
+            limit: "5",
+          },
+        }
+      );
+      commit("SET_LIST", response.data);
     },
+    async getRestaurants({ commit }) {
+      const response = await axios.get(`${endpoint}/restaurants`, {
+        params: {
+          limit: 10,
+        },
+      });
+      commit("SET_restaurants", response.data);
+    },
+    async getRestaurantsVisited({ commit }) {
+      const response = await axios.get(
+        `${endpoint}/users/${owner.id}/restaurants/visits`
+      );
+      commit("SET_restaurantsVisited", response.data);
+    },
+  },
 });
