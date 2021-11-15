@@ -41,11 +41,11 @@ export default {
 <style>
 .map {
   position: absolute;
-  width: 90%;
+  width: 80%;
   height: 100%;
   border-radius: 20px;
-  left: 5%;
-  right: 5%;
+  left: 10%;
+  right: 10%;
 }
 .restaurant-icon {
   height: 60px;
