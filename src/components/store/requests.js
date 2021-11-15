@@ -19,6 +19,7 @@ export const store = new Vuex.Store({
     ListFavorites: {},
     restaurants: undefined,
     restaurantsVisited: {},
+    nameRestaurant: {},
   },
   mutations: {
     SET_LIST(state, data) {
@@ -39,9 +40,6 @@ export const store = new Vuex.Store({
           headers: {
             "Content-Type": "application/json",
           },
-          params: {
-            limit: "5",
-          },
         }
       );
       commit("SET_LIST", response.data);
@@ -49,7 +47,7 @@ export const store = new Vuex.Store({
     async getRestaurants({ commit }) {
       const response = await axios.get(`${endpoint}/restaurants`, {
         params: {
-          limit: 10,
+          limit: 100,
         },
       });
       commit("SET_restaurants", response.data);

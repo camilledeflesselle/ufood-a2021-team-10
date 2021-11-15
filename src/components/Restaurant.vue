@@ -45,7 +45,7 @@
           {{ list.name }}
         </b-dropdown-item>
       </b-dropdown>
-      <button class="button" @click="openModal()">Entrer visiste</button>
+      <button class="button" @click="viewModal(restaurantsVisited[0])">Entrer visit</button>
     </footer>
     <div id="restaurantpage">
       <div class="ligne">
@@ -193,7 +193,7 @@ export default {
         this.$store.state.ListFavorites = await getListFavorites();
       }
     },
-    openModal: function () {
+    viewModal: function () {
       this.isModalVisible = true;
     },
     closeModal: function () {

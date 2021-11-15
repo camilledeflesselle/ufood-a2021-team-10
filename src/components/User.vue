@@ -6,8 +6,8 @@
       <div class="item">3.8</div>
     </div>
     <div class="item bold">Favorites restaurants</div>
-    <div class="ListFavoritesContainer padding">
-      <div class="item">
+    <div class = "ListFavoritesContainer padding">
+      <div class = "item">
         Your lists :
         <div
           v-for="list in ListFavorites.items"
@@ -140,6 +140,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import {
   createListFavorites,

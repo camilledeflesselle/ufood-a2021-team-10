@@ -4,56 +4,41 @@
       <div id="search-bar">
         <input
           placeholder="search for restaurants..."
-          id="input"
-          type="search"
+          v-model="searchTerm"
+          type="text"
         />
+
       </div>
       <div id="search-filter">
         <div class="filter-option">
           <div class="filter-title">Price range</div>
-          <div id="price">
-            <input type="checkbox" name="price" value="$" /> $
-            <input type="checkbox" name="price" value="$$" /> $$
-            <input type="checkbox" name="price" value="$$$" /> $$$
-          </div>
-        </div>
-        <div class="filter-option">
-          <div class="filter-title">Type</div>
-          <div id="type">
-            <input type="checkbox" name="type" value="Chic" /> Chic
-            <input type="checkbox" name="type" value="Casual" /> Casual
-            <input type="checkbox" name="type" value="Cafe" /> Cafe
-            <input type="checkbox" name="type" value="Pub" /> Pub
+          <div v-for="price_range in PriceRanges" id="price" v-bind:key="price_range">
+            <input type="checkbox" v-model="checkedPriceRange" v-bind:value="price_range"/> {{representPrice(price_range)}}
           </div>
         </div>
         <div class="filter-option">
           <div class="filter-title">Cuisine</div>
-          <div id="cuisine">
-            <input type="checkbox" name="type" value="Chic" /> Italian
-            <input type="checkbox" name="type" value="Casual" /> Chinese
-            <input type="checkbox" name="type" value="Cafe" /> Thai
-            <input type="checkbox" name="type" value="Pub" /> Mexican
-            <input type="checkbox" name="type" value="Pub" /> American
+          <div id="type">
+            <div v-for="genre in genres" id="genres" v-bind:key="genre">
+            <input type="checkbox" v-model="checkedGenres" v-bind:value="genre"/> {{genre}}
+          </div>
           </div>
         </div>
+         
       </div>
     </div>
     <!-- here -->
-    <div id="apply-filters">
-      <button>Apply filters</button>
-    </div>
-
+    
     <div id="restaurant-container">
       <div
         class="item-container"
-        v-for="restaurant in restaurants"
+        v-for="restaurant in restaurantsFiltered"
         :key="restaurant.id"
       >
         <h1>{{ restaurant.name }}</h1>
         <img class="item-image" :src="restaurant.pictures[0]" />
         <div>
-          <p>restaurant</p>
-            <router-link
+          <router-link
             tag="div"
             :to="{
               name: 'Restaurant',
@@ -106,7 +91,7 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { createVisit, visitesOfOneRestaurantByUser, visitesRestaurantOfUser } from "./api/restaurants.js";
+import { restaurantsFiltered, createVisit, visitesOfOneRestaurantByUser, visitesRestaurantOfUser } from "./api/restaurants.js";
 
 export default {
   name: "App",
@@ -117,12 +102,15 @@ export default {
   data: function () {
     return {
       isModalVisible: false,
-      filterGenres: [],
-      filterPriceRange: [],
+      checkedGenres: [],
+      checkedPriceRange: [],
+      searchTerm:"",
       comment: "",
       rating: 0,
       date: Date.now(),
       currentRestaurantId: "",
+      limit: undefined,
+      page: undefined,
     };
   },
   methods: {
@@ -136,6 +124,9 @@ export default {
       this.rating = "3";
       this.date = Date.now();
       this.currentRestaurantId = "";
+    },
+    representPrice: function(range){
+      return "$".repeat(range)
     },
     submitVisit: async function () {
       const visitDate = new Date(this.date);
@@ -157,6 +148,33 @@ export default {
     restaurants() {
       return this.$store.state.restaurants;
     },
+    restaurantsFiltered() {
+      let res = this.$store.state.restaurants
+      if (this.searchTerm !== ""){
+        res = Object.values(res).filter(restaurant => {
+        return restaurant.name.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1
+      })}
+
+      if (this.checkedPriceRange.length){
+        res = Object.values(res).filter(restaurant => this.checkedPriceRange.includes(restaurant.price_range))
+      }
+      if (this.checkedGenres.length){
+        res = Object.values(res).filter(restaurant => this.checkedGenres.includes(restaurant.genres[0]))
+      }
+      return res
+    },
+    PriceRanges(){
+      const array = Object.values(this.$store.state.restaurants)
+      const unique = [...new Set(array.map(array => array.price_range))].sort();
+      return unique
+    },
+     genres(){
+      let array = Object.values(this.$store.state.restaurants)
+      let arrays = [...new Set(array.map(array => array.genres))];
+      array = [...new Set(arrays.flat(1))].sort()
+      return array
+    },
+    
   },
   async mounted() {
     this.$store.dispatch("getRestaurants");
@@ -186,6 +204,7 @@ export default {
 .filter-option {
   padding-left: 1rem;
   padding-right: 1rem;
+  width:100%;
 }
 .filter-title {
   font-size: 1.2rem;
@@ -217,7 +236,7 @@ export default {
 }
 
 .item-container {
-  width: 30%;
+  width: 50%;
   padding: 1rem;
 }
 
