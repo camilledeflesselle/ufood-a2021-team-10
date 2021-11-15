@@ -29,10 +29,10 @@ export default {
       accessToken: mapboxgl.accessToken,
     });
 
-   //  map.on("load", function () {
-   //    directions.setOrigin(this.coord); // can be address in form setOrigin("12, Elm Street, NY")
-   //    // this.directions.setDestinaion(this.coord); // can be address
-   //  });
+    //  map.on("load", function () {
+    //    directions.setOrigin(this.coord); // can be address in form setOrigin("12, Elm Street, NY")
+    //    // this.directions.setDestinaion(this.coord); // can be address
+    //  });
 
     map.addControl(directions, "top-right");
   },

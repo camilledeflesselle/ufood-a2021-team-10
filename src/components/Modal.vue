@@ -42,7 +42,7 @@ export default {
 }
 
 .modal-container {
-    margin-top: 1rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   background-color: rgba(255, 255, 255, 255);
@@ -55,5 +55,4 @@ export default {
   height: inherit;
   width: inherit;
 } */
-
 </style>

@@ -45,7 +45,9 @@
           {{ list.name }}
         </b-dropdown-item>
       </b-dropdown>
-      <button class="button" @click="viewModal(restaurantsVisited[0])">Entrer visit</button>
+      <button class="button" @click="viewModal(restaurantsVisited[0])">
+        Entrer visit
+      </button>
     </footer>
     <div id="restaurantpage">
       <div class="ligne">

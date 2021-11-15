@@ -5,7 +5,7 @@
       <router-link to="/" id="titleText">UFood</router-link>
     </div>
     <div id="searchBar">
-      <input id="searchBarInput" type="search" placeholder="Search">
+      <input id="searchBarInput" type="search" placeholder="Search" />
       <button id="searchBarButton">Search</button>
     </div>
     <div id="navRight">
@@ -85,7 +85,8 @@
 
 #titleText {
   font-size: x-large;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   text-decoration: none;
   color: inherit;
   margin-right: 5px;
@@ -113,7 +114,7 @@
   color: rgb(0, 0, 0);
   margin-left: 2px;
   margin-right: 2px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }
 
@@ -132,5 +133,4 @@
     min-width: 80px;
   }
 }
-
 </style>

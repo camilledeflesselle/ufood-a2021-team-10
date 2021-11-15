@@ -7,149 +7,160 @@
     </div>
     <div class="item bold">Favorites restaurants</div>
     <div class="ListFavoritesContainer padding">
-      
-        <div
-          v-for="list in ListFavorites.items"
-          :key="list.id"
-          class="list-group"
-        >
-          <b-input-group size="lg" class="mt-4">
-            <b-form-input
-              v-model="list.name"
-              placeholder="Change name..."
-              id="inputValue"
-            ></b-form-input>
-            <b-input-group-append>
-              <b-button
-                size="lg"
-                @click="updateListFavorites(list)"
-                variant="outline-success"
-                >Change name</b-button
-              >
-              <b-button
-                size="lg"
-                @click="deleteListFavorites(list.id)"
-                variant="danger"
-                >X</b-button
-              >
-            </b-input-group-append>
-          </b-input-group>
-          <b-button block v-b-toggle="'test-' + list.id"
-            >View Restaurants 
-            (total : {{ list.restaurants.length }})</b-button
-          >
-          <b-collapse
-            :id="'test-' + list.id"
-            :title="
-              list.name +
-              ', list of ' +
-              list.restaurants.length +
-              ' restaurant(s)'
-            "
-            bg-variant="dark"
-            text-variant="light"
-            shadow
-          >
-            <div >
-              
-                <b-card v-for="restaurant in list.restaurants" :key="restaurant.id"  no-body class="overflow-hidden"  style="max-width: 100%;">
-    <b-row no-gutters>
-      <b-col md="3">
-        <b-card-img :src="restaurantInfo(restaurant.id).pictures[0]" alt="Image" width="20%"></b-card-img>
-      </b-col>
-      <b-col md="9">
-        <b-card-body :title="restaurantInfo(restaurant.id).name">
-          <b-card-text>
-            <router-link
-                    :to="{
-                      name: 'Restaurant',
-                      params: { restaurantId: restaurant.id },
-                    }"
-                  > 
-                    More...
-
-                  </router-link>
-                  
-          </b-card-text>
-          <b-button right="true"
-                    size="sm"
-                    @click="deleteRestaurantFromList(restaurant.id, list.id)"
-                    variant="danger"
-                    >Delete X</b-button>
-        </b-card-body>
-      </b-col>
-    </b-row>
-  </b-card>
-            </div>
-          </b-collapse>
-        </div>
-        <div class="item">
-          Create a new list :
-          <b-input-group size="lg" prepend="New list">
-            <b-form-input
-              v-model="inputValue"
-              placeholder="Choose a name..."
-              variant="success"
-            ></b-form-input>
+      <div
+        v-for="list in ListFavorites.items"
+        :key="list.id"
+        class="list-group"
+      >
+        <b-input-group size="lg" class="mt-4">
+          <b-form-input
+            v-model="list.name"
+            placeholder="Change name..."
+            id="inputValue"
+          ></b-form-input>
+          <b-input-group-append>
             <b-button
               size="lg"
-              :disabled="inputValue === ''"
-              @click="createListFavorites"
-              variant="success"
-              >Create</b-button
+              @click="updateListFavorites(list)"
+              variant="outline-success"
+              >Change name</b-button
             >
-          </b-input-group>
-        
+            <b-button
+              size="lg"
+              @click="deleteListFavorites(list.id)"
+              variant="danger"
+              >X</b-button
+            >
+          </b-input-group-append>
+        </b-input-group>
+        <b-button block v-b-toggle="'test-' + list.id"
+          >View Restaurants (total : {{ list.restaurants.length }})</b-button
+        >
+        <b-collapse
+          :id="'test-' + list.id"
+          :title="
+            list.name +
+            ', list of ' +
+            list.restaurants.length +
+            ' restaurant(s)'
+          "
+          bg-variant="dark"
+          text-variant="light"
+          shadow
+        >
+          <div>
+            <b-card
+              v-for="restaurant in list.restaurants"
+              :key="restaurant.id"
+              no-body
+              class="overflow-hidden"
+              style="max-width: 100%"
+            >
+              <b-row no-gutters>
+                <b-col md="3">
+                  <b-card-img
+                    :src="restaurantInfo(restaurant.id).pictures[0]"
+                    alt="Image"
+                    width="20%"
+                  ></b-card-img>
+                </b-col>
+                <b-col md="9">
+                  <b-card-body :title="restaurantInfo(restaurant.id).name">
+                    <b-card-text>
+                      <router-link
+                        :to="{
+                          name: 'Restaurant',
+                          params: { restaurantId: restaurant.id },
+                        }"
+                      >
+                        More...
+                      </router-link>
+                    </b-card-text>
+                    <b-button
+                      right="true"
+                      size="sm"
+                      @click="deleteRestaurantFromList(restaurant.id, list.id)"
+                      variant="danger"
+                      >Delete X</b-button
+                    >
+                  </b-card-body>
+                </b-col>
+              </b-row>
+            </b-card>
+          </div>
+        </b-collapse>
       </div>
+      <div class="item">
+        Create a new list :
+        <b-input-group size="lg" prepend="New list">
+          <b-form-input
+            v-model="inputValue"
+            placeholder="Choose a name..."
+            variant="success"
+          ></b-form-input>
+          <b-button
+            size="lg"
+            :disabled="inputValue === ''"
+            @click="createListFavorites"
+            variant="success"
+            >Create</b-button
+          >
+        </b-input-group>
       </div>
-      <div class="item bold">Recent restaurants Visited</div>
-      <div class=" flex-container padding">
+    </div>
+    <div class="item bold">Recent restaurants Visited</div>
+    <div class="flex-container padding">
       <div class="flex-container">
-        <div 
-            v-for="resto in restaurantsVisited"
-            :key="resto.id" class="card" style="width: 30%;">
-  <img class="card-img-top" :src="restaurantInfo(resto.restaurant_id).pictures[0]" alt="Card image cap">
-  <div class="card-body-right">
-
+        <div
+          v-for="resto in restaurantsVisited"
+          :key="resto.id"
+          class="card"
+          style="width: 30%"
+        >
+          <img
+            class="card-img-top"
+            :src="restaurantInfo(resto.restaurant_id).pictures[0]"
+            alt="Card image cap"
+          />
+          <div class="card-body-right">
             <router-link
               :to="{
                 name: 'Restaurant',
                 params: { restaurantId: resto.restaurant_id },
               }"
             >
-             <h5 class="card-title"> {{ restaurantInfo(resto.restaurant_id).name }}</h5>
-             
+              <h5 class="card-title">
+                {{ restaurantInfo(resto.restaurant_id).name }}
+              </h5>
             </router-link>
-   
-    <p class="card-text"> 
-    <p>{{viewNumberVisitsRestaurant(resto.restaurant_id)}} visite</p>
 
-                <b-dropdown
-                  text="Add to a list of favorites"
-                  variant="primary"
-                  class="m-2"
-                  size="sm"
-                >
-                  <b-dropdown-item
-                    v-for="list in ListFavorites.items"
-                    :key="list.id"
-                    @click="addRestaurantToList(list.id, resto.restaurant_id)"
-                    tooltip="add to list"
-                  >
-                    {{ list.name }}
-                  </b-dropdown-item>
-                </b-dropdown>
+            <p class="card-text"></p>
+            <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
 
-                <b-btn
-                  class="m-2"
-                  size="sm" 
-                   @click="openModal(resto.restaurant_id, resto)">View visit information
-                  
-                   </b-btn>
+            <b-dropdown
+              text="Add to a list of favorites"
+              variant="primary"
+              class="m-2"
+              size="sm"
+            >
+              <b-dropdown-item
+                v-for="list in ListFavorites.items"
+                :key="list.id"
+                @click="addRestaurantToList(list.id, resto.restaurant_id)"
+                tooltip="add to list"
+              >
+                {{ list.name }}
+              </b-dropdown-item>
+            </b-dropdown>
 
-</div>
-</div>
-        
+            <b-btn
+              class="m-2"
+              size="sm"
+              @click="openModal(resto.restaurant_id, resto)"
+              >View visit information
+            </b-btn>
+          </div>
+        </div>
       </div>
       <router-link to="/">Home</router-link>
       <Modal v-if="isModalVisible">
@@ -315,9 +326,7 @@ export default {
   align-content: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin-bottom:10px;
- 
-  
+  margin-bottom: 10px;
 }
 .item {
   font-size: 20px;
@@ -325,8 +334,8 @@ export default {
   padding-right: 4rem;
   flex-direction: column wrap;
   display: flex;
-  margin-bottom:10px;
-  padding:10px;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 .padding {
   padding: 2rem;
