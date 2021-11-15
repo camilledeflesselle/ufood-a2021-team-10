@@ -50,18 +50,19 @@
             text-variant="light"
             shadow
           >
-            <h3>List : {{ list.name }}</h3>
             Total : {{ list.restaurants.length }}
             <div class="px-2 py-1">
               <ul v-for="restaurant in list.restaurants" :key="restaurant.id">
                 <li>
+
+                <img class="item-img" :src="restaurantInfo(restaurant.id).pictures[0]">
                   <router-link
                     :to="{
                       name: 'Restaurant',
                       params: { restaurantId: restaurant.id },
                     }"
                   >
-                    Name : {{ restaurantInfo(restaurant.id).name }}
+                    {{ restaurantInfo(restaurant.id).name }}
                   </router-link>
                   <b-button
                     size="lg"
@@ -92,6 +93,7 @@
           </b-input-group>
         </div>
       </div>
+      </div>
       <div class="item bold">Recent restaurants Visited</div>
       <div class="padding" id="vistedContainer">
         <div id="restaurant-container">
@@ -108,6 +110,8 @@
             >
               {{ restaurantInfo(resto.restaurant_id).name }}
             </router-link>
+
+      <img class="mean-img" :src="restaurantInfo(resto.restaurant_id).pictures[0]">
             <div>Comment : {{ resto.comment }}</div>
             <div>Rating : {{ resto.rating }}</div>
             <!-- <img class="item-image" :src="restaurant.pictures[0]" /> -->
@@ -141,7 +145,7 @@
               </div>
             </div>
           </div>
-        </div>
+        
       </div>
       <router-link to="/">Home</router-link>
       <Modal v-if="isModalVisible">
@@ -253,10 +257,7 @@ export default {
     restaurantInfo(idRestaurant) {
       const data = this.$store.state.restaurants;
       if (data && idRestaurant) {
-        let res = Object.values(data).find(
-          (restaurant) => restaurant.id === idRestaurant
-        );
-        console.log(res);
+        let res = Object.values(data).find(restaurant => restaurant.id === idRestaurant)
         return res;
       }
     },
@@ -329,13 +330,13 @@ export default {
 .italic {
   font-weight: italic;
 }
-.littleimg {
-  width: 100%;
+.item-img {
+  width: 10%;
   padding: 2px;
   align-content: center;
 }
-.meanimg {
-  width: 20%;
+.mean-img {
+  width: 30%;
   padding: 2px;
   align-content: center;
 }
