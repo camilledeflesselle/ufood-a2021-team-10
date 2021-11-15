@@ -123,7 +123,7 @@ import {
   addRestaurantToList,
   viewListFavorites,
 } from "./api/favorites.js";
-import { visitesRestaurantOfUser } from "./api/restaurants.js";
+import { createVisit, visitesRestaurantOfUser } from "./api/restaurants.js";
 
 export default {
   name: "Restaurant",

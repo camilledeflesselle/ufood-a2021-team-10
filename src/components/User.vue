@@ -261,7 +261,9 @@ export default {
     restaurantInfo(idRestaurant) {
       const data = this.$store.state.restaurants;
       if (data && idRestaurant) {
-        let res = Object.values(data).find(restaurant => restaurant.id === idRestaurant)
+        let res = Object.values(data).find(
+          (restaurant) => restaurant.id === idRestaurant
+        );
         return res;
       }
     },
