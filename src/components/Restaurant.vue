@@ -54,7 +54,6 @@
         >
           <b-icon
             icon="geo-alt"
-            animation="fade"
             scale="2"
             variant="danger"
           ></b-icon>
@@ -65,7 +64,6 @@
         >
           <b-icon
             icon="telephone-fill"
-            animation="fade"
             scale="2"
             variant="warning"
           ></b-icon>
@@ -84,7 +82,6 @@
           >
             <b-icon
               icon="info-circle-fill"
-              animation="fade"
               scale="2"
               variant="info"
             ></b-icon>
@@ -92,21 +89,50 @@
           </b-list-group-item>
           <b-list-group> </b-list-group>
         </b-list-group>
+        
 
-        <b-list-group class="item">
-          <b-list-group-item> Cuisine</b-list-group-item>
-
-          <b-list-group-item v-for="genre in restaurant.genres" :key="genre">
+          <b-list-group class="item"> 
+            <b-list-group-item
+            class="d-flex justify-content-center align-items-center"
+          >
+           Cuisine
+          </b-list-group-item>
+            <b-list-group-item v-for="genre in restaurant.genres" :key="genre">
             {{ genre }}
           </b-list-group-item>
-        </b-list-group>
+
+          </b-list-group>
+
+             <b-list-group class="item"> 
+            <b-list-group-item
+            class="d-flex justify-content-center align-items-center"
+          >
+           Price
+          </b-list-group-item>
+              <b-list-group-item>
+            
+        <Price :priceTag="restaurant.price_range"></Price>
+          </b-list-group-item>
+
+          </b-list-group>
+
+         <b-list-group class="item"> 
+            <b-list-group-item
+            class="d-flex justify-content-center align-items-center"
+          >
+           Rate
+          </b-list-group-item>
+              <b-form-rating v-model="restaurant.rating" variant="warning" readonly show-value></b-form-rating>
+   
+
+          </b-list-group>
+  
+  
       </b-list-group>
     </div>
-    <div class="flex-container">
-      <div class = "flex-container"> 
-      <b-img class = "img-end" v-for="photo in restaurant.pictures" :key="photo" :src="photo">
+    <div class="img-container">
+      <b-img v-for="photo in restaurant.pictures" :key="photo" :src="photo">
       </b-img>
-      </div>
       </div>
   
     <div class="item">
@@ -152,6 +178,7 @@
 <script>
 import store from "./store/requests.js";
 import Map from "./map.vue";
+import Price from "./price.vue";
 import Stars from "./stars.vue";
 import Modal from "./Modal.vue";
 import Datepicker from "vuejs-datepicker";
@@ -168,6 +195,7 @@ export default {
   components: {
     Map,
     Modal,
+    Price,
     Datepicker,
   },
   data: () => {
@@ -293,9 +321,9 @@ export default {
   margin:10px;
 }
 
-.img-end {
-  display: flex;
-  max-width:30%;
+.img-container img {
+  max-height:100px;
+  padding: 2px;
 }
 .page .imgback {
   position: absolute;

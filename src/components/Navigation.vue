@@ -21,7 +21,7 @@
   -->
   <div>
     <b-navbar
-      sticky="true"
+      :sticky="true"
       fixed="top"
       toggleable="lg"
       type="dark"
