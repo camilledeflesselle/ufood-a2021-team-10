@@ -1,12 +1,13 @@
 <template>
-  <div id="user">
+  <div id="user" class="padding">
     <h1>User Profile</h1>
     <div class="flex-container bg">
       <div class="item">name place holder</div>
       <div class="item">3.8</div>
     </div>
-    <div class="item bold">Favorites restaurants</div>
-    <div class="ListFavoritesContainer padding">
+    <div>
+      <h2>Your favorites restaurants</h2>
+
       <div
         v-for="list in ListFavorites.items"
         :key="list.id"
@@ -33,9 +34,6 @@
             >
           </b-input-group-append>
         </b-input-group>
-        <b-button block v-b-toggle="'test-' + list.id"
-          >View Restaurants (total : {{ list.restaurants.length }})</b-button
-        >
         <b-collapse
           :id="'test-' + list.id"
           :title="
@@ -89,6 +87,9 @@
             </b-card>
           </div>
         </b-collapse>
+        <b-button block v-b-toggle="'test-' + list.id"
+          >View Restaurants (total : {{ list.restaurants.length }})</b-button
+        >
       </div>
       <div class="item">
         Create a new list :
@@ -108,77 +109,70 @@
         </b-input-group>
       </div>
     </div>
-    <div class="item bold">Recent restaurants Visited</div>
-    <div class="flex-container padding">
-      <div class="flex-container">
-        <div
-          v-for="resto in restaurantsVisited"
-          :key="resto.id"
-          class="card"
-          style="width: 30%"
-        >
-          <img
-            class="card-img-top"
-            :src="restaurantInfo(resto.restaurant_id).pictures[0]"
-            alt="Card image cap"
-          />
-          <div class="card-body-right">
-            <router-link
-              :to="{
-                name: 'Restaurant',
-                params: { restaurantId: resto.restaurant_id },
-              }"
+    <h2>Recent restaurants Visited</h2>
+    <b-card-group columns class="padding">
+      <b-card v-for="resto in restaurantsVisited" :key="resto.id">
+        <img
+          class="card-img-top"
+          :src="restaurantInfo(resto.restaurant_id).pictures[0]"
+          alt="Card image cap"
+        />
+        <div class="card-body-right">
+          <router-link
+            :to="{
+              name: 'Restaurant',
+              params: { restaurantId: resto.restaurant_id },
+            }"
+          >
+            <h5 class="card-title">
+              {{ restaurantInfo(resto.restaurant_id).name }}
+            </h5>
+          </router-link>
+
+          <p class="card-text"></p>
+          <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
+
+          <b-dropdown
+            text="Add to a list of favorites"
+            variant="primary"
+            class="m-2"
+            size="sm"
+          >
+            <b-dropdown-item
+              v-for="list in ListFavorites.items"
+              :key="list.id"
+              @click="addRestaurantToList(list.id, resto.restaurant_id)"
+              tooltip="add to list"
             >
-              <h5 class="card-title">
-                {{ restaurantInfo(resto.restaurant_id).name }}
-              </h5>
-            </router-link>
+              {{ list.name }}
+            </b-dropdown-item>
+          </b-dropdown>
 
-            <p class="card-text"></p>
-            <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
-
-            <b-dropdown
-              text="Add to a list of favorites"
-              variant="primary"
-              class="m-2"
-              size="sm"
-            >
-              <b-dropdown-item
-                v-for="list in ListFavorites.items"
-                :key="list.id"
-                @click="addRestaurantToList(list.id, resto.restaurant_id)"
-                tooltip="add to list"
-              >
-                {{ list.name }}
-              </b-dropdown-item>
-            </b-dropdown>
-
-            <b-btn
-              class="m-2"
-              size="sm"
-              @click="openModal(resto.restaurant_id, resto)"
-              >View visit information
-            </b-btn>
-          </div>
+          <b-btn
+            class="m-2"
+            size="sm"
+            @click="openModal(resto.restaurant_id, resto)"
+            >View visit information
+          </b-btn>
         </div>
-      </div>
-      <router-link to="/">Home</router-link>
-      <Modal v-if="isModalVisible">
-        <template v-slot:m-header> Visite </template>
-        <template v-slot:m-body>
-          <div>Date de la visite : {{ date }}</div>
-          <div>Commentaire: {{ comment }}</div>
-          <div>
-            <label for="rating">Votre cote : {{ rating }}</label>
-          </div>
-        </template>
-        <template v-slot:m-footer>
-          <div class="modal-button-area">
-            <span><button @click="closeModal">Close</button></span>
-          </div>
-        </template>
-      </Modal>
-    </div>
+      </b-card>
+    </b-card-group>
+    <router-link to="/">Home</router-link>
+    <Modal v-if="isModalVisible">
+      <template v-slot:m-header> Visite </template>
+      <template v-slot:m-body>
+        <div>Date de la visite : {{ date }}</div>
+        <div>Commentaire: {{ comment }}</div>
+        <div>
+          <label for="rating">Votre cote : {{ rating }}</label>
+        </div>
+      </template>
+      <template v-slot:m-footer>
+        <div class="modal-button-area">
+          <span><button @click="closeModal">Close</button></span>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -222,7 +216,6 @@ export default {
       return this.$store.state.restaurants;
     },
     restaurantsVisited() {
-      console.log(this.$store.state.restaurantsVisited);
       return this.$store.state.restaurantsVisited;
     },
     restoName() {
@@ -286,7 +279,6 @@ export default {
     viewNumberVisitsRestaurant(restaurantId) {
       let nb = 0;
       const visits = this.$store.state.restaurantsVisited;
-      console.log(visits);
       if (visits) {
         for (let visit in visits) {
           if (visits[visit].restaurant_id == restaurantId) {
@@ -321,65 +313,8 @@ export default {
 };
 </script>
 <style>
-.flex-container {
-  display: flex;
-  align-content: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.item {
-  font-size: 20px;
-  padding: 1rem;
-  padding-right: 4rem;
-  flex-direction: column wrap;
-  display: flex;
-  margin-bottom: 10px;
-  padding: 10px;
-}
 .padding {
-  padding: 2rem;
-}
-.bg {
-  background-color: aliceblue;
-  border-radius: 16px;
-}
-.bold {
-  font-weight: bold;
-}
-.italic {
-  font-weight: italic;
-}
-.item-img {
-  width: 10%;
-  padding: 2px;
-  align-content: center;
-}
-.mean-img {
-  width: 30%;
-  padding: 2px;
-  align-content: center;
-}
-#submit {
-  background-color: aliceblue;
-  flex: 1;
-}
-input {
-  flex: 8;
-}
-.onelist {
-  display: flex;
-  border-radius: 10px;
-  flex-direction: row;
-}
-.delete {
-  color: white;
-  background-color: #dd7e24;
-  flex: 1;
-}
-.update {
-  color: white;
-  flex: 1;
-  background-color: #7a7a79;
+  padding: 10px;
+  margin: 10px;
 }
 </style>

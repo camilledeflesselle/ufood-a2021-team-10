@@ -1,54 +1,76 @@
 <template>
-  <canvas id="stars" height="50" width="400"></canvas>
+  <div>
+    <b-button v-b-modal.modal-prevent-closing>Open Modal</b-button>
+
+    <div class="mt-3">
+      Submitted Names:
+      <div v-if="submittedNames.length === 0">--</div>
+    </div>
+
+    <b-modal
+      id="modal-prevent-closing"
+      ref="modal"
+      title="Submit Your Name"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="handleOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group
+          label="Name"
+          label-for="name-input"
+          invalid-feedback="Name is required"
+          :state="nameState"
+        >
+          <b-form-input
+            id="name-input"
+            v-model="name"
+            :state="nameState"
+            required
+          ></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
+  </div>
 </template>
+
 <script>
 export default {
-  props: ["rating"],
-  mounted() {
-    let c = document.getElementById("stars");
-    let canvas = document.getElementById("stars");
-    let ctx = canvas.getContext("2d");
-
-    function strokeStar(x, y, r, n, inset, doFill, half) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.translate(x, y);
-      ctx.moveTo(0, 0 - r);
-      let loop = n;
-      if (half) {
-        loop = 2;
+  data() {
+    return {
+      name: "",
+      nameState: null,
+      submittedNames: [],
+    };
+  },
+  methods: {
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity();
+      this.nameState = valid;
+      return valid;
+    },
+    resetModal() {
+      this.name = "";
+      this.nameState = null;
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger submit handler
+      this.handleSubmit();
+    },
+    handleSubmit() {
+      // Exit when the form isn't valid
+      if (!this.checkFormValidity()) {
+        return;
       }
-      for (let i = 0; i < loop; i++) {
-        ctx.rotate(-Math.PI / n);
-        ctx.lineTo(0, 0 - r * inset);
-        ctx.rotate(-Math.PI / n);
-        ctx.lineTo(0, 0 - r);
-      }
-      if (half) {
-        ctx.rotate(-Math.PI / n);
-        ctx.lineTo(0, 0 - r * inset);
-      }
-      ctx.closePath();
-      if (!doFill) {
-        ctx.stroke();
-      } else {
-        ctx.fill();
-      }
-      ctx.restore();
-    }
-    let xi = 100;
-    let p = 50;
-    ctx.fillStyle = "yellow";
-    for (let i = 0; i < 5; ++i) {
-      strokeStar(xi + p * i, 25, 5, 5, 2, 0);
-    }
-    for (let i = 0; i < this.rating - 1; ++i) {
-      strokeStar(xi + p * i, 25, 5, 5, 2, 1);
-    }
-    if (this.rating - (Math.ceil(this.rating) - 1) > 0.5) {
-      strokeStar(xi + p * (Math.ceil(this.rating) - 1), 25, 5, 5, 2, 1, 1);
-    }
-    this.vueCanvas = ctx;
+      // Push the name to submitted names
+      this.submittedNames.push(this.name);
+      // Hide the modal manually
+      this.$nextTick(() => {
+        this.$bvModal.hide("modal-prevent-closing");
+      });
+    },
   },
 };
 </script>

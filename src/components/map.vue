@@ -35,17 +35,16 @@ export default {
     //  });
 
     map.addControl(directions, "top-right");
+    map.scrollZoom.disable();
   },
 };
 </script>
 <style>
 .map {
   position: absolute;
-  width: 80%;
+  width: 100%;
   height: 100%;
-  border-radius: 20px;
-  left: 10%;
-  right: 10%;
+  margin-bottom: 10%;
 }
 .restaurant-icon {
   height: 60px;

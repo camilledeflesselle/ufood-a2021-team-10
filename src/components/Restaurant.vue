@@ -1,6 +1,32 @@
 <template>
-  <div id="restaurantpage">
-    <footer>
+  <div id="restaurantpage" class="page">
+    <b-carousel
+      id="carousel-1"
+      v-model="slide"
+      :interval="4000"
+      controls
+      indicators
+      background="#ababab"
+    >
+      <!-- Text slides with image -->
+      <b-carousel-slide
+        v-for="photo in restaurant.pictures"
+        :key="photo"
+        :img-src="photo"
+      >
+      </b-carousel-slide>
+
+      <!-- Slide with blank fluid image to maintain slide aspect ratio -->
+      <b-carousel-slide
+        :caption="restaurant.name"
+        img-blank
+        img-alt="Blank image"
+      >
+      </b-carousel-slide>
+      <b-card :title="restaurant.name"> </b-card>
+    </b-carousel>
+
+    <div>
       <b-dropdown
         text="Ajouter Favoris"
         variant="primary"
@@ -15,57 +41,81 @@
           {{ list.name }}
         </b-dropdown-item>
       </b-dropdown>
-      <button class="button" @click="openModal(restaurantId)">
+      <div>
+        <b-button class="button" @click="openModal(restaurantId)">
         Entrer visit
-      </button>
-    </footer>
-    <div class="ligne">
-      <option>Restaurant</option>
-      <div>{{ restaurant.name }}</div>
-    </div>
-    <div class="ligne">
-      <option>Cuisine</option>
-      <div>
-        <ul>
-          <li v-for="genre in restaurant.genres" :key="genre">
-            {{ genre }}
-          </li>
-        </ul>
+      </b-button>
       </div>
     </div>
-    <div class="ligne">
-      <option>Price</option>
-      <div>
-        <Price :priceTag="restaurant.price_range"></Price>
-      </div>
-    </div>
-    <div class="ligne">
-      <option>Rate</option>
-      <div>
-        <Stars :rating="restaurant.rating"></Stars>
-      </div>
-    </div>
-    <div class="ligne">
-      <option>Opening hours</option>
-      <div>
-        <ul>
-          <div
-            class="small"
+    <div class="flex-container">
+      <b-list-group class="item">
+        <b-list-group-item
+          class="d-flex justify-content-between align-items-center"
+        >
+          <b-icon
+            icon="geo-alt"
+            animation="fade"
+            scale="2"
+            variant="danger"
+          ></b-icon>
+          {{ restaurant.address }}
+        </b-list-group-item>
+        <b-list-group-item
+          class="d-flex justify-content-between align-items-center"
+        >
+          <b-icon
+            icon="telephone-fill"
+            animation="fade"
+            scale="2"
+            variant="warning"
+          ></b-icon>
+          {{ restaurant.tel }}
+        </b-list-group-item>
+        <b-list-group class="item">
+          <b-list-group-item
+            class="d-flex justify-content-center align-items-center"
+          >
+            Openning Hours
+          </b-list-group-item>
+          <b-list-group-item
+            class="d-flex justify-content-between align-items-center"
             v-for="(hour, day) in restaurant.opening_hours"
             :key="day"
           >
+            <b-icon
+              icon="info-circle-fill"
+              animation="fade"
+              scale="2"
+              variant="info"
+            ></b-icon>
             {{ day }} : {{ hour }}
-          </div>
-        </ul>
+          </b-list-group-item>
+          <b-list-group> </b-list-group>
+        </b-list-group>
+
+        <b-list-group class="item">
+          <b-list-group-item> Cuisine</b-list-group-item>
+
+          <b-list-group-item v-for="genre in restaurant.genres" :key="genre">
+            {{ genre }}
+          </b-list-group-item>
+        </b-list-group>
+      </b-list-group>
+    </div>
+    <div class="flex-container">
+      <div class = "flex-container"> 
+      <b-img class = "img-end" v-for="photo in restaurant.pictures" :key="photo" :src="photo">
+      </b-img>
       </div>
-    </div>
-    <div class="ligne">
-      <option>Adresse</option>
-      <div>{{ restaurant.address }}</div>
-    </div>
-    <div class="ligne">
-      <option>Telephone</option>
-      <div>{{ restaurant.tel }}</div>
+      </div>
+  
+    <div class="item">
+      <div class="flex-container">
+        <Map
+          class="localisation"
+          :coord="restaurant.location.coordinates"
+        ></Map>
+      </div>
     </div>
     <Modal v-if="isModalVisible">
       <template v-slot:m-header> Ajout d'une visite </template>
@@ -96,26 +146,13 @@
           <span><button @click="closeModal">Annuler</button></span>
         </div>
       </template>
-    </Modal>
-    <div class="listimgres">
-      <img
-        class="imgres"
-        v-for="photo in restaurant.pictures"
-        :key="photo"
-        :src="photo"
-      />
-      <img />
-    </div>
-    <div class="localisation">
-      <Map :coord="restaurant.location.coordinates"></Map>
-    </div>
-  </div>
+    </Modal>  </div>
+  
 </template>
 <script>
 import store from "./store/requests.js";
 import Map from "./map.vue";
 import Stars from "./stars.vue";
-import Price from "./price.vue";
 import Modal from "./Modal.vue";
 import Datepicker from "vuejs-datepicker";
 import {
@@ -130,13 +167,13 @@ export default {
   props: ["restaurantId"],
   components: {
     Map,
-    Stars,
-    Price,
     Modal,
     Datepicker,
   },
   data: () => {
     return {
+      slide: 0,
+      sliding: null,
       isModalVisible: false,
       filterGenres: [],
       filterPriceRange: [],
@@ -154,6 +191,12 @@ export default {
     },
   },
   methods: {
+    onSlideStart(slide) {
+      this.sliding = true;
+    },
+    onSlideEnd(slide) {
+      this.sliding = false;
+    },
     async addRestaurantToList(listId, restaurantId) {
       if (restaurantId) {
         // be sure that list doens't have duplicated keys
@@ -211,81 +254,64 @@ export default {
 };
 </script>
 <style>
-/*page restaurant*/
-body {
-  height: 100%;
-  font-family: "Montserrat";
-}
-footer {
-  display: flex;
-  align-items: right;
-  justify-content: right;
-}
-.button {
-  background-color: rgb(20, 56, 56);
-  color: white;
-  font-family: "Montserrat";
-  border-radius: 4px;
-  font-size: 15px;
-  margin-right: 15px;
-}
-#restaurantpage {
+.carousel {
+  width: 100%;
+
   display: flex;
   flex-direction: column;
-  text-decoration: none;
-  list-style-type: none;
-  align-content: center;
-  margin: 2%;
-  width: 80%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: space-around;
+  height: 600px;
 }
-.small {
-  height: 1px;
-}
-.ligne div {
+
+.page {
   display: flex;
-  padding: 20px;
-}
-.ligne {
-  display: flex;
-  padding: 20px;
-  text-decoration: none;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
+  background-color: grey;
 }
-.ligne div {
-  flex: 2;
-  background-color: #f1f1f1;
-  align-items: center;
-  border-bottom-right-radius: 10px;
-}
-.ligne option {
-  flex: 1;
-  background-color: #f1f1f1;
-  align-items: center;
-  border-top-left-radius: 10px;
-}
-#restaurantpage div option {
-  color: white;
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: space-around;
   padding: 10px;
-  background-color: rgb(20, 56, 56);
-  font-size: 20px;
+  width: 100%;
 }
-.imgres {
-  flex: 1;
-  width: 20%;
-  height: 20%;
-  padding: 2px;
-  align-content: center;
-}
-.listimgres {
+
+.img-container {
   display: flex;
-  padding-left: 20px;
-  padding-right: 20px;
-  flex-flow: row wrap;
-  justify-content: center;
-  width: 100%;
-  align-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: space-around;
+  padding: 10px;
+  margin:10px;
 }
-canvas {
+
+.img-end {
+  display: flex;
+  max-width:30%;
+}
+.page .imgback {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100%;
+  height: auto;
+  opacity: 0.2;
+}
+.item {
+  padding-top: 10px;
+  width: 100%;
+  max-width: 500px;
+}
+.localisation {
+  align-items: space-around;
+  margin: 10px;
 }
 </style>

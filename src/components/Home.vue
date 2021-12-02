@@ -1,6 +1,6 @@
 <template>
   <body>
-    <div id="search">
+    <b-card bg-variant="light">
       <div id="search-bar">
         <input
           placeholder="search for restaurants..."
@@ -8,118 +8,120 @@
           type="text"
         />
       </div>
-      <div id="search-filter">
-        <div class="filter-option">
-          <div class="filter-title">Price range</div>
-          <div
-            v-for="price_range in PriceRanges"
-            id="price"
-            v-bind:key="price_range"
-          >
-            <input
-              type="checkbox"
-              v-model="checkedPriceRange"
-              v-bind:value="price_range"
-            />
-            {{ representPrice(price_range) }}
-          </div>
-        </div>
-        <div class="filter-option">
-          <div class="filter-title">Cuisine</div>
-          <div id="type">
-            <div v-for="genre in genres" id="genres" v-bind:key="genre">
-              <input
-                type="checkbox"
-                v-model="checkedGenres"
-                v-bind:value="genre"
-              />
-              {{ genre }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- here -->
-    <div>
-      <b-card-group columns class="padding">
-        <b-card
-          img-top
-          :header="restaurant.name"
-          class="mb-2"
-          v-for="restaurant in restaurantsFiltered"
-          :key="restaurant.id"
+      <b-form-group label="Price Range" v-slot="{ ariaDescribedby }">
+        <b-form-checkbox
+          v-for="option in PriceRanges"
+          v-model="checkedPriceRange"
+          :key="option"
+          :value="option"
+          :aria-describedby="ariaDescribedby"
+          name="flavour-3a"
         >
-          <b-card-body>
-            <b-card-img
-              :src="restaurant.pictures[0]"
-              img-alt="Image"
-              overlay
-            ></b-card-img>
-            <b-card-text>
-              <p></p>
-              <div>
-                <b-btn class="btn-success" size="sm">
-                  <router-link
-                    tag="div"
-                    :to="{
-                      name: 'Restaurant',
-                      params: { restaurantId: restaurant.id },
-                    }"
-                  >
-                    More...
-                  </router-link>
-                </b-btn>
-              </div>
+          {{ representPrice(option) }}
+        </b-form-checkbox>
+      </b-form-group>
 
-              <div>
-                <b-btn size="sm" @click="openModal(restaurant.id)"
-                  >Add to visited</b-btn
+      <div>
+        Cuisine
+        <b-form-select
+          v-model="checkedGenres"
+          :options="genres"
+          label="cuisine"
+        ></b-form-select>
+      </div>
+    </b-card>
+
+    <b-card-group columns class="padding">
+      <b-card
+        img-top
+        :header="restaurant.name"
+        class="mb-2"
+        v-for="restaurant in restaurantsFiltered"
+        :key="restaurant.id"
+      >
+        <b-card-body>
+          <b-card-img
+            :src="restaurant.pictures[0]"
+            img-alt="Image"
+            overlay
+          ></b-card-img>
+          <b-card-text>
+            <p></p>
+            <div>
+              <b-button
+                v-b-popover.hover="'I am popover content!'"
+                class="btn-success"
+                size="sm"
+              >
+                <router-link
+                  tag="div"
+                  :to="{
+                    name: 'Restaurant',
+                    params: { restaurantId: restaurant.id },
+                  }"
                 >
-              </div>
-              <Modal v-if="isModalVisible">
-                <template v-slot:m-header> Ajout d'une visite </template>
-                <template v-slot:m-body>
-                  <div>Date de la visite</div>
-                  <Datepicker v-model="date"></Datepicker>
-                  <div>Commentaire:</div>
-                  <textarea
-                    name="commentArea"
-                    id="comment"
-                    placeholder="Entrez votre commentaire ici"
-                    v-model="comment"
-                  ></textarea>
-                  <div>
-                    <label for="rating">Votre cote :</label>
-                    <select name="rating" id="rating" v-model="rating">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                  </div>
-                </template>
-                <template v-slot:m-footer>
-                  <div class="modal-b-btn-area">
-                    <span>
-                      <b-btn
-                        size="sm"
-                        class="success-variant"
-                        @click="submitVisit"
-                        >Soumettre</b-btn
-                      >
-                    </span>
-                    <span>
-                      <b-btn size="sm" @click="closeModal">Annuler</b-btn>
-                    </span>
-                  </div>
-                </template>
-              </Modal>
-            </b-card-text>
-          </b-card-body>
-        </b-card>
-      </b-card-group>
-    </div>
+                  More...
+                </router-link>
+              </b-button>
+            </div>
+
+            <div>
+              <b-button
+                v-b-popover.hover="'I am popover content!'"
+                size="sm"
+                @click="openModal(restaurant.id)"
+                >Add to visited</b-button
+              >
+            </div>
+            <Modal v-if="isModalVisible">
+              <template v-slot:m-header> Ajout d'une visite </template>
+              <template v-slot:m-body>
+                <div>Date de la visite</div>
+                <Datepicker v-model="date"></Datepicker>
+                <div>Commentaire:</div>
+                <textarea
+                  name="commentArea"
+                  id="comment"
+                  placeholder="Entrez votre commentaire ici"
+                  v-model="comment"
+                ></textarea>
+                <div>
+                  <label for="rating">Votre cote :</label>
+                  <select name="rating" id="rating" v-model="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+              </template>
+              <template v-slot:m-footer>
+                <div class="modal-b-button-area">
+                  <span>
+                    <b-button
+                      v-b-popover.hover="'I am popover content!'"
+                      size="sm"
+                      class="success-variant"
+                      @click="submitVisit"
+                      >Soumettre</b-button
+                    >
+                  </span>
+                  <span>
+                    <b-button
+                      v-b-popover.hover="'I am popover content!'"
+                      size="sm"
+                      @click="closeModal"
+                      >Annuler</b-button
+                    >
+                  </span>
+                </div>
+              </template>
+            </Modal>
+          </b-card-text>
+        </b-card-body>
+      </b-card>
+    </b-card-group>
   </body>
 </template>
 <script>
@@ -235,74 +237,4 @@ export default {
   },
 };
 </script>
-<style>
-#search {
-  background-color: lightblue;
-  display: flex;
-  flex-direction: column;
-  padding-left: 1rem;
-  padding-right: 3rem;
-}
-#search-bar {
-  padding: 1rem;
-  display: flex;
-}
-#search-filter {
-  display: flex;
-}
-#apply-filters {
-  padding: 1rem;
-}
-.filter-option {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  width: 100%;
-}
-.flex-container {
-  display: flex;
-  align-content: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.item {
-  font-size: 20px;
-  padding: 1rem;
-  padding-right: 4rem;
-  flex-direction: column wrap;
-  display: flex;
-  margin-bottom: 10px;
-  padding: 10px;
-}
-.filter-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-@media screen and (max-width: 600px) {
-  #nav .nav-item {
-    display: none;
-    visibility: hidden;
-  }
-  #menu-container {
-    flex-direction: column;
-  }
-  #search-filter {
-    flex-direction: column;
-  }
-  #restaurant-container {
-    flex-direction: column;
-    align-items: center;
-  }
-  .item-container {
-    width: inherit;
-  }
-}
-#restaurant-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-.item-container {
-  width: 50%;
-  padding: 1rem;
-}
-</style>
+<style></style>
