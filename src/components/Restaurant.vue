@@ -176,7 +176,7 @@
   
 </template>
 <script>
-import store from "./store/requests.js";
+import store from "../api/store/requests.js";
 import Map from "./map.vue";
 import Price from "./price.vue";
 import Stars from "./stars.vue";
@@ -186,8 +186,8 @@ import {
   getListFavorites,
   addRestaurantToList,
   viewListFavorites,
-} from "./api/favorites.js";
-import { createVisit, visitesRestaurantOfUser } from "./api/restaurants.js";
+} from "../api/api/favorites.js";
+import { createVisit, visitesRestaurantOfUser } from "../api/api/restaurants.js";
 
 export default {
   name: "Restaurant",
@@ -261,7 +261,6 @@ export default {
       };
       // TODO Quel est l'id du user?
       const userId = "5f766f6dad626a0004ba134f";
-      console.log(body);
       await createVisit(userId, body);
       this.closeModal();
       this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);

@@ -186,12 +186,12 @@ import {
   deleteRestaurantFromList,
   addRestaurantToList,
   viewListFavorites,
-} from "./api/favorites.js";
+} from "../api/api/favorites.js";
 import {
   restaurantInfo,
   visitesRestaurantOfUser,
   visitesOfOneRestaurantByUser,
-} from "./api/restaurants.js";
+} from "../api/api/restaurants.js";
 import Modal from "./Modal.vue";
 
 export default {
