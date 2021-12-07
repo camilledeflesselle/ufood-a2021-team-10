@@ -43,8 +43,8 @@
       </b-dropdown>
       <div>
         <b-button class="button" @click="openModal(restaurantId)">
-        Entrer visit
-      </b-button>
+          Entrer visit
+        </b-button>
       </div>
     </div>
     <div class="flex-container">
@@ -52,21 +52,13 @@
         <b-list-group-item
           class="d-flex justify-content-between align-items-center"
         >
-          <b-icon
-            icon="geo-alt"
-            scale="2"
-            variant="danger"
-          ></b-icon>
+          <b-icon icon="geo-alt" scale="2" variant="danger"></b-icon>
           {{ restaurant.address }}
         </b-list-group-item>
         <b-list-group-item
           class="d-flex justify-content-between align-items-center"
         >
-          <b-icon
-            icon="telephone-fill"
-            scale="2"
-            variant="warning"
-          ></b-icon>
+          <b-icon icon="telephone-fill" scale="2" variant="warning"></b-icon>
           {{ restaurant.tel }}
         </b-list-group-item>
         <b-list-group class="item">
@@ -80,61 +72,54 @@
             v-for="(hour, day) in restaurant.opening_hours"
             :key="day"
           >
-            <b-icon
-              icon="info-circle-fill"
-              scale="2"
-              variant="info"
-            ></b-icon>
+            <b-icon icon="info-circle-fill" scale="2" variant="info"></b-icon>
             {{ day }} : {{ hour }}
           </b-list-group-item>
           <b-list-group> </b-list-group>
         </b-list-group>
-        
 
-          <b-list-group class="item"> 
-            <b-list-group-item
+        <b-list-group class="item">
+          <b-list-group-item
             class="d-flex justify-content-center align-items-center"
           >
-           Cuisine
+            Cuisine
           </b-list-group-item>
-            <b-list-group-item v-for="genre in restaurant.genres" :key="genre">
+          <b-list-group-item v-for="genre in restaurant.genres" :key="genre">
             {{ genre }}
           </b-list-group-item>
+        </b-list-group>
 
-          </b-list-group>
-
-             <b-list-group class="item"> 
-            <b-list-group-item
+        <b-list-group class="item">
+          <b-list-group-item
             class="d-flex justify-content-center align-items-center"
           >
-           Price
+            Price
           </b-list-group-item>
-              <b-list-group-item>
-            
-        <Price :priceTag="restaurant.price_range"></Price>
+          <b-list-group-item>
+            <Price :priceTag="restaurant.price_range"></Price>
           </b-list-group-item>
+        </b-list-group>
 
-          </b-list-group>
-
-         <b-list-group class="item"> 
-            <b-list-group-item
+        <b-list-group class="item">
+          <b-list-group-item
             class="d-flex justify-content-center align-items-center"
           >
-           Rate
+            Rate
           </b-list-group-item>
-              <b-form-rating v-model="restaurant.rating" variant="warning" readonly show-value></b-form-rating>
-   
-
-          </b-list-group>
-  
-  
+          <b-form-rating
+            v-model="restaurant.rating"
+            variant="warning"
+            readonly
+            show-value
+          ></b-form-rating>
+        </b-list-group>
       </b-list-group>
     </div>
     <div class="img-container">
       <b-img v-for="photo in restaurant.pictures" :key="photo" :src="photo">
       </b-img>
-      </div>
-  
+    </div>
+
     <div class="item">
       <div class="flex-container">
         <Map
@@ -172,8 +157,8 @@
           <span><button @click="closeModal">Annuler</button></span>
         </div>
       </template>
-    </Modal>  </div>
-  
+    </Modal>
+  </div>
 </template>
 <script>
 import store from "../api/store/requests.js";
@@ -187,7 +172,10 @@ import {
   addRestaurantToList,
   viewListFavorites,
 } from "../api/api/favorites.js";
-import { createVisit, visitesRestaurantOfUser } from "../api/api/restaurants.js";
+import {
+  createVisit,
+  visitesRestaurantOfUser,
+} from "../api/api/restaurants.js";
 
 export default {
   name: "Restaurant",
@@ -317,11 +305,11 @@ export default {
   justify-content: space-around;
   align-items: space-around;
   padding: 10px;
-  margin:10px;
+  margin: 10px;
 }
 
 .img-container img {
-  max-height:100px;
+  max-height: 100px;
   padding: 2px;
 }
 .page .imgback {

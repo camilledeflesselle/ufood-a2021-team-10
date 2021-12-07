@@ -127,7 +127,10 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import Modal from "./Modal.vue";
-import { createVisit, visitesRestaurantOfUser } from "../api/api/restaurants.js";
+import {
+  createVisit,
+  visitesRestaurantOfUser,
+} from "../api/api/restaurants.js";
 
 export default {
   name: "Home",
