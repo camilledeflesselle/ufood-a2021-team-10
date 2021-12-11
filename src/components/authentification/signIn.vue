@@ -3,14 +3,12 @@
   <b-button v-b-modal.modal-1>Sign in</b-button>
 
   <b-modal ref="modal-1" id="modal-1" 
-  ok-only
+  hide-footer
   title="Sign In/Register" 
   header-bg-variant="dark"
   header-text-variant="light"
   body-bg-variant="light"
   body-text-variant="dark"
-  footer-bg-variant="dark"
-  footer-text-variant="dark"
   modal-header-close="danger"
   >
 

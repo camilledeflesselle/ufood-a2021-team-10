@@ -135,8 +135,7 @@
           <b-dropdown
             text="Add to a list of favorites"
             variant="primary"
-            class="m-2"
-            size="sm"
+            class="mt-3"
           >
             <b-dropdown-item
               v-for="list in ListFavorites.items"
@@ -147,39 +146,20 @@
               {{ list.name }}
             </b-dropdown-item>
           </b-dropdown>
+          <Visit :restau="resto"></Visit>
 
-          <b-btn
-            class="m-2"
-            size="sm"
-            @click="openModal(resto.restaurant_id, resto)"
-            >View visit information
-          </b-btn>
+        
         </div>
       </b-card>
     </b-card-group>
     <router-link to="/">Home</router-link>
-    <Modal v-if="isModalVisible">
-      <template v-slot:m-header> Visite </template>
-      <template v-slot:m-body>
-        <div>Date de la visite : {{ date }}</div>
-        <div>Commentaire: {{ comment }}</div>
-        <div>
-          <label for="rating">Votre cote : {{ rating }}</label>
-        </div>
-      </template>
-      <template v-slot:m-footer>
-        <div class="modal-button-area">
-          <span><button @click="closeModal">Close</button></span>
-        </div>
-      </template>
-    </Modal>
+ 
   </div>
 </template>
 
 <script>
 import {
   createListFavorites,
-  //createUser,
   getListFavorites,
   updateListFavorites,
   deleteListFavorites,
@@ -189,25 +169,21 @@ import {
 } from "../api/api/favorites.js";
 import {
   restaurantInfo,
-  visitesRestaurantOfUser,
   visitesOfOneRestaurantByUser,
 } from "../api/api/restaurants.js";
-import Modal from "./Modal.vue";
 
+import Visit from "./modalVisit/userView.vue"
 export default {
   name: "App",
-  components: {
-    Modal,
-  },
+ 
   data: () => ({
     inputValue: "",
-    restaurantsName: {},
-    isModalVisible: false,
-    comment: "",
-    rating: 0,
-    date: "",
-    currentVisiteId: "",
+    restaurantsName: {}
+    
   }),
+  components:{
+    Visit
+  },
   computed: {
     ListFavorites() {
       return this.$store.state.ListFavorites;
@@ -231,6 +207,13 @@ export default {
     async updateListFavorites(list) {
       await updateListFavorites(list);
       this.$store.state.ListFavorites = await getListFavorites();
+       this.$bvModal.msgBoxOk('Name changed')
+          .then(value => {
+            this.boxTwo = value
+          })
+          .catch(err => {
+            // An error occurred
+          })
     },
     async deleteListFavorites(id) {
       await deleteListFavorites(id);
@@ -287,23 +270,7 @@ export default {
         }
       }
       return nb;
-    },
-    openModal: function (id, viste) {
-      this.isModalVisible = true;
-      this.currentRestaurantId = id;
-      this.currentVisiteId = viste.id;
-      this.comment = viste.comment;
-      this.rating = viste.rating;
-      this.date = viste.date.substring(0, 10);
-    },
-    closeModal: function () {
-      this.isModalVisible = false;
-      this.comment = "";
-      this.rating = "3";
-      this.date = "";
-      this.currentRestaurantId = "";
-      this.currentVisiteId = "";
-    },
+    }
   },
   async mounted() {
     this.$store.dispatch("getList");

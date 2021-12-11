@@ -26,12 +26,11 @@
       <b-card :title="restaurant.name"> </b-card>
     </b-carousel>
 
-    <div v-if="this.$store.state.isConnected" class="mt-3">
+    <div v-if="this.$store.state.isConnected">
       <b-dropdown
         text="Ajouter Favoris"
         variant="primary"
-        class="m-2"
-        size="lg"
+        class="mt-3"
       >
         <b-dropdown-item
           v-for="list in listResto"
@@ -41,11 +40,8 @@
           {{ list.name }}
         </b-dropdown-item>
       </b-dropdown>
+      <Modal :restaurant="restaurant"></Modal>
      
-        <b-button class="button" @click="openModal(restaurantId)">
-          Entrer visit
-        </b-button>
-      
     </div>
     <div class="flex-container">
       <b-list-group class="item">
@@ -128,72 +124,31 @@
         ></Map>
       </div>
     </div>
-    <Modal v-if="isModalVisible">
-      <template v-slot:m-header> Ajout d'une visite </template>
-      <template v-slot:m-body>
-        <div>Date de la visite</div>
-        <Datepicker v-model="date"></Datepicker>
-        <div>Commentaire:</div>
-        <textarea
-          name="commentArea"
-          id="comment"
-          placeholder="Entrez votre commentaire ici"
-          v-model="comment"
-        ></textarea>
-        <div>
-          <label for="rating">Votre cote :</label>
-          <select name="rating" id="rating" v-model="rating">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </div>
-      </template>
-      <template v-slot:m-footer>
-        <div class="modal-button-area">
-          <span><button @click="submitVisit">Soumettre</button></span>
-          <span><button @click="closeModal">Annuler</button></span>
-        </div>
-      </template>
-    </Modal>
+   
   </div>
 </template>
 <script>
 import Map from "./restaurant/map.vue";
 import Price from "./restaurant/price.vue";
-import Modal from "./Modal.vue";
-import Datepicker from "vuejs-datepicker";
+import Modal from "./modalVisit/modalhome.vue";
 import {
   getListFavorites,
   addRestaurantToList,
   viewListFavorites,
 } from "../api/api/favorites.js";
-import {
-  createVisit,
-  visitesRestaurantOfUser,
-} from "../api/api/restaurants.js";
 
 export default {
   name: "Restaurant",
   props: ["restaurantId"],
   components: {
     Map,
-    Modal,
     Price,
-    Datepicker,
+    Modal
   },
   data: () => {
     return {
       slide: 0,
-      sliding: null,
-      isModalVisible: false,
-      filterGenres: [],
-      filterPriceRange: [],
-      comment: "",
-      rating: 0,
-      date: Date.now(),
+      sliding: null
     };
   },
   computed: {
@@ -225,32 +180,7 @@ export default {
         }
         this.$store.state.ListFavorites = await getListFavorites();
       }
-    },
-    openModal: function (id) {
-      this.isModalVisible = true;
-      this.currentRestaurantId = id;
-    },
-    closeModal: function () {
-      this.isModalVisible = false;
-      this.comment = "";
-      this.rating = "3";
-      this.date = Date.now();
-      this.currentRestaurantId = "";
-    },
-    submitVisit: async function () {
-      const visitDate = new Date(this.date);
-      const body = {
-        restaurant_id: this.currentRestaurantId,
-        comment: this.comment,
-        rating: parseInt(this.rating),
-        date: visitDate.toISOString(),
-      };
-      // TODO Quel est l'id du user?
-      const userId = "5f766f6dad626a0004ba134f";
-      await createVisit(userId, body);
-      this.closeModal();
-      this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);
-    },
+    }
   },
   mounted() {
     if (this.restaurantId) {
