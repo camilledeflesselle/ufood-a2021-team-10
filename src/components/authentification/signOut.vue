@@ -1,5 +1,5 @@
 <template>
-      <b-button href = "/" size="sm" class="my-2 my-sm-0" type="submit"
+      <b-button @click="signOut" size="sm" class="my-2 my-sm-0"
                 >Sign Out</b-button
               >
 </template>
@@ -9,7 +9,7 @@ export default ({
     name: "SignOut",
     methods :{
       async signOut() {
-        await signOut(email, password); 
+        await signOut(); 
         this.$store.state.isConnected = false;
 
     }

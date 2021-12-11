@@ -5,17 +5,18 @@
     <b-form-input v-model="username"></b-form-input>
   </b-input-group>
 
-  <b-input-group prepend="Email" class="mt-3">
-    <b-form-input v-model="email"></b-form-input>
+  <b-input-group prepend="email" class="mt-3">
+    <b-form-input v-model="email1"></b-form-input>
   </b-input-group>
 
-  <b-input-group prepend="Password" class="mt-3">
-    <b-form-input v-model="password" type="password"></b-form-input>
+  <b-input-group prepend="password" class="mt-3">
+    <b-form-input v-model="password1" type="password"></b-form-input>
   </b-input-group>
 
   <b-button @click="signUp" variant="warning" class="mt-3 ">Sign up</b-button>
 
-
+<div class="mt-3">{{message}}</div>
+    
     </b-card-body>
 
 </template>
@@ -26,17 +27,19 @@ export default({
     data: function() {
         return {
             username: '',
-            email:'',
-            password:''
+            email1:'',
+            password1:'',
+            message: ''
         }
     },
+    
     methods :{
       async signUp() {
-      let username = this.username;
-      let email= this.email;
-      let password = this.password;
-      console.log(username);
-      await signUp(username, email, password);
+      
+      await signUp(this.username, this.email1, this.password1)
+        .then(result => {
+            this.message = `Your account has been successfully created, ${this.username} !`
+        });
     },
     }
 })

@@ -25,6 +25,7 @@ export const signUp = async (name, email, password) => {
       requestOptions
     );
     const response = await fetch(request);
+    
   };
 
   export const signIn = async (email, password) => {

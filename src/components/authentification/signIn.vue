@@ -32,9 +32,10 @@
   </b-input-group>
 
   <b-button @click="signIn" variant="warning" class="mt-3">Log in</b-button>
+   <div>{{message}}</div>
     </b-card-body>
 
-    <Register v-else></Register>
+    <Register :email="email" :password="password" v-else></Register>
  
   </b-modal>
 </div>
@@ -53,25 +54,31 @@ export default ({
         return {
             tabs: 1,
             email: '',
-            password: ''
+            password: '',
+            message: ''
         }
     },
     methods :{
       async signIn() {
         const email= this.email;
         const password = this.password;
-        const userInfo = await signIn(email, password); 
-        this.$store.state.userInfo = userInfo;
+        const userInfo = await signIn(email, password)
+        .then(result => {
+        this.$store.state.userInfo = result;
         this.$refs['modal-1'].hide();
         this.$store.state.isConnected = true;
+    
+        this.$cookie.set("token_access", result.token, "expiring time")
+      
+    })
+        .catch(error => {
+this.message = "Sorry, your email or password is wrong, please retry."
+       
+        }
+             );
+       
 
     }
-  },
-  created() {
-    const userInfo = this.$store.state.userInfo;
-    if (userInfo){
-      this.$cookie.set("token_access", userInfo.token, "expiring time")
-    } 
-}
+  }
 })
 </script>
