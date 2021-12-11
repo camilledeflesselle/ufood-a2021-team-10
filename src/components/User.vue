@@ -17,7 +17,7 @@
           <b-form-input
             v-model="list.name"
             placeholder="Change name..."
-            
+            id="inputValue"
           ></b-form-input>
           <b-input-group-append>
             <b-button

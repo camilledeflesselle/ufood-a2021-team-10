@@ -11,10 +11,9 @@
         <b-navbar-brand to="/">UFood</b-navbar-brand>
         
         <div v-if="this.$store.state.isConnected" >
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
+      
           <b-navbar-nav class="ml-auto">
-              <b-nav-item to="/#/user/#">
+              <b-nav-item to="/user/#">
             <v-gravatar
               :email="emailAdress"
               alt="Nobody"
@@ -30,11 +29,9 @@
             </b-nav-form>
             
           </b-navbar-nav>
-        </b-collapse>
+       
           </div>
           <div v-else>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-form>
               
@@ -44,7 +41,7 @@
             </b-nav-form>
             
           </b-navbar-nav>
-        </b-collapse>
+      
             </div>
       </div>
     </b-navbar>
