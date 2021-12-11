@@ -124,7 +124,7 @@
       <div class="flex-container">
         <Map
           class="localisation"
-          :coord="restaurant.location.coordinates"
+          :restaurant="restaurant"
         ></Map>
       </div>
     </div>
@@ -161,10 +161,8 @@
   </div>
 </template>
 <script>
-import store from "../api/store/requests.js";
 import Map from "./map.vue";
 import Price from "./price.vue";
-import Stars from "./stars.vue";
 import Modal from "./Modal.vue";
 import Datepicker from "vuejs-datepicker";
 import {

@@ -30,160 +30,61 @@
         ></b-form-select>
       </div>
     </b-card>
+<div>
+  <div>
+    <b-card-header header-tag="nav">
+      <b-nav card-header tabs>
+        <b-nav-item v-on:click="activeTab=1" v-bind:active="activeTab === 1">List View</b-nav-item>
+       <b-nav-item v-on:click="activeTab=2" v-bind:active="activeTab === 2">Map View </b-nav-item>
+       
+      </b-nav>
+    </b-card-header>
+    <div>
+     
+            <listView :restaurantsFiltered="restaurantsFiltered" v-if="activeTab === 1"></listView>
+        
+            <mapView v-if="activeTab === 2"
+          :restaurants="restaurantsFiltered">
+          </mapView>
+       
 
-    <b-card-group columns class="padding">
-      <b-card
-        img-top
-        :header="restaurant.name"
-        class="mb-2"
-        v-for="restaurant in restaurantsFiltered"
-        :key="restaurant.id"
-      >
-        <b-card-body>
-          <b-card-img
-            :src="restaurant.pictures[0]"
-            img-alt="Image"
-            overlay
-          ></b-card-img>
-          <b-card-text>
-            <p></p>
-            <div>
-              <b-button
-                v-b-popover.hover="'I am popover content!'"
-                class="btn-success"
-                size="sm"
-              >
-                <router-link
-                  tag="div"
-                  :to="{
-                    name: 'Restaurant',
-                    params: { restaurantId: restaurant.id },
-                  }"
-                >
-                  More...
-                </router-link>
-              </b-button>
-            </div>
-
-            <div>
-              <b-button
-                v-b-popover.hover="'I am popover content!'"
-                size="sm"
-                @click="openModal(restaurant.id)"
-                >Add to visited</b-button
-              >
-            </div>
-            <Modal v-if="isModalVisible">
-              <template v-slot:m-header> Ajout d'une visite </template>
-              <template v-slot:m-body>
-                <div>Date de la visite</div>
-                <Datepicker v-model="date"></Datepicker>
-                <div>Commentaire:</div>
-                <textarea
-                  name="commentArea"
-                  id="comment"
-                  placeholder="Entrez votre commentaire ici"
-                  v-model="comment"
-                ></textarea>
-                <div>
-                  <label for="rating">Votre cote :</label>
-                  <select name="rating" id="rating" v-model="rating">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                </div>
-              </template>
-              <template v-slot:m-footer>
-                <div class="modal-b-button-area">
-                  <span>
-                    <b-button
-                      v-b-popover.hover="'I am popover content!'"
-                      size="sm"
-                      class="success-variant"
-                      @click="submitVisit"
-                      >Soumettre</b-button
-                    >
-                  </span>
-                  <span>
-                    <b-button
-                      v-b-popover.hover="'I am popover content!'"
-                      size="sm"
-                      @click="closeModal"
-                      >Annuler</b-button
-                    >
-                  </span>
-                </div>
-              </template>
-            </Modal>
-          </b-card-text>
-        </b-card-body>
-      </b-card>
-    </b-card-group>
+    </div>
+</div>
+  
+</div>
   </body>
 </template>
 <script>
-import Datepicker from "vuejs-datepicker";
-import Modal from "./Modal.vue";
-import {
-  createVisit,
-  visitesRestaurantOfUser,
-} from "../api/api/restaurants.js";
+import listView from "./home/listView.vue";
+import mapView from "./home/mapRestaurants.vue";
+
 
 export default {
   name: "Home",
-  components: {
-    Datepicker,
-    Modal,
+  components:{
+    mapView,
+    listView
   },
+ 
   data: function () {
     return {
-      isModalVisible: false,
+      activeTab: 1,
       checkedGenres: [],
       checkedPriceRange: [],
-      searchTerm: "",
-      comment: "",
-      rating: 0,
-      date: Date.now(),
-      currentRestaurantId: "",
-      limit: undefined,
-      page: undefined,
+      searchTerm: ""
     };
   },
   methods: {
-    openModal: function (id) {
-      this.isModalVisible = true;
-      this.currentRestaurantId = id;
-    },
-    closeModal: function () {
-      this.isModalVisible = false;
-      this.comment = "";
-      this.rating = "3";
-      this.date = Date.now();
-      this.currentRestaurantId = "";
-    },
     representPrice: function (range) {
       return "$".repeat(range);
-    },
-    submitVisit: async function () {
-      const visitDate = new Date(this.date);
-      const body = {
-        restaurant_id: this.currentRestaurantId,
-        comment: this.comment,
-        rating: parseInt(this.rating),
-        date: visitDate.toISOString(),
-      };
-      // TODO Quel est l'id du user?
-      const userId = "5f766f6dad626a0004ba134f";
-      console.log(body);
-      await createVisit(userId, body);
-      this.closeModal();
-      this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);
-    },
+    }
   },
   computed: {
+
+    geolocationPosition(){
+      return this.$store.state.geolocationPosition;
+    },
+
     restaurants() {
       return this.$store.state.restaurants;
     },
@@ -232,12 +133,21 @@ export default {
         array = [...new Set(arrays.flat(1))].sort();
       }
       return array;
-    },
+    }
   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch("getRestaurants");
     this.$store.dispatch("getRestaurantsVisited");
+    this.$store.dispatch("getlocation");
   },
 };
 </script>
-<style></style>
+<style>
+.testMap{
+  height:200px;
+}
+
+body{
+  height:100%;
+}
+</style>
