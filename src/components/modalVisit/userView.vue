@@ -1,6 +1,6 @@
 <template>
     <div>
-  <b-button @click="openModal(restau.id)" variant="warning" class="mt-3">View visit</b-button>
+  <b-button @click="openModal(restau.id)" variant="warning" size="sm" class="mt-3">View visit</b-button>
 
   <b-modal :ref="'modal-'+restau.id" :id="'modal-'+restau.id" 
   title="Visit information"

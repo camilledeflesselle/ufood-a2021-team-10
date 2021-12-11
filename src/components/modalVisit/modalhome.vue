@@ -1,6 +1,6 @@
 <template>
     <div>
-  <b-button @click="openModal(restaurant.id)" variant="warning" class="mt-3">Add to visited</b-button>
+  <b-button @click="openModal(restaurant.id)" variant="warning"  class="mt-3 text-center">Add to visited</b-button>
 
   <b-modal :ref="'modal-'+restaurant.id" :id="'modal-'+restaurant.id" 
   :title="title"
@@ -43,7 +43,7 @@ export default {
     return {
       comment: "",
       rating: 0,
-      date: Date.now(),
+      date: undefined,
       currentRestaurantId: "",
       title: ""
     };
@@ -72,8 +72,8 @@ export default {
       this.$store.state.restaurantsVisited = visitesRestaurantOfUser(userId);
       this.$refs['modal-'+this.currentRestaurantId].hide();
       this.comment = "";
-      this.rating = "3";
-      this.date = Date.now();
+      this.rating = 0;
+      this.date = undefined;
       this.currentRestaurantId = "";
       this.$bvModal.msgBoxOk('Action completed')
           .catch(err => {
