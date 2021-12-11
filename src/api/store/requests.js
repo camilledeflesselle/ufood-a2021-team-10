@@ -22,6 +22,7 @@ export const store = new Vuex.Store({
     nameRestaurant: {},
     info_restaurant: undefined,
     geolocation: undefined,
+    isConnected: false,
   },
   mutations: {
     SET_LIST(state, data) {

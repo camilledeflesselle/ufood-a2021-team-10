@@ -24,7 +24,7 @@
               </b-button>
             </div>
 
-            <div>
+            <div v-if="this.$store.state.isConnected">
               <b-button
                 v-b-popover.hover="'I am popover content!'"
                 size="sm"
