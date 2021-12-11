@@ -32,7 +32,7 @@
   </b-input-group>
 
   <b-button @click="signIn" variant="warning" class="mt-3">Log in</b-button>
-   <div>{{message}}</div>
+   <div class="mt-3">{{message}}</div>
     </b-card-body>
 
     <Register :email="email" :password="password" v-else></Register>
@@ -72,7 +72,7 @@ export default ({
       
     })
         .catch(error => {
-this.message = "Sorry, your email or password is wrong, please retry."
+this.message = "Sorry, your email or password is wrong, please retry or register."
        
         }
              );

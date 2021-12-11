@@ -1,7 +1,7 @@
 <template>
      <b-card-body class="text-center">
     
-<b-input-group prepend="Name" class="mt-3">
+<b-input-group prepend="name" class="mt-3">
     <b-form-input v-model="username"></b-form-input>
   </b-input-group>
 
@@ -39,7 +39,12 @@ export default({
       await signUp(this.username, this.email1, this.password1)
         .then(result => {
             this.message = `Your account has been successfully created, ${this.username} !`
-        });
+        })
+        .catch(error => {
+this.message = "Sorry, please retry."
+       
+        }
+             );
     },
     }
 })
