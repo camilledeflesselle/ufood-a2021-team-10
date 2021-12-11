@@ -31,7 +31,14 @@
         <b-navbar-brand href="/">UFood</b-navbar-brand>
 
         <b-navbar-nav>
-          <b-nav-item href="/#/user/#"><b-avatar></b-avatar></b-nav-item>
+          <b-nav-item href="/#/user/#">
+            <v-gravatar
+              :email="emailAdress"
+              alt="Nobody"
+              :size="40"
+              default-img="mm"
+            />
+          </b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -59,5 +66,23 @@
     </b-navbar>
   </div>
 </template>
+
+<script>
+import Vue from "vue";
+import Gravatar from "vue-gravatar";
+
+Vue.component("v-gravatar", Gravatar);
+
+export default {
+  name: "Nav",
+  props: ["emailAdress"],
+  // data: () => ({
+  //   emailAdress: "anlav256@ulaval.ca",
+  // }),
+  async mounted() {
+    // let adresseHash = md5("MyEmailAddress@example.com ".trim().toLowerCase());
+  },
+};
+</script>
 
 <style></style>

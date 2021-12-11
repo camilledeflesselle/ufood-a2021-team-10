@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav-menu></nav-menu>
+    <nav-menu emailAdress="anlav256@ulaval.ca"></nav-menu>
     <router-view></router-view>
   </div>
 </template>
