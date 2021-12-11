@@ -44,7 +44,9 @@
             <listView :restaurantsFiltered="restaurantsFiltered" v-if="activeTab === 1"></listView>
         
             <mapView v-if="activeTab === 2"
-          :restaurants="restaurantsFiltered"></mapView>
+          :restaurants="restaurantsFiltered"
+          :geolocationPosition="geolocationPosition">
+          </mapView>
        
 
     </div>
@@ -79,6 +81,11 @@ export default {
     }
   },
   computed: {
+
+    geolocationPosition(){
+      return this.$store.state.geolocationPosition;
+    },
+
     restaurants() {
       return this.$store.state.restaurants;
     },
@@ -127,11 +134,12 @@ export default {
         array = [...new Set(arrays.flat(1))].sort();
       }
       return array;
-    },
+    }
   },
-  async mounted() {
+  mounted() {
     this.$store.dispatch("getRestaurants");
     this.$store.dispatch("getRestaurantsVisited");
+    this.$store.dispatch("getlocation");
   },
 };
 </script>

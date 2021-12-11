@@ -5,7 +5,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import { endpoint } from "./url.js";
-import { addRestaurantToList } from "../api/favorites.js";
+import {getCoordinates} from "../api/localisation.js"
 
 Vue.use(Vuex);
 
@@ -21,6 +21,7 @@ export const store = new Vuex.Store({
     restaurantsVisited: {},
     nameRestaurant: {},
     info_restaurant: undefined,
+    geolocation: undefined,
   },
   mutations: {
     SET_LIST(state, data) {
@@ -35,6 +36,9 @@ export const store = new Vuex.Store({
     SET_info_restaurant(state, data) {
       state.info_restaurant = data;
     },
+    SET_geolocation(state, data){
+      state.geolocationPosition = data;
+    }
   },
   actions: {
     async getList({ commit }) {
@@ -69,5 +73,9 @@ export const store = new Vuex.Store({
       );
       commit("SET_info_restaurant", response.data);
     },
+    async getlocation({commit}){
+      const geolocationPosition = await getCoordinates()
+      commit("SET_geolocation", geolocationPosition)
+  }
   },
 });

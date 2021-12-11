@@ -220,7 +220,7 @@ export default {
     },
     restoName() {
       return this.restaurantsName;
-    },
+    }
   },
   methods: {
     async createListFavorites() {
