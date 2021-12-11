@@ -44,8 +44,7 @@
             <listView :restaurantsFiltered="restaurantsFiltered" v-if="activeTab === 1"></listView>
         
             <mapView v-if="activeTab === 2"
-          :restaurants="restaurantsFiltered"
-          :geolocationPosition="geolocationPosition">
+          :restaurants="restaurantsFiltered">
           </mapView>
        
 

@@ -4,7 +4,7 @@
 <script>
 import mapboxgl from "mapbox-gl";
 export default {
-  props: ["restaurants", "geolocationPosition"],
+  props: ["restaurants"],
   name: "Map",
   computed: {
     geoJson () {
@@ -27,8 +27,8 @@ export default {
   },
   },
     mounted() {
-      const coord = {lat: this.geolocationPosition.coords.latitude,
-      lng: this.geolocationPosition.coords.longitude
+      const coord = {lat: this.$store.state.geolocationPosition.coords.latitude,
+      lng: this.$store.state.geolocationPosition.coords.longitude
       }
       mapboxgl.accessToken =
       "pk.eyJ1IjoiZGVmbGVzc2MiLCJhIjoiY2t0enFiY2RoM2EyajJwcGl6enp5MG95biJ9.HJiHufyLG-7K-8DwOCL-cw";
@@ -51,7 +51,9 @@ export default {
 
     
     })
-
+    let directions = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+    });
     map.on('load', () => {
 
 map.addSource('places', {'type':'geojson', 'data':this.geoJson})
@@ -73,61 +75,39 @@ closeOnClick: false
 });
  
 map.on('mouseenter', 'places', (e) => {
-// Change the cursor style as a UI indicator.
 map.getCanvas().style.cursor = 'pointer';
  
-// Copy coordinates array.
 const coordinates = e.features[0].geometry.coordinates.slice();
 const description = e.features[0].properties.description;
- 
-// Ensure that if the map is zoomed out such that multiple
-// copies of the feature are visible, the popup appears
-// over the copy being pointed to.
+directions.setDestination(coordinates);  
 while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
 }
  
-// Populate the popup and set its coordinates
-// based on the feature found.
 popup.setLngLat(coordinates).setHTML(description).addTo(map);
 });
  
 map.on('mouseleave', 'places', () => {
 map.getCanvas().style.cursor = '';
 popup.remove();
-});
- 
-/* Change the cursor to a pointer when the mouse is over the places layer.
-map.on('mouseenter', 'places', () => {
-map.getCanvas().style.cursor = 'pointer';
-});
- 
-// Change it back to a pointer when it leaves.
-map.on('mouseleave', 'places', () => {
-map.getCanvas().style.cursor = '';
-});*/
+
+
 });
 
+});
+
+ const coordPosition = [coord.lng, coord.lat]
+ directions.setOrigin(coordPosition)
     const marker = new mapboxgl.Marker({
       color: "#0ABC3e",
     })
       .setLngLat(coord)
       .addTo(map);
    
-
-    let directions = new MapboxDirections({
-      accessToken: mapboxgl.accessToken,
-    });
-
-     // map.on("load", function () {
-        //directions.setOrigin(coord); // can be address in form setOrigin("12, Elm Street, NY")
-       // directions.setDestinaion(this.restaurants[0].address); // can be address
-     // });
-
-     
-
     map.addControl(directions, "top-right");
     map.scrollZoom.disable();
+    const nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'bottom-right');
   },
 };
 </script>
