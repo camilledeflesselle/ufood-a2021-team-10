@@ -26,7 +26,7 @@
       <b-card :title="restaurant.name"> </b-card>
     </b-carousel>
 
-    <div>
+    <div v-if="this.$store.state.isConnected" class="mt-3">
       <b-dropdown
         text="Ajouter Favoris"
         variant="primary"
@@ -41,11 +41,11 @@
           {{ list.name }}
         </b-dropdown-item>
       </b-dropdown>
-      <div>
+     
         <b-button class="button" @click="openModal(restaurantId)">
           Entrer visit
         </b-button>
-      </div>
+      
     </div>
     <div class="flex-container">
       <b-list-group class="item">
@@ -161,8 +161,8 @@
   </div>
 </template>
 <script>
-import Map from "./map.vue";
-import Price from "./price.vue";
+import Map from "./restaurant/map.vue";
+import Price from "./restaurant/price.vue";
 import Modal from "./Modal.vue";
 import Datepicker from "vuejs-datepicker";
 import {

@@ -6,22 +6,6 @@ const owner = {
 }
 // create a user
 export const createUser = async () => {
-        /*const request = new Request(`${endpoint}/signup`, 
-        {
-            method:"POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            params: {
-                name: "Me",
-                email: owner,
-                password: "Team10!"
-            }
-        }
-        );
-        const response = await fetch(request);
-        const body = await response.json();
-        const userId = body.id;*/
 
         window.localStorage.setItem("userId", owner.id);
     
