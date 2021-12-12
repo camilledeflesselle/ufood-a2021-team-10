@@ -63,13 +63,13 @@ export default {
     async signIn() {
       const email = this.email;
       const password = this.password;
-      const userInfo = await signIn(email, password)
-         .then((result) => console.log(result))
+      await signIn(email, password)
         .then((result) => {
-          this.$refs["modal-1"].hide();
+          console.log(result)
           this.$store.state.isConnected = true;
           this.$store.state.userInfo = result;
           this.$cookie.set("token_access", result.token, "1h");
+          this.$refs["modal-1"].hide();
         })
         .catch((error) => {
           this.message =
@@ -77,6 +77,6 @@ export default {
         });
     },
 
-  },
+  }
 };
 </script>

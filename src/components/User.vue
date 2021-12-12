@@ -2,8 +2,9 @@
   <div id="user" class="padding">
     <h1>User Profile</h1>
     <div class="flex-container bg">
-      <div class="item">name place holder</div>
-      <div class="item">3.8</div>
+      <div class="item">{{userInfo.name}}</div>
+      <div class="item">{{userInfo.rating}}</div>
+      
     </div>
     <div>
       <h2>Your favorites restaurants</h2>
@@ -193,6 +194,10 @@ export default {
     restoName() {
       return this.restaurantsName;
     },
+    userInfo() {
+      console.log(this.$store.state.userInfo)
+      return this.$store.state.userInfo;
+    }
   },
   methods: {
     async createListFavorites() {

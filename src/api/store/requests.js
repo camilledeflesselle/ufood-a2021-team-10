@@ -4,7 +4,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import { endpoint } from "./url.js";
+import testToken from "../api/restaurants.js"
 import {getCoordinates} from "../api/localisation.js"
 
 Vue.use(Vuex);
@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
     nameRestaurant: {},
     info_restaurant: undefined,
     isConnected: false,
-    userInfo: undefined
+    userInfo: {email:"test@gmail.com"}
   },
   mutations: {
     SET_LIST(state, data) {
@@ -43,9 +43,9 @@ export const store = new Vuex.Store({
   },
   actions: {
     async getList({ commit }) {
-      
+      headers, url = testToken(new Headers())
       const response = await axios.get(
-        `${endpoint}/users/${userInfo.id}/favorites`,
+        `${url}/users/${userInfo.id}/favorites`,
         {
           headers: headers
         }
@@ -53,7 +53,9 @@ export const store = new Vuex.Store({
       commit("SET_LIST", response.data);
     },
     async getRestaurants({ commit }) {
-      const response = await axios.get(`${endpoint}/restaurants`, {
+
+      headers, url = testToken(new Headers())
+      const response = await axios.get(`${url}/restaurants`, {
         params: {
           limit: 100,
         },
@@ -61,15 +63,21 @@ export const store = new Vuex.Store({
       commit("SET_restaurants", response.data);
     },
     async getRestaurantsVisited({ commit }) {
+
+      headers, url = testToken(new Headers())
       const response = await axios.get(
-        `${endpoint}/users/${owner.id}/restaurants/visits`
+        `${url}/users/${owner.id}/restaurants/visits`, {
+          headers: headers
+        }
       );
       commit("SET_restaurantsVisited", response.data);
     },
     async getInfoRestaurant({ commit }, id) {
+
+      headers, url = testToken(new Headers())
       const response = await axios.get(
         `https://ufoodapi.herokuapp.com/unsecure/restaurants/${id}`,
-        {}
+        {headers: headers}
       );
       commit("SET_info_restaurant", response.data);
     },
