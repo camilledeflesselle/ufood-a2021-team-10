@@ -9,12 +9,11 @@
     >
       <div class="container-fluid">
         <b-navbar-brand to="/">UFood</b-navbar-brand>
-
         <div v-if="this.$store.state.isConnected">
           <b-navbar-nav class="ml-auto">
             <b-nav-item to="/user/#">
               <v-gravatar
-                :email="emailAdress"
+                :email="this.$store.state.userInfo.email"
                 alt="Nobody"
                 :size="40"
                 default-img="mm"
@@ -47,17 +46,9 @@ Vue.component("v-gravatar", Gravatar);
 
 export default {
   name: "Nav",
-  props: ["emailAdress"],
   components: {
     SignIn,
     SignOut,
-  },
-  data: () => ({
-    //   emailAdress: "anlav256@ulaval.ca",
-    isConnected2: true,
-  }),
-  async mounted() {
-    // let adresseHash = md5("MyEmailAddress@example.com ".trim().toLowerCase());
   },
 };
 </script>
