@@ -1,5 +1,9 @@
 <template>
 <div>
+
+  <b-button v-if="!showedPopup" v-on:click="showedPopup= !showedPopup" block>Show all restaurants popups on map</b-button>
+
+  <b-button v-if="showedPopup" v-on:click="showedPopup= !showedPopup" block>Hide some restaurants popups on map</b-button>
   <MglMap
     id="map2"
     :accessToken="accessToken"
@@ -15,7 +19,7 @@
       v-on:mouseenter="showedYourPosition=true"
       >
       <MglPopup
-        :showed="showedYourPosition || showedPopup"
+        :showed="showedYourPosition ? showedPopup : !showedPopup"
       >
         It's your position
       </MglPopup>
@@ -30,7 +34,7 @@
         v-on:mouseenter="showRestaurant(restaurant.id)"
       >
       <MglPopup
-        :showed="showActualrestaurant(restaurant.id) || showedPopup"
+        :showed="showActualrestaurant(restaurant.id) ? !showedPopup : showedPopup"
         
       >
         <RestaurantDescription :restaurant="restaurant">
@@ -41,7 +45,7 @@
     <MglAttributionControl />
       <MglNavigationControl position="top-right" />
       <MglGeolocateControl position="top-right" />
-      <MglScaleControl />
+     
   </MglMap>
   </div>
 </template>
@@ -50,8 +54,7 @@
 import Mapbox from "mapbox-gl";
 import { MglMap, MglMarker, MglPopup,  MglAttributionControl,
   MglNavigationControl,
-  MglGeolocateControl,
-  MglScaleControl } from "vue-mapbox";
+  MglGeolocateControl} from "vue-mapbox";
 import RestaurantDescription from "./restaurantDescription.vue"
 
 export default {
@@ -61,7 +64,6 @@ export default {
     MglMarker,
     MglPopup,
     MglAttributionControl,
-    MglScaleControl,
 
     MglNavigationControl,
     MglGeolocateControl,
@@ -74,7 +76,8 @@ export default {
      "pk.eyJ1IjoiZGVmbGVzc2MiLCJhIjoiY2t0enFiY2RoM2EyajJwcGl6enp5MG95biJ9.HJiHufyLG-7K-8DwOCL-cw",
     mapStyle: "mapbox://styles/mapbox/streets-v11",
     showedYourPosition: false,
-    show: undefined
+    show: undefined,
+    showedPopup: false
   }),
   methods: {
     showRestaurant(id) {
@@ -92,16 +95,8 @@ export default {
     },
     computedShow() {
       return this.restaurantsFiltered != undefined;
-    },
-     showedPopup() {
-       let res = false;
-       if(this.restaurantsFiltered != undefined){
-         res = Object.values(this.restaurantsFiltered).length < 3;
-       }
-      return res;
-    },
+    }
      
-    
   },
 
   mounted() {

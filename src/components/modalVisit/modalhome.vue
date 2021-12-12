@@ -3,7 +3,8 @@
     <b-button
       @click="openModal(restaurant.id)"
       variant="warning"
-      class="mt-3 text-center"
+      block
+      size="sm"
       >Add to visited</b-button
     >
 

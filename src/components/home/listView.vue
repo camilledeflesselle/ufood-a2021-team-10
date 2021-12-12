@@ -22,11 +22,7 @@ export default {
       limit: undefined,
       page: undefined,
     };
-  },
-  async mounted() {
-    this.$store.dispatch("getRestaurants");
-    this.$store.dispatch("getRestaurantsVisited");
-  },
+  }
 };
 </script>
 <style></style>

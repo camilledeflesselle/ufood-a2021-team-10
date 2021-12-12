@@ -133,7 +133,7 @@
           <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
 
           <b-dropdown
-            text="Add to a list of favorites"
+            text="Add to favorites"
             variant="primary"
             class="mt-3"
           >

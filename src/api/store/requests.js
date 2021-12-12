@@ -55,7 +55,7 @@ export const store = new Vuex.Store({
     async getRestaurants({ commit }) {
       const response = await axios.get(`${endpoint}/restaurants`, {
         params: {
-          limit: 1000,
+          limit: 100,
         },
       });
       commit("SET_restaurants", response.data);

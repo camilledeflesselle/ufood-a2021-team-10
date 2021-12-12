@@ -57,7 +57,7 @@
     <div>
       <div>
         <b-card-header header-tag="nav">
-          <b-nav card-header tabs>
+          <b-nav card-header tabs justified>
             <b-nav-item
               v-on:click="activeTab = 1"
               v-bind:active="activeTab === 1"
@@ -67,6 +67,7 @@
               v-on:click="activeTab = 2"
               v-bind:active="activeTab === 2"
               >Map View
+              
             </b-nav-item>
           </b-nav>
         </b-card-header>
@@ -97,7 +98,7 @@ export default {
 
   data: function () {
     return {
-      activeTab: 2,
+      activeTab: 1,
       checkedGenres: [],
       checkedPriceRange: [],
       searchTerm: "",

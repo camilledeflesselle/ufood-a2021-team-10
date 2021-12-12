@@ -1,5 +1,6 @@
 <template>
-  <div id="restaurantpage" class="page">
+  <div id="restaurantpage" class="page" 
+      v-if="restaurant !== undefined">
     <b-carousel
       id="carousel-1"
       v-model="slide"
