@@ -1,8 +1,14 @@
 <template>
   <body>
-    <b-card bg-variant="light">
+    
+    <b-card bg-variant="light" >
+      <b-card-header >
+        Filters
+    </b-card-header>
+    <b-card-body>
+
       <div id="search-bar" class="dropdown">
-        <input
+        <b-form-input
           placeholder="search for restaurants..."
           v-model="searchTerm"
           type="text"
@@ -29,27 +35,24 @@
           </li>
         </ul>
       </div>
-      <b-form-group label="Price Range" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox
-          v-for="option in PriceRanges"
+      <b-form-group class = "mt-3" label="Price Range" v-slot="{ ariaDescribedby }">
+        <b-form-checkbox-group
           v-model="checkedPriceRange"
-          :key="option"
-          :value="option"
+          :options="PriceRanges"
           :aria-describedby="ariaDescribedby"
-          name="flavour-3a"
+          multiple
         >
-          {{ representPrice(option) }}
-        </b-form-checkbox>
+        </b-form-checkbox-group>
       </b-form-group>
 
       <div>
         Cuisine
-        <b-form-select
-          v-model="checkedGenres"
-          :options="genres"
-          label="cuisine"
-        ></b-form-select>
+        <div>
+  <multiselect v-model="checkedGenres" :options="genres" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true"  placeholder="You can select some types..." >
+ </multiselect>
+</div>
       </div>
+      </b-card-body>
     </b-card>
     <div>
       <div>
@@ -68,10 +71,10 @@
           </b-nav>
         </b-card-header>
         <div>
-          <ListView
+          <listView
             :restaurantsFiltered="restaurantsFiltered"
             v-if="activeTab === 1"
-          ></ListView>
+          ></listView>
 
           <MapView v-if="activeTab === 2" :restaurantsFiltered="restaurantsFiltered">
           </MapView>
@@ -81,20 +84,20 @@
   </body>
 </template>
 <script>
-import { restaurantsFiltered } from "../api/api/restaurants";
-import ListView from "./home/listView.vue";
+import listView from "./home/listView.vue";
 import MapView from "./home/mapRestaurants.vue";
-
+import Multiselect from 'vue-multiselect';
 export default {
   name: "Home",
   components: {
+    Multiselect,
     MapView,
-    ListView,
+    listView,
   },
 
   data: function () {
     return {
-      activeTab: 1,
+      activeTab: 2,
       checkedGenres: [],
       checkedPriceRange: [],
       searchTerm: "",
@@ -104,9 +107,7 @@ export default {
     };
   },
   methods: {
-    representPrice: function (range) {
-      return "$".repeat(range);
-    },
+    
     handleKeyDown(e) {
       if (this.items.length == 0) return;
       let key = e.keyCode;
@@ -228,6 +229,7 @@ export default {
       if (data) {
         const array = Object.values(data);
         unique = [...new Set(array.map((array) => array.price_range))].sort();
+        unique = unique.map(i => {return {text: '$'.repeat(i), value: i}})
       }
       return unique;
     },
@@ -258,3 +260,4 @@ body {
   height: 100%;
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
