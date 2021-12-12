@@ -72,7 +72,6 @@ export const updateListFavorites = async ({owner, id, name}) => {
             }
         }
     );
-    console.log(owner)
     window.localStorage.setItem("owner", owner);
     const response = await fetch(request);
     return await response.json();

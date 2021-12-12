@@ -68,13 +68,13 @@
           </b-nav>
         </b-card-header>
         <div>
-          <listView
+          <ListView
             :restaurantsFiltered="restaurantsFiltered"
             v-if="activeTab === 1"
-          ></listView>
+          ></ListView>
 
-          <mapView v-if="activeTab === 2" :restaurants="restaurantsFiltered">
-          </mapView>
+          <MapView v-if="activeTab === 2" :restaurantsFiltered="restaurantsFiltered">
+          </MapView>
         </div>
       </div>
     </div>
@@ -82,14 +82,14 @@
 </template>
 <script>
 import { restaurantsFiltered } from "../api/api/restaurants";
-import listView from "./home/listView.vue";
-import mapView from "./home/mapRestaurants.vue";
+import ListView from "./home/listView.vue";
+import MapView from "./home/mapRestaurants.vue";
 
 export default {
   name: "Home",
   components: {
-    mapView,
-    listView,
+    MapView,
+    ListView,
   },
 
   data: function () {

@@ -21,7 +21,6 @@ export const store = new Vuex.Store({
     restaurantsVisited: {},
     nameRestaurant: {},
     info_restaurant: undefined,
-    geolocation: undefined,
     isConnected: false,
   },
   mutations: {

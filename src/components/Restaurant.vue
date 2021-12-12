@@ -27,11 +27,7 @@
     </b-carousel>
 
     <div v-if="this.$store.state.isConnected">
-      <b-dropdown
-        text="Ajouter Favoris"
-        variant="primary"
-        class="mt-3"
-      >
+      <b-dropdown text="Ajouter Favoris" variant="primary" class="mt-3">
         <b-dropdown-item
           v-for="list in listResto"
           :key="list.id"
@@ -41,7 +37,6 @@
         </b-dropdown-item>
       </b-dropdown>
       <Modal :restaurant="restaurant"></Modal>
-     
     </div>
     <div class="flex-container">
       <b-list-group class="item">
@@ -118,13 +113,9 @@
 
     <div class="item">
       <div class="flex-container">
-        <Map
-          class="localisation"
-          :restaurant="restaurant"
-        ></Map>
+        <Map class="localisation" :restaurant="restaurant"></Map>
       </div>
     </div>
-   
   </div>
 </template>
 <script>
@@ -143,12 +134,12 @@ export default {
   components: {
     Map,
     Price,
-    Modal
+    Modal,
   },
   data: () => {
     return {
       slide: 0,
-      sliding: null
+      sliding: null,
     };
   },
   computed: {
@@ -180,7 +171,7 @@ export default {
         }
         this.$store.state.ListFavorites = await getListFavorites();
       }
-    }
+    },
   },
   mounted() {
     if (this.restaurantId) {

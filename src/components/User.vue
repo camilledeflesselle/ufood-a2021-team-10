@@ -147,13 +147,10 @@
             </b-dropdown-item>
           </b-dropdown>
           <Visit :restau="resto"></Visit>
-
-        
         </div>
       </b-card>
     </b-card-group>
     <router-link to="/">Home</router-link>
- 
   </div>
 </template>
 
@@ -172,17 +169,16 @@ import {
   visitesOfOneRestaurantByUser,
 } from "../api/api/restaurants.js";
 
-import Visit from "./modalVisit/userView.vue"
+import Visit from "./modalVisit/userView.vue";
 export default {
   name: "App",
- 
+
   data: () => ({
     inputValue: "",
-    restaurantsName: {}
-    
+    restaurantsName: {},
   }),
-  components:{
-    Visit
+  components: {
+    Visit,
   },
   computed: {
     ListFavorites() {
@@ -196,7 +192,7 @@ export default {
     },
     restoName() {
       return this.restaurantsName;
-    }
+    },
   },
   methods: {
     async createListFavorites() {
@@ -207,13 +203,14 @@ export default {
     async updateListFavorites(list) {
       await updateListFavorites(list);
       this.$store.state.ListFavorites = await getListFavorites();
-       this.$bvModal.msgBoxOk('Name changed')
-          .then(value => {
-            this.boxTwo = value
-          })
-          .catch(err => {
-            // An error occurred
-          })
+      this.$bvModal
+        .msgBoxOk("Name changed")
+        .then((value) => {
+          this.boxTwo = value;
+        })
+        .catch((err) => {
+          // An error occurred
+        });
     },
     async deleteListFavorites(id) {
       await deleteListFavorites(id);
@@ -270,7 +267,7 @@ export default {
         }
       }
       return nb;
-    }
+    },
   },
   async mounted() {
     this.$store.dispatch("getList");
