@@ -4,7 +4,7 @@
     :accessToken="accessToken"
     :center="(latlng && latlng.length > 0 && computedLngLat) || [0, 0]"
     :mapStyle.sync="mapStyle"
-    :zoom="10"
+    :zoom="8"
   >
     <MglMarker
       v-if="latlng && latlng.length > 0"
@@ -26,12 +26,20 @@
       </MglPopup>
     </MglMarker>
     </template>
+    <MglAttributionControl />
+      <MglNavigationControl position="top-right" />
+      <MglGeolocateControl position="top-right" />
+      <MglScaleControl />
   </MglMap>
 </template>
 
 <script>
 import Mapbox from "mapbox-gl";
-import { MglMap, MglMarker, MglPopup } from "vue-mapbox";
+import { MglMap, MglMarker, MglPopup,  MglAttributionControl,
+  MglNavigationControl,
+  MglGeolocateControl,
+  MglFullscreenControl,
+  MglScaleControl } from "vue-mapbox";
 import RestaurantDescription from "./restaurantDescription.vue"
 export default {
   name: "MapView",
@@ -39,6 +47,9 @@ export default {
     MglMap,
     MglMarker,
     MglPopup,
+
+    MglNavigationControl,
+    MglGeolocateControl,
     RestaurantDescription
   },
   props: ["restaurantsFiltered", "restaurants"],
