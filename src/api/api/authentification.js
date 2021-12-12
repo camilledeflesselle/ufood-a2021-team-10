@@ -1,5 +1,6 @@
 import { endpoint2 } from "../store/url.js";
 
+
 export const signUp = async (name, email, password) => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -35,7 +36,6 @@ export const signUp = async (name, email, password) => {
       "Cookie",
       "connect.sid=s%3AcVMNzJEmd1pLOu3sQfTvsPNoI9TrWK5_.cyL8L1JUvJslrAT041sg9aHSN5wrU0mxRofBAY7%2BJ28"
     );
-  
     var urlencoded = new URLSearchParams();
     urlencoded.append("email", email);
     urlencoded.append("password", password);

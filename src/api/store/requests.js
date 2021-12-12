@@ -22,6 +22,7 @@ export const store = new Vuex.Store({
     nameRestaurant: {},
     info_restaurant: undefined,
     isConnected: false,
+    userInfo: undefined
   },
   mutations: {
     SET_LIST(state, data) {
@@ -42,12 +43,11 @@ export const store = new Vuex.Store({
   },
   actions: {
     async getList({ commit }) {
+      
       const response = await axios.get(
-        `${endpoint}/users/${owner.id}/favorites`,
+        `${endpoint}/users/${userInfo.id}/favorites`,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: headers
         }
       );
       commit("SET_LIST", response.data);

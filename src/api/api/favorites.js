@@ -1,49 +1,40 @@
 import { endpoint } from "../store/url.js";
-const owner = { 
-    "email": "test", 
-    "name": "test",
-    "id": "5f766f6dad626a0004ba134f" 
-}
-// create a user
-export const createUser = async () => {
-
-        window.localStorage.setItem("userId", owner.id);
-    
-};
+import {testToken} from "./restaurants.js";
 
 // create a list of favorite restaurants
 export const createListFavorites = async (listName) => {
-  
-    var myHeaders = new Headers();
+
+let myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 myHeaders.append("Cookie", "connect.sid=s%3A75zFyvTZRk7rQ_juDpjNfzmZvkZbe2pe.xaSZI%2BUpGP6nYVCbxbTqoTf%2B6EpxHIFaF%2BKs0VATF3Q");
 
-var urlencoded = new URLSearchParams();
+myHeaders, url = testToken(myHeaders);
+let urlencoded = new URLSearchParams();
 urlencoded.append("name", listName);
-urlencoded.append("owner", owner.email);
+urlencoded.append("owner", this.$store.state.userInfo.email);
 urlencoded.append("", "");
 
-var requestOptions = {
+let requestOptions = {
   method: 'POST',
   headers: myHeaders,
   body: urlencoded,
   redirect: 'follow'
 };
 
-const request = new Request(`${endpoint}/favorites`, requestOptions)
+const request = new Request(`${url}/favorites`, requestOptions)
     const response = await fetch(request);
     await response.json();
 }
 
 // get all list of restaurants favorite of the user
 export const getListFavorites = async () => {
+    myHeaders, url = testToken(new Headers());
     const request = new Request(
-        `${endpoint}/users/${owner.id}/favorites`,
+        `${url}/users/${this.$store.state.userInfo.id}/favorites`,
         {
             method: "GET",
-            headers:{
-                "Content-Type": "application/json",
-            },
+           
+            headers: myHeaders,
             params:{
                 limit:"30"
             }
@@ -56,13 +47,12 @@ export const getListFavorites = async () => {
 
 
 export const updateListFavorites = async ({owner, id, name}) => {
+    myHeaders, url = testToken(new Headers());
     const request = new Request(
-        `${endpoint}/favorites/${id}`,
+        `${url}/favorites/${id}`,
         {
             method: "PUT",
-            headers:{
-                "Content-Type": "application/json",
-            },
+            headers: myHeaders,
             body:JSON.stringify({
                 name: name
             }),
@@ -72,16 +62,18 @@ export const updateListFavorites = async ({owner, id, name}) => {
             }
         }
     );
-    window.localStorage.setItem("owner", owner);
     const response = await fetch(request);
     return await response.json();
 };
 
 export const deleteListFavorites = async (id) => {
+    myHeaders, url = testToken(new Headers());
     const request = new Request(
-        `${endpoint}/favorites/${id}`,
+        `${url}/favorites/${id}`,
         {
-            method: "DELETE"
+            method: "DELETE",
+
+            headers: myHeaders,
         }
     )
     const response = await fetch(request);
@@ -89,10 +81,13 @@ export const deleteListFavorites = async (id) => {
 };
 
 export const viewListFavorites = async (id) => {
+    myHeaders, url = testToken(new Headers());
     const request = new Request(
-        `${endpoint}/favorites/${id}`,
+        `${url}/favorites/${id}`,
         {
-            method: "GET"
+            method: "GET",
+
+            headers: myHeaders,
         }
     )
     const response = await fetch(request);
@@ -100,15 +95,14 @@ export const viewListFavorites = async (id) => {
 };
 
 export const addRestaurantToList = async (listId, restaurantId) => {
-      
-    var myHeaders = new Headers();
+    myHeaders, url = testToken(new Headers());
 myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 myHeaders.append("Cookie", "connect.sid=s%3A75zFyvTZRk7rQ_juDpjNfzmZvkZbe2pe.xaSZI%2BUpGP6nYVCbxbTqoTf%2B6EpxHIFaF%2BKs0VATF3Q");
 
-var urlencoded = new URLSearchParams();
+let urlencoded = new URLSearchParams();
 urlencoded.append("id", restaurantId);
 
-var requestOptions = {
+let requestOptions = {
   method: 'POST',
   headers: myHeaders,
   body: urlencoded,
@@ -125,10 +119,13 @@ var requestOptions = {
 
 export const deleteRestaurantFromList = async (restaurantId, Listid) => {
     
+    myHeaders, url = testToken(new Headers());
     const request = new Request(
-        `${endpoint}/favorites/${Listid}/restaurants/${restaurantId}`,
+        `${url}/favorites/${Listid}/restaurants/${restaurantId}`,
         {
-            method: "DELETE"
+            method: "DELETE",
+
+            headers: myHeaders,
         }
     );
 

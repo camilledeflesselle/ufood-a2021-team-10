@@ -1,48 +1,26 @@
 import { endpoint } from "../store/url.js";
+import { endpoint2} from "../store/url.js";
+
+const testToken = function(myHeaders){
+  const access_token = this.$cookie.access_token
+  let url = endpoint
+  if (access_token != undefined){
+   myHeaders.append("Authorization", access_token);
+   url = endpoint2
+  }
+  return myHeaders, url
+}
 const owner = {
   email: "test",
   name: "test",
   id: "5f766f6dad626a0004ba134f",
 };
 
-export const restaurantsFiltered = async (body) => {
-  const request = new Request(`${endpoint}/restaurants`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    params: {
-      limit: body.limit,
-      page: body.page,
-      q: body.searchTerm,
-      genres: body.genres,
-      lon: body.lon,
-      lat: body.lat
-    },
-  });
-  const response = await fetch(request).then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-  return await response.json();
-};
-
-export const restaurantInfo = async (id) => {
-  const request = new Request(`${endpoint}/restaurants/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const response = await fetch(request);
-  return await response.json();
-};
-
 export const getVisitesOneRestaurant = async (id) => {
-  const request = new Request(`${endpoint}/restaurants/${id}/visits`, {
+  myHeaders, url = testToken(new Headers());
+  const request = new Request(`${url}/restaurants/${id}/visits`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: myHeaders,
     params: {
       limit: "30",
     },
@@ -53,13 +31,12 @@ export const getVisitesOneRestaurant = async (id) => {
 };
 
 export const visitesRestaurantOfUser = async (userId) => {
+  myHeaders, url = testToken(new Headers());
   const request = new Request(
-    `${endpoint}/users/${userId}/restaurants/visits`,
+    `${url}/users/${userId}/restaurants/visits`,
     {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: myHeaders,
     }
   );
   const response = await fetch(request);
@@ -67,13 +44,12 @@ export const visitesRestaurantOfUser = async (userId) => {
 };
 
 export const visitesOfOneRestaurantByUser = async (userId, restaurantId) => {
+  myHeaders, url = testToken(new Headers());
   const request = new Request(
-    `${endpoint}/users/${userId}/restaurants/${restaurantId}/visits`,
+    `${url}/users/${userId}/restaurants/${restaurantId}/visits`,
     {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: myHeaders,
     }
   );
   const response = await fetch(request);
@@ -81,13 +57,12 @@ export const visitesOfOneRestaurantByUser = async (userId, restaurantId) => {
 };
 
 export const oneVisitOfUser = async (userId, visitId) => {
+  myHeaders, url = testToken(new Headers());
   const request = new Request(
-    `${endpoint}/users/${userId}/restaurants/visits/${visitId}`,
+    `${url}/users/${userId}/restaurants/visits/${visitId}`,
     {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: myHeaders
     }
   );
   const response = await fetch(request);
@@ -101,7 +76,7 @@ export const createVisit = async (userId, body) => {
     "Cookie",
     "connect.sid=s%3AcVMNzJEmd1pLOu3sQfTvsPNoI9TrWK5_.cyL8L1JUvJslrAT041sg9aHSN5wrU0mxRofBAY7%2BJ28"
   );
-
+  myHeaders, url = testToken(myHeaders);
   var urlencoded = new URLSearchParams();
   urlencoded.append("restaurant_id", body.restaurant_id);
   urlencoded.append("comment", body.comment);
@@ -116,7 +91,7 @@ export const createVisit = async (userId, body) => {
   };
 
   const request = new Request(
-    `${endpoint}/users/${userId}/restaurants/visits/`,
+    `${url}/users/${userId}/restaurants/visits/`,
     requestOptions
   );
   const response = await fetch(request);

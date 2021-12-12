@@ -56,7 +56,7 @@ export default {
       tabs: 1,
       email: "",
       password: "",
-      message: "",
+      message: ""
     };
   },
   methods: {
@@ -64,18 +64,19 @@ export default {
       const email = this.email;
       const password = this.password;
       const userInfo = await signIn(email, password)
+         .then((result) => console.log(result))
         .then((result) => {
-          this.$store.state.userInfo = result;
           this.$refs["modal-1"].hide();
           this.$store.state.isConnected = true;
-
-          this.$cookie.set("token_access", result.token, "expiring time");
+          this.$store.state.userInfo = result;
+          this.$cookie.set("token_access", result.token, "1h");
         })
         .catch((error) => {
           this.message =
             "Sorry, your email or password is wrong, please retry or register.";
         });
     },
+
   },
 };
 </script>
