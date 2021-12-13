@@ -69,7 +69,6 @@ export default {
           Vue.cookie.set('token_access', result.token)
           this.$store.state.isConnected = true;
           this.$store.state.userInfo = result;
-          console.log(result)
           this.$refs["modal-1"].hide();
         })
         .catch((error) => {

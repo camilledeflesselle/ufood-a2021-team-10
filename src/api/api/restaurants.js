@@ -8,7 +8,6 @@ export const testToken = function(myHeaders){
    let url = endpoint
    
    const match = Vue.$cookies.get("token_access")
-   console.log(match)
   if (match ){
      
      myHeaders.append("Authorization", match);
@@ -99,6 +98,5 @@ export const createVisit = async (userId, body) => {
     requestOptions
   );
   const response = await fetch(request);
-  // console.log(response.json())
   return await response.json();
 };

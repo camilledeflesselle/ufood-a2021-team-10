@@ -1,9 +1,9 @@
 <template>
   <div id="user" class="padding">
     <h1>User Profile</h1>
-    <div class="flex-container bg">
-      <div class="item">{{userInfo.name}}</div>
-      <div class="item">{{userInfo.rating}}</div>
+    <div>
+      <div class="item">Name : {{userInfo.name}}</div>
+      <div class="item">Rating : {{userInfo.rating}}</div>
       <router-link :to="{ name: 'Usage' }"> Liste usages UFood </router-link>
     </div>
     <div>
@@ -112,6 +112,34 @@
         </b-input-group>
       </div>
     </div>
+        <div>
+      <div>
+        <h2>Following</h2>
+        <ul id="followingList" v-if="listFollowing.length != 0">
+          <li v-for="following in listFollowing" :key="following.id" style="line-height: 40px">
+            <a>{{ following.name }}</a>
+
+          <b-button
+                size="sm"
+                @click="unfollow(following.id)"
+                variant="outline-primary"
+                style="float: right"
+                >Unfollow</b-button
+              >
+          </li>
+        </ul>
+        <div v-if="listFollowers.length === 0">Nobody is following</div>
+      </div>
+      <div>
+        <h2>Followers</h2>
+        <ul id="followingList" v-if="listFollowers.length != 0">
+          <li v-for="follower in listFollowers" :key="follower.id">
+            <a>{{ follower.name }}</a>
+          </li>
+        </ul>
+        <div v-if="listFollowers.length === 0">No followers to display</div>
+      </div>
+    </div>
     <h2>Recent restaurants Visited</h2>
     <b-card-group columns class="padding">
       <b-card v-for="resto in restaurantsVisited" :key="resto.id">
@@ -167,9 +195,7 @@ import {
   addRestaurantToList,
   viewListFavorites,
 } from "../api/api/favorites.js";
-import {
-  restaurantInfo,
-  visitesOfOneRestaurantByUser,
+import {visitesOfOneRestaurantByUser,
 } from "../api/api/restaurants.js";
 
 import Visit from "./modalVisit/userView.vue";
@@ -198,7 +224,16 @@ export default {
     },
     userInfo() {
       return this.$store.state.userInfo;
-    }
+    },
+    isConnected() {
+      return this.userInfo.id;
+    },
+    listFollowers() {
+      return this.$store.state.follower;
+    },
+    listFollowing() {
+      return this.$store.state.following;
+    },
   },
   methods: {
     async createListFavorites(user) {
@@ -207,8 +242,8 @@ export default {
       this.$store.state.ListFavorites = await getListFavorites(user.id);
     },
     async updateListFavorites(list, user) {
-      await updateListFavorites(list);
-      this.$store.state.ListFavorites = await getListFavorites(user.id);
+      let i = await updateListFavorites(list, this.$cookie.get("token_access"));
+      this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
       this.$bvModal
         .msgBoxOk("Name changed")
         .then((value) => {
@@ -222,10 +257,19 @@ export default {
       await deleteListFavorites(id);
       this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
     },
+    restaurantInfo(idRestaurant) {
+      const data = this.$store.state.restaurants;
+      if (data && idRestaurant) {
+        let res = Object.values(data).find(
+          (restaurant) => restaurant.id === idRestaurant
+        );
+        return res;
+      }
+    },
     async addRestaurantToList(listId, restaurantId) {
       if (restaurantId) {
         // be sure that list doens't have duplicated keys
-        let res = await restaurantInfo(restaurantId);
+        let res = this.restaurantInfo(restaurantId);
         this.restaurantsName[restaurantId] = res.name;
         let oldList = await viewListFavorites(listId);
         oldList = oldList.restaurants;
@@ -236,7 +280,7 @@ export default {
         if (obj.indexOf(restaurantId) == -1) {
           await addRestaurantToList(listId, restaurantId);
         }
-        this.$store.state.ListFavorites = await getListFavorites(userId);
+        this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
       }
     },
     async deleteRestaurantFromList(restaurantId, ListId) {
@@ -247,15 +291,6 @@ export default {
     },
     async viewListFavorites(id) {
       return await viewListFavorites(id);
-    },
-    restaurantInfo(idRestaurant) {
-      const data = this.$store.state.restaurants;
-      if (data && idRestaurant) {
-        let res = Object.values(data).find(
-          (restaurant) => restaurant.id === idRestaurant
-        );
-        return res;
-      }
     },
     async visitesOfOneRestaurantByUser(restaurantId) {
       if (restaurantId) {
@@ -274,12 +309,27 @@ export default {
       }
       return nb;
     },
+    async unfollow(user_id) {
+      this.$store.dispatch("unfollowUser", {'id': user_id, "token": this.$cookie.get("token_access")});
+    },
   },
+  
   async mounted() {
-    this.$store.dispatch("getList", this.userInfo.id);
-    this.$store.dispatch("getRestaurantsVisited", this.userInfo.id);
-    this.$store.dispatch("getRestaurants");
+    if (this.userInfo.id){
+      this.$store.dispatch("getList", {'id': this.userInfo.id, "token": this.$cookie.get("token_access")});
+      this.$store.dispatch("getRestaurantsVisited", {'id': this.userInfo.id, "token": this.$cookie.get("token_access")});
+    }
+    this.$store.dispatch("getRestaurants", this.$cookie.get("token_access"));
   },
+  watch: {
+    isConnected(newval, oldVal) {
+      if (newval) {
+        this.$store.dispatch("getList", {'id': this.userInfo.id, "token": this.$cookie.get("token_access")});
+        this.$store.dispatch("getRestaurantsVisited", {'id': this.userInfo.id, "token": this.$cookie.get("token_access")});
+      }
+    },
+  }
+  
 };
 </script>
 <style>

@@ -74,7 +74,7 @@ export const store = new Vuex.Store({
       const response = await axios.get(`${endpoint2
       }/restaurants`, {
         params: {
-          limit: 10,
+          limit: 100,
         },
         headers: {
           Authorization: token
@@ -162,7 +162,7 @@ export const store = new Vuex.Store({
         this.state.userInfo = response.data;
         commit("SET_list_follower_following", response.data);
       } catch (err) {
-        console.log("this", err);
+        console.log(err);
       }
     },
   },
