@@ -56,26 +56,36 @@ export default {
       tabs: 1,
       email: "",
       password: "",
-      message: "",
+      message: ""
     };
   },
   methods: {
     async signIn() {
       const email = this.email;
       const password = this.password;
-      const userInfo = await signIn(email, password)
+      await signIn(email, password)
         .then((result) => {
-          this.$store.state.userInfo = result;
-          this.$refs["modal-1"].hide();
+          console.log(result)
           this.$store.state.isConnected = true;
-
-          this.$cookie.set("token_access", result.token, "expiring time");
+          this.$store.state.userInfo = result;
+          console.log(this.$cookie.get("token_access"))
+          this.$refs["modal-1"].hide();
         })
         .catch((error) => {
           this.message =
             "Sorry, your email or password is wrong, please retry or register.";
         });
     },
+
   },
+
+  mounted() {
+    if (this.$store.state.isConnected) {
+     return this.$cookies.set("token_access", this.$store.state.userInfo.token, "1h");
+   
+    }
+  }
+  
+ 
 };
 </script>

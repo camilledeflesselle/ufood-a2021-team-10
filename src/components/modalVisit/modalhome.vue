@@ -74,8 +74,7 @@ export default {
         rating: parseInt(this.rating),
         date: visitDate.toISOString(),
       };
-      // TODO Quel est l'id du user?
-      const userId = "5f766f6dad626a0004ba134f";
+      const userId = this.$store.state.userInfo.id;
 
       await createVisit(userId, body);
 

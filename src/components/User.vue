@@ -2,10 +2,8 @@
   <div id="user" class="padding">
     <h1>User Profile</h1>
     <div class="flex-container bg">
-      <div class="item">name place holder TO CHANGE</div>
-      <div class="item">3.8 TO CHANGE</div>
-    </div>
-    <div>
+      <div class="item">{{userInfo.name}}</div>
+      <div class="item">{{userInfo.rating}}</div>
       <router-link :to="{ name: 'Usage' }"> Liste usages UFood </router-link>
     </div>
     <div>
@@ -20,13 +18,14 @@
           <b-form-input
             v-model="list.name"
             placeholder="Change name..."
-            id="inputValue"
           ></b-form-input>
+          {{list}}
           <b-input-group-append>
             <b-button
               size="lg"
-              @click="updateListFavorites(list)"
+              @click="updateListFavorites(list, userInfo)"
               variant="outline-success"
+              :disabled="list.name === ''"
               >Change name</b-button
             >
             <b-button
@@ -80,7 +79,7 @@
                     <b-button
                       right="true"
                       size="sm"
-                      @click="deleteRestaurantFromList(restaurant.id, list.id)"
+                      @click="deleteRestaurantFromList(restaurant.id, list.id, userInfo.id)"
                       variant="danger"
                       >Delete X</b-button
                     >
@@ -101,11 +100,12 @@
             v-model="inputValue"
             placeholder="Choose a name..."
             variant="success"
+            
           ></b-form-input>
           <b-button
             size="lg"
             :disabled="inputValue === ''"
-            @click="createListFavorites"
+            @click="createListFavorites(userInfo)"
             variant="success"
             >Create</b-button
           >
@@ -196,16 +196,19 @@ export default {
     restoName() {
       return this.restaurantsName;
     },
+    userInfo() {
+      return this.$store.state.userInfo;
+    }
   },
   methods: {
-    async createListFavorites() {
-      await createListFavorites(this.inputValue);
+    async createListFavorites(user) {
+      await createListFavorites(this.inputValue, user.email);
       this.inputValue = "";
-      this.$store.state.ListFavorites = await getListFavorites();
+      this.$store.state.ListFavorites = await getListFavorites(user.id);
     },
-    async updateListFavorites(list) {
+    async updateListFavorites(list, user) {
       await updateListFavorites(list);
-      this.$store.state.ListFavorites = await getListFavorites();
+      this.$store.state.ListFavorites = await getListFavorites(user.id);
       this.$bvModal
         .msgBoxOk("Name changed")
         .then((value) => {
@@ -217,7 +220,7 @@ export default {
     },
     async deleteListFavorites(id) {
       await deleteListFavorites(id);
-      this.$store.state.ListFavorites = await getListFavorites();
+      this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
     },
     async addRestaurantToList(listId, restaurantId) {
       if (restaurantId) {
@@ -233,13 +236,13 @@ export default {
         if (obj.indexOf(restaurantId) == -1) {
           await addRestaurantToList(listId, restaurantId);
         }
-        this.$store.state.ListFavorites = await getListFavorites();
+        this.$store.state.ListFavorites = await getListFavorites(userId);
       }
     },
     async deleteRestaurantFromList(restaurantId, ListId) {
       if (restaurantId) {
         await deleteRestaurantFromList(restaurantId, ListId);
-        this.$store.state.ListFavorites = await getListFavorites();
+        this.$store.state.ListFavorites = await getListFavorites(userId);
       }
     },
     async viewListFavorites(id) {
@@ -273,8 +276,8 @@ export default {
     },
   },
   async mounted() {
-    this.$store.dispatch("getList");
-    this.$store.dispatch("getRestaurantsVisited");
+    this.$store.dispatch("getList", this.userInfo.id);
+    this.$store.dispatch("getRestaurantsVisited", this.userInfo.id);
     this.$store.dispatch("getRestaurants");
   },
 };

@@ -6,6 +6,7 @@ import Vuex from "vuex";
 import axios from "axios";
 import { endpoint, endpoint2 } from "./url.js";
 import { getCoordinates } from "../api/localisation.js";
+import {testToken} from "../api/restaurants.js"
 
 Vue.use(Vuex);
 
@@ -26,6 +27,7 @@ export const store = new Vuex.Store({
     totalUsage: 0,
     follower: {},
     following: {},
+    userInfo: {email:"test@gmail.com"}
   },
   mutations: {
     SET_LIST(state, data) {
@@ -53,35 +55,46 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
-    async getList({ commit }) {
+    async getList({ commit }, userId) {
+      const res = testToken(new Headers())
       const response = await axios.get(
-        `${endpoint}/users/${owner.id}/favorites`,
+        `${res.url}/users/${userId}/favorites`,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: res.headers
         }
       );
       commit("SET_LIST", response.data);
     },
     async getRestaurants({ commit }) {
-      const response = await axios.get(`${endpoint}/restaurants`, {
+
+      const res = testToken(new Headers())
+      
+      const response = await axios.get(`${res.url}/restaurants`, {
         params: {
-          limit: 100,
+          limit: 10,
         },
+        headers: res.headers
       });
       commit("SET_restaurants", response.data);
     },
-    async getRestaurantsVisited({ commit }) {
+    async getRestaurantsVisited({ commit }, userId) {
+
+      const res = testToken(new Headers())
       const response = await axios.get(
-        `${endpoint}/users/${owner.id}/restaurants/visits`
+        `${res.url}/users/${userId}/restaurants/visits`, {
+          headers: res.headers
+        }
       );
       commit("SET_restaurantsVisited", response.data);
     },
     async getInfoRestaurant({ commit }, id) {
+
+      const res = testToken(new Headers())
       const response = await axios.get(
-        `https://ufoodapi.herokuapp.com/unsecure/restaurants/${id}`,
-        {}
+        `${res.url}/restaurants/${id}`,
+        {
+          headers: res.headers
+        }
       );
       commit("SET_info_restaurant", response.data);
     },
