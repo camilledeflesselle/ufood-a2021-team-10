@@ -163,24 +163,5 @@ export const store = new Vuex.Store({
         console.log(err);
       }
     },
-    async getFollower_Following1({ commit }, token) {
-      try {
-        const response = await axios.get(`${endpoint2}/tokeninfo`, {
-          headers: {
-            Authorization: token,
-          },
-        });
-        const response1 = await axios.get(
-          `${endpoint2}/users/${response.data.id}`,
-          {
-            headers: {
-              Authorization: token,
-            },
-          }
-        );
-
-        commit("SET_list_follower_following", response1.data);
-      } catch (err) {}
-    },
   },
 });
