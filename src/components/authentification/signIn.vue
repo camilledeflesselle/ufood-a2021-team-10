@@ -68,7 +68,7 @@ export default {
           console.log(result)
           this.$store.state.isConnected = true;
           this.$store.state.userInfo = result;
-          this.$cookie.set("token_access", result.token, "1h");
+          console.log(this.$cookie.get("token_access"))
           this.$refs["modal-1"].hide();
         })
         .catch((error) => {
@@ -77,6 +77,15 @@ export default {
         });
     },
 
+  },
+
+  mounted() {
+    if (this.$store.state.isConnected) {
+     return this.$cookies.set("token_access", this.$store.state.userInfo.token, "1h");
+   
+    }
   }
+  
+ 
 };
 </script>

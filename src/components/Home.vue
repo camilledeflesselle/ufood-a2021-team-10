@@ -247,8 +247,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getRestaurants");
-    this.$store.dispatch("getRestaurantsVisited");
     this.$store.dispatch("getlocation");
+    if (this.$store.state.isConnected) {this.$store.dispatch("getRestaurantsVisited", this.$store.state.userInfo.id)};
   },
 };
 </script>

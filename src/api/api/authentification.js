@@ -2,19 +2,19 @@ import { endpoint2 } from "../store/url.js";
 
 
 export const signUp = async (name, email, password) => {
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
     myHeaders.append(
       "Cookie",
       "connect.sid=s%3AcVMNzJEmd1pLOu3sQfTvsPNoI9TrWK5_.cyL8L1JUvJslrAT041sg9aHSN5wrU0mxRofBAY7%2BJ28"
     );
   
-    var urlencoded = new URLSearchParams();
+    let urlencoded = new URLSearchParams();
     urlencoded.append("name", name);
     urlencoded.append("email", email);
     urlencoded.append("password", password);
   
-    var requestOptions = {
+    let requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: urlencoded,
@@ -30,17 +30,17 @@ export const signUp = async (name, email, password) => {
   };
 
   export const signIn = async (email, password) => {
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
     myHeaders.append(
       "Cookie",
       "connect.sid=s%3AcVMNzJEmd1pLOu3sQfTvsPNoI9TrWK5_.cyL8L1JUvJslrAT041sg9aHSN5wrU0mxRofBAY7%2BJ28"
     );
-    var urlencoded = new URLSearchParams();
+    let urlencoded = new URLSearchParams();
     urlencoded.append("email", email);
     urlencoded.append("password", password);
   
-    var requestOptions = {
+    let requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: urlencoded,
@@ -58,14 +58,14 @@ export const signUp = async (name, email, password) => {
 
 
   export const signOut = async () => {
-    var myHeaders = new Headers();
+    let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
     myHeaders.append(
       "Cookie",
       "connect.sid=s%3AcVMNzJEmd1pLOu3sQfTvsPNoI9TrWK5_.cyL8L1JUvJslrAT041sg9aHSN5wrU0mxRofBAY7%2BJ28"
     );
   
-    var requestOptions = {
+    let requestOptions = {
       method: "POST",
       headers: myHeaders,
       redirect: "follow",

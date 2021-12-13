@@ -184,7 +184,7 @@ export default {
         window.localStorage.getItem("restoId")
       );
     }
-    if (this.$store.state.isConnected) {this.$store.dispatch("getList");}
+    if (this.$store.state.userInfo) {this.$store.dispatch("getList", this.$store.state.userInfo.id );}
   },
 };
 </script>

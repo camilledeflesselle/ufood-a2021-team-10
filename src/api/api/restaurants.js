@@ -2,7 +2,8 @@ import { endpoint, endpoint2} from "../store/url.js";
 
 export const testToken = function(myHeaders){
    let url = endpoint
-   const match = document.cookie.match(new RegExp('(^| )access_token=([^;]+)'));
+   
+   const match = document.cookie.match(new RegExp('(^| )token_access=([^;]+)'));
    console.log(match)
   if (match ){
      
@@ -74,8 +75,8 @@ export const createVisit = async (userId, body) => {
     "Cookie",
     "connect.sid=s%3AcVMNzJEmd1pLOu3sQfTvsPNoI9TrWK5_.cyL8L1JUvJslrAT041sg9aHSN5wrU0mxRofBAY7%2BJ28"
   );
-  const res1 = testToken(myHeaders);
-  let urlencoded = new res.urlSearchParams();
+  const res = testToken(myHeaders);
+  let urlencoded = new URLSearchParams();
   urlencoded.append("restaurant_id", body.restaurant_id);
   urlencoded.append("comment", body.comment);
   urlencoded.append("rating", body.rating);
@@ -83,13 +84,13 @@ export const createVisit = async (userId, body) => {
 
   let requestOptions = {
     method: "POST",
-    headers: res1.myHeaders,
+    headers: res.headers,
     body: urlencoded,
     redirect: "follow",
   };
 
   const request = new Request(
-    `${res1.url}/users/${userId}/restaurants/visits/`,
+    `${res.url}/users/${userId}/restaurants/visits/`,
     requestOptions
   );
   const response = await fetch(request);

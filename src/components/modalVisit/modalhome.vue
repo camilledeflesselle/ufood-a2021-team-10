@@ -1,15 +1,5 @@
 <template>
   <div>
-    <b-dropdown text="Ajouter Favoris" block
-      size="sm">
-        <b-dropdown-item
-          v-for="list in listResto"
-          :key="list.id"
-          @click="addRestaurantToList(list.id, restaurant.id)"
-        >
-          {{ list.name }}
-        </b-dropdown-item>
-      </b-dropdown>
     <b-button
       @click="openModal(restaurant.id)"
       variant="warning"

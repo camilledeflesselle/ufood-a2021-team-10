@@ -18,13 +18,14 @@
           <b-form-input
             v-model="list.name"
             placeholder="Change name..."
-            id="inputValue"
           ></b-form-input>
+          {{list}}
           <b-input-group-append>
             <b-button
               size="lg"
-              @click="updateListFavorites(list)"
+              @click="updateListFavorites(list, userInfo)"
               variant="outline-success"
+              :disabled="list.name === ''"
               >Change name</b-button
             >
             <b-button
@@ -99,6 +100,7 @@
             v-model="inputValue"
             placeholder="Choose a name..."
             variant="success"
+            
           ></b-form-input>
           <b-button
             size="lg"
@@ -204,9 +206,9 @@ export default {
       this.inputValue = "";
       this.$store.state.ListFavorites = await getListFavorites(user.id);
     },
-    async updateListFavorites(list, userId) {
+    async updateListFavorites(list, user) {
       await updateListFavorites(list);
-      this.$store.state.ListFavorites = await getListFavorites(userId);
+      this.$store.state.ListFavorites = await getListFavorites(user.id);
       this.$bvModal
         .msgBoxOk("Name changed")
         .then((value) => {
@@ -216,11 +218,11 @@ export default {
           // An error occurred
         });
     },
-    async deleteListFavorites(id, userId) {
+    async deleteListFavorites(id) {
       await deleteListFavorites(id);
-      this.$store.state.ListFavorites = await getListFavorites(userId);
+      this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
     },
-    async addRestaurantToList(listId, restaurantId, userId) {
+    async addRestaurantToList(listId, restaurantId) {
       if (restaurantId) {
         // be sure that list doens't have duplicated keys
         let res = await restaurantInfo(restaurantId);
