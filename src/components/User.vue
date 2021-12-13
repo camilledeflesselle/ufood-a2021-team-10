@@ -2,8 +2,8 @@
   <div id="user" class="padding">
     <h1>User Profile</h1>
     <div class="flex-container bg">
-      <div class="item">{{userInfo.name}}</div>
-      <div class="item">{{userInfo.rating}}</div>
+      <div class="item">{{ userInfo.name }}</div>
+      <div class="item">{{ userInfo.rating }}</div>
       <router-link :to="{ name: 'Usage' }"> Liste usages UFood </router-link>
     </div>
     <div>
@@ -19,7 +19,7 @@
             v-model="list.name"
             placeholder="Change name..."
           ></b-form-input>
-         
+
           <b-input-group-append>
             <b-button
               size="lg"
@@ -79,7 +79,13 @@
                     <b-button
                       right="true"
                       size="sm"
-                      @click="deleteRestaurantFromList(restaurant.id, list.id, userInfo.id)"
+                      @click="
+                        deleteRestaurantFromList(
+                          restaurant.id,
+                          list.id,
+                          userInfo.id
+                        )
+                      "
                       variant="danger"
                       >Delete X</b-button
                     >
@@ -100,7 +106,6 @@
             v-model="inputValue"
             placeholder="Choose a name..."
             variant="success"
-            
           ></b-form-input>
           <b-button
             size="lg"
@@ -110,6 +115,26 @@
             >Create</b-button
           >
         </b-input-group>
+      </div>
+    </div>
+    <div>
+      <div>
+        <h2>Following</h2>
+        <ul id="followingList" v-if="listFollowing.length != 0">
+          <li v-for="following in listFollowing" :key="following.id">
+            <a href="">{{ following.name }}</a>
+          </li>
+        </ul>
+        <div v-if="listFollowers.length === 0">Nobody is following</div>
+      </div>
+      <div>
+        <h2>Followers</h2>
+        <ul id="followingList" v-if="listFollowers.length != 0">
+          <li v-for="follower in listFollowers" :key="follower.id">
+            <a href="">{{ follower.name }}</a>
+          </li>
+        </ul>
+        <div v-if="listFollowers.length === 0">No followers to display</div>
       </div>
     </div>
     <h2>Recent restaurants Visited</h2>
@@ -135,11 +160,7 @@
           <p class="card-text"></p>
           <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
 
-          <b-dropdown
-            text="Add to favorites"
-            variant="primary"
-            class="mt-3"
-          >
+          <b-dropdown text="Add to favorites" variant="primary" class="mt-3">
             <b-dropdown-item
               v-for="list in ListFavorites.items"
               :key="list.id"
@@ -198,7 +219,13 @@ export default {
     },
     userInfo() {
       return this.$store.state.userInfo;
-    }
+    },
+    listFollowers() {
+      return this.$store.state.follower;
+    },
+    listFollowing() {
+      return this.$store.state.following;
+    },
   },
   methods: {
     async createListFavorites(user) {
@@ -220,7 +247,9 @@ export default {
     },
     async deleteListFavorites(id) {
       await deleteListFavorites(id);
-      this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
+      this.$store.state.ListFavorites = await getListFavorites(
+        this.userInfo.id
+      );
     },
     async addRestaurantToList(listId, restaurantId) {
       if (restaurantId) {
@@ -279,6 +308,10 @@ export default {
     this.$store.dispatch("getList", this.userInfo.id);
     this.$store.dispatch("getRestaurantsVisited", this.userInfo.id);
     this.$store.dispatch("getRestaurants");
+    this.$store.dispatch(
+      "getFollower_Following",
+      this.$cookie.get("token_access")
+    );
   },
 };
 </script>
