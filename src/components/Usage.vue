@@ -63,8 +63,13 @@
 </template>
 
 <script>
+import { useCookies } from "vue3-cookies";
 export default {
   name: "Usage",
+  setup() {
+    const { cookies } = useCookies();
+    return { cookies };
+  },
 
   data: () => ({
     page: 0,
@@ -83,25 +88,25 @@ export default {
   watch: {
     isConnected(newval, oldVal) {
       if (newval) {
-        this.$store.dispatch("getUsager", this.page);
-        this.$store.dispatch("getFollower_Following");
+        this.$store.dispatch("getUsager", {'page': this.page, "token": this.$cookie.get("token_access")});
+        this.$store.dispatch("getFollower_Following", this.$cookie.get("token_access"));
       }
     },
   },
   methods: {
     async follow(user_id) {
-      this.$store.dispatch("followUser", user_id);
+      this.$store.dispatch("followUser", {'id': user_id, "token": this.$cookie.get("token_access")});
     },
     async unfollow(user_id) {
-      this.$store.dispatch("unfollowUser", user_id);
+      this.$store.dispatch("unfollowUser", {'id': user_id, "token": this.$cookie.get("token_access")});
     },
     async nextPage() {
       this.page += 1;
-      this.$store.dispatch("getUsager", this.page);
+      this.$store.dispatch("getUsager", {'page': this.page, "token": this.$cookie.get("token_access")});
     },
     async prevPage() {
       this.page -= 1;
-      this.$store.dispatch("getUsager", this.page);
+      this.$store.dispatch("getUsager", {'page': this.page, "token": this.$cookie.get("token_access")});
     },
     isFollowed(id) {
       return Object.values(this.$store.state.following).some((element) => {
@@ -112,9 +117,9 @@ export default {
     },
   },
   async mounted() {
-    if (this.$store.state.isConnected) {
-      this.$store.dispatch("getUsager", this.page);
-      this.$store.dispatch("getFollower_Following");
+    if (this.$store.state.isConnected || this.$cookie.get("token_access") !== null ) {
+      this.$store.dispatch("getUsager", {'page': this.page, "token": this.$cookie.get("token_access")});
+      this.$store.dispatch("getFollower_Following", this.$cookie.get("token_access"));
     }
   },
 };

@@ -6,7 +6,9 @@ import Vuex from "vuex";
 import axios from "axios";
 import { endpoint, endpoint2 } from "./url.js";
 import { getCoordinates } from "../api/localisation.js";
-import {testToken} from "../api/restaurants.js"
+import { testToken } from "../api/restaurants.js";
+
+import { useCookies } from "vue3-cookies";
 
 Vue.use(Vuex);
 
@@ -27,7 +29,7 @@ export const store = new Vuex.Store({
     totalUsage: 0,
     follower: {},
     following: {},
-    userInfo: {email:"test@gmail.com"}
+    userInfo: { email: "test@gmail.com" },
   },
   mutations: {
     SET_LIST(state, data) {
@@ -56,54 +58,51 @@ export const store = new Vuex.Store({
   },
   actions: {
     async getList({ commit }, userId) {
-      const res = testToken(new Headers())
-      const response = await axios.get(
-        `${res.url}/users/${userId}/favorites`,
-        {
-          headers: res.headers
-        }
-      );
+      const res = testToken(new Headers());
+      const response = await axios.get(`${res.url}/users/${userId}/favorites`, {
+        headers: res.headers,
+      });
       commit("SET_LIST", response.data);
     },
     async getRestaurants({ commit }) {
+      const res = testToken(new Headers());
 
-      const res = testToken(new Headers())
-      
       const response = await axios.get(`${res.url}/restaurants`, {
         params: {
           limit: 10,
         },
-        headers: res.headers
+        headers: res.headers,
       });
       commit("SET_restaurants", response.data);
     },
     async getRestaurantsVisited({ commit }, userId) {
-
-      const res = testToken(new Headers())
+      const res = testToken(new Headers());
       const response = await axios.get(
-        `${res.url}/users/${userId}/restaurants/visits`, {
-          headers: res.headers
+        `${res.url}/users/${userId}/restaurants/visits`,
+        {
+          headers: res.headers,
         }
       );
       commit("SET_restaurantsVisited", response.data);
     },
     async getInfoRestaurant({ commit }, id) {
-
-      const res = testToken(new Headers())
-      const response = await axios.get(
-        `${res.url}/restaurants/${id}`,
-        {
-          headers: res.headers
-        }
-      );
+      const res = testToken(new Headers());
+      const response = await axios.get(`${res.url}/restaurants/${id}`, {
+        headers: res.headers,
+      });
       commit("SET_info_restaurant", response.data);
     },
     async getlocation({ commit }) {
       const geolocationPosition = await getCoordinates();
       commit("SET_geolocation", geolocationPosition);
     },
-    async getUsager({ commit }, page) {
-      const response = await axios.get(`${endpoint}/users`, {
+    async getUsager({ commit }, ob) {
+      let page = ob.page;
+      let token = ob.token;
+      const response = await axios.get(`${endpoint2}/users`, {
+        headers: {
+          Authorization: token,
+        },
         params: {
           limit: 100,
           page: page,
@@ -111,7 +110,9 @@ export const store = new Vuex.Store({
       });
       commit("SET_list_usages", response.data);
     },
-    async followUser({ commit }, id) {
+    async followUser({ commit }, ob) {
+      let id = ob.id
+      let token = ob.token
       try {
         const response = await axios.post(
           `${endpoint2}/follow`,
@@ -119,36 +120,36 @@ export const store = new Vuex.Store({
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization:
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI2MWI2NzkwMGNlODMxZDAwMDRlYWM2NTkiLCJleHAiOjE2Mzk0NDEzODE1MDF9.ewnT53bDbPGf3Ta0SfsDwrsB4K-lq9KdJBXI9sZ_Xdw",
+              Authorization: token
             },
           }
         );
-        // getFollower_Following()
-        this.dispatch("getFollower_Following");
+        this.dispatch("getFollower_Following", token);
       } catch (err) {}
     },
-    async unfollowUser({ commit }, id) {
+    async unfollowUser({ commit }, ob) {
+      let id = ob.id
+      let token = ob.token
       try {
         const response = await axios.delete(`${endpoint2}/follow/${id}`, {
           headers: {
-            Authorization:
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI2MWI2NzkwMGNlODMxZDAwMDRlYWM2NTkiLCJleHAiOjE2Mzk0NDEzODE1MDF9.ewnT53bDbPGf3Ta0SfsDwrsB4K-lq9KdJBXI9sZ_Xdw",
+            Authorization: token
           },
         });
-        this.dispatch("getFollower_Following");
+        this.dispatch("getFollower_Following", token);
       } catch (err) {}
     },
-    async getFollower_Following({ commit }) {
+    async getFollower_Following({ commit }, token) {
       try {
         const response = await axios.get(`${endpoint2}/tokeninfo`, {
           headers: {
-            Authorization:
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI2MWI2NzkwMGNlODMxZDAwMDRlYWM2NTkiLCJleHAiOjE2Mzk0NDEzODE1MDF9.ewnT53bDbPGf3Ta0SfsDwrsB4K-lq9KdJBXI9sZ_Xdw",
+            Authorization: token,
           },
         });
         commit("SET_list_follower_following", response.data);
-      } catch (err) {}
+      } catch (err) {
+        console.log("this", err);
+      }
     },
   },
 });

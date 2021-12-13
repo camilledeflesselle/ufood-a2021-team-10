@@ -46,6 +46,7 @@
 <script>
 import { signIn } from "../../api/api/authentification.js";
 import Register from "./register.vue";
+import Vue from "vue";
 export default {
   name: "SignIn",
   components: {
@@ -65,10 +66,9 @@ export default {
       const password = this.password;
       await signIn(email, password)
         .then((result) => {
-          console.log(result)
+          Vue.cookie.set('token_access', result.token)
           this.$store.state.isConnected = true;
           this.$store.state.userInfo = result;
-          console.log(this.$cookie.get("token_access"))
           this.$refs["modal-1"].hide();
         })
         .catch((error) => {
@@ -82,8 +82,11 @@ export default {
   mounted() {
     if (this.$store.state.isConnected) {
      return this.$cookies.set("token_access", this.$store.state.userInfo.token, "1h");
-   
     }
+    if (this.$cookie.get("token_access") !== null){
+      this.$store.state.isConnected = true;
+    }
+    
   }
   
  
