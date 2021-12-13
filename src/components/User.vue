@@ -2,8 +2,11 @@
   <div id="user" class="padding">
     <h1>User Profile</h1>
     <div class="flex-container bg">
-      <div class="item">name place holder</div>
-      <div class="item">3.8</div>
+      <div class="item">name place holder TO CHANGE</div>
+      <div class="item">3.8 TO CHANGE</div>
+    </div>
+    <div>
+      <router-link :to="{ name: 'Usage' }"> Liste usages UFood </router-link>
     </div>
     <div>
       <h2>Your favorites restaurants</h2>
