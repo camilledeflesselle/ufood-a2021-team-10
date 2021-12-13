@@ -1,5 +1,15 @@
 <template>
   <div>
+    <b-dropdown text="Ajouter Favoris" block
+      size="sm">
+        <b-dropdown-item
+          v-for="list in listResto"
+          :key="list.id"
+          @click="addRestaurantToList(list.id, restaurant.id)"
+        >
+          {{ list.name }}
+        </b-dropdown-item>
+      </b-dropdown>
     <b-button
       @click="openModal(restaurant.id)"
       variant="warning"
@@ -74,8 +84,7 @@ export default {
         rating: parseInt(this.rating),
         date: visitDate.toISOString(),
       };
-      // TODO Quel est l'id du user?
-      const userId = "5f766f6dad626a0004ba134f";
+      const userId = this.$store.state.userInfo.id;
 
       await createVisit(userId, body);
 

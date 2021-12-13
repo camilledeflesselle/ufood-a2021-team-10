@@ -78,7 +78,7 @@
                     <b-button
                       right="true"
                       size="sm"
-                      @click="deleteRestaurantFromList(restaurant.id, list.id)"
+                      @click="deleteRestaurantFromList(restaurant.id, list.id, userInfo.id)"
                       variant="danger"
                       >Delete X</b-button
                     >
@@ -103,7 +103,7 @@
           <b-button
             size="lg"
             :disabled="inputValue === ''"
-            @click="createListFavorites"
+            @click="createListFavorites(userInfo)"
             variant="success"
             >Create</b-button
           >
@@ -195,19 +195,18 @@ export default {
       return this.restaurantsName;
     },
     userInfo() {
-      console.log(this.$store.state.userInfo)
       return this.$store.state.userInfo;
     }
   },
   methods: {
-    async createListFavorites() {
-      await createListFavorites(this.inputValue);
+    async createListFavorites(user) {
+      await createListFavorites(this.inputValue, user.email);
       this.inputValue = "";
-      this.$store.state.ListFavorites = await getListFavorites();
+      this.$store.state.ListFavorites = await getListFavorites(user.id);
     },
-    async updateListFavorites(list) {
+    async updateListFavorites(list, userId) {
       await updateListFavorites(list);
-      this.$store.state.ListFavorites = await getListFavorites();
+      this.$store.state.ListFavorites = await getListFavorites(userId);
       this.$bvModal
         .msgBoxOk("Name changed")
         .then((value) => {
@@ -217,11 +216,11 @@ export default {
           // An error occurred
         });
     },
-    async deleteListFavorites(id) {
+    async deleteListFavorites(id, userId) {
       await deleteListFavorites(id);
-      this.$store.state.ListFavorites = await getListFavorites();
+      this.$store.state.ListFavorites = await getListFavorites(userId);
     },
-    async addRestaurantToList(listId, restaurantId) {
+    async addRestaurantToList(listId, restaurantId, userId) {
       if (restaurantId) {
         // be sure that list doens't have duplicated keys
         let res = await restaurantInfo(restaurantId);
@@ -235,13 +234,13 @@ export default {
         if (obj.indexOf(restaurantId) == -1) {
           await addRestaurantToList(listId, restaurantId);
         }
-        this.$store.state.ListFavorites = await getListFavorites();
+        this.$store.state.ListFavorites = await getListFavorites(userId);
       }
     },
     async deleteRestaurantFromList(restaurantId, ListId) {
       if (restaurantId) {
         await deleteRestaurantFromList(restaurantId, ListId);
-        this.$store.state.ListFavorites = await getListFavorites();
+        this.$store.state.ListFavorites = await getListFavorites(userId);
       }
     },
     async viewListFavorites(id) {
@@ -275,8 +274,8 @@ export default {
     },
   },
   async mounted() {
-    this.$store.dispatch("getList");
-    this.$store.dispatch("getRestaurantsVisited");
+    this.$store.dispatch("getList", this.userInfo.id);
+    this.$store.dispatch("getRestaurantsVisited", this.userInfo.id);
     this.$store.dispatch("getRestaurants");
   },
 };

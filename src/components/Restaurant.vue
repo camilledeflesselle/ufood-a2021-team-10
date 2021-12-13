@@ -168,9 +168,9 @@ export default {
           obj[i] = oldList[i].id;
         }
         if (obj.indexOf(restaurantId) == -1) {
-          await addRestaurantToList(listId, restaurantId);
+          await addRestaurantToList(listId, restaurantId, this.$store.state.userInfo.email);
         }
-        this.$store.state.ListFavorites = await getListFavorites();
+        this.$store.state.ListFavorites = await getListFavorites(this.$store.state.userInfo.id);
       }
     },
   },
@@ -184,7 +184,7 @@ export default {
         window.localStorage.getItem("restoId")
       );
     }
-    this.$store.dispatch("getList");
+    if (this.$store.state.isConnected) {this.$store.dispatch("getList");}
   },
 };
 </script>
