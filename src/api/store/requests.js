@@ -7,7 +7,9 @@ import axios from "axios";
 import { endpoint, endpoint2 } from "./url.js";
 import { getCoordinates } from "../api/localisation.js";
 import {testToken} from "../api/restaurants.js"
-
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
+Vue.$cookies.config('7d')
 Vue.use(Vuex);
 
 const owner = {

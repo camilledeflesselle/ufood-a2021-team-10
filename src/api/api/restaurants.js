@@ -1,13 +1,18 @@
 import { endpoint, endpoint2} from "../store/url.js";
+import Vue from "vue";
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
+Vue.$cookies.config('7d')
 
 export const testToken = function(myHeaders){
    let url = endpoint
    
-   const match = document.cookie.match(new RegExp('(^| )token_access=([^;]+)'));
+   const match = Vue.$cookies.get("token_access")
    console.log(match)
   if (match ){
      
-     myHeaders.append("Authorization", match[2]);
+     myHeaders.append("Authorization", match);
+     
      url = endpoint2
 
   }

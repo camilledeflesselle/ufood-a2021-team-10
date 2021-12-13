@@ -248,7 +248,10 @@ export default {
   mounted() {
     this.$store.dispatch("getRestaurants");
     this.$store.dispatch("getlocation");
-    if (this.$store.state.isConnected) {this.$store.dispatch("getRestaurantsVisited", this.$store.state.userInfo.id)};
+    if (this.$store.state.isConnected) {
+      this.$store.dispatch("getRestaurantsVisited", this.$store.state.userInfo.id)
+      this.$cookies.set("token_user", this.$store.state.userInfo.token, "1h");
+      };
   },
 };
 </script>

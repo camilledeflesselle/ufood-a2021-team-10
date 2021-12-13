@@ -77,13 +77,6 @@ export default {
         });
     },
 
-  },
-
-  mounted() {
-    if (this.$store.state.isConnected) {
-     return this.$cookies.set("token_access", this.$store.state.userInfo.token, "1h");
-   
-    }
   }
   
  
