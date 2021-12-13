@@ -59,38 +59,49 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
-    async getList({ commit }, userId) {
-      const res = testToken(new Headers());
-      const response = await axios.get(`${res.url}/users/${userId}/favorites`, {
-        headers: res.headers,
+    async getList({ commit }, ob) {
+      let id = ob.id;
+      let token = ob.token
+      const response = await axios.get(`${endpoint2}/users/${id}/favorites`, {
+        headers: {
+          Authorization: token
+        },
       });
       commit("SET_LIST", response.data);
     },
-    async getRestaurants({ commit }) {
-      const res = testToken(new Headers());
+    async getRestaurants({ commit }, token) {
 
-      const response = await axios.get(`${res.url}/restaurants`, {
+      const response = await axios.get(`${endpoint2
+      }/restaurants`, {
         params: {
           limit: 10,
         },
-        headers: res.headers,
+        headers: {
+          Authorization: token
+        },
       });
       commit("SET_restaurants", response.data);
     },
-    async getRestaurantsVisited({ commit }, userId) {
-      const res = testToken(new Headers());
+    async getRestaurantsVisited({ commit }, ob) {
+      let id = ob.id;
+      let token = ob.token
       const response = await axios.get(
-        `${res.url}/users/${userId}/restaurants/visits`,
+        `${endpoint2}/users/${id}/restaurants/visits`,
         {
-          headers: res.headers,
+          headers: {
+            Authorization: token
+          },
         }
       );
       commit("SET_restaurantsVisited", response.data);
     },
-    async getInfoRestaurant({ commit }, id) {
-      const res = testToken(new Headers());
-      const response = await axios.get(`${res.url}/restaurants/${id}`, {
-        headers: res.headers,
+    async getInfoRestaurant({ commit }, ob) {
+      let id = ob.id;
+      let token = ob.token
+      const response = await axios.get(`${endpoint2}/restaurants/${id}`, {
+        headers: {
+          Authorization: token
+        },
       });
       commit("SET_info_restaurant", response.data);
     },
@@ -148,6 +159,7 @@ export const store = new Vuex.Store({
             Authorization: token,
           },
         });
+        this.state.userInfo = response.data;
         commit("SET_list_follower_following", response.data);
       } catch (err) {
         console.log("this", err);

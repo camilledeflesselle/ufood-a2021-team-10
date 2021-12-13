@@ -246,10 +246,10 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch("getRestaurants");
-    this.$store.dispatch("getlocation");
-    if (this.$store.state.isConnected) {
-      this.$store.dispatch("getRestaurantsVisited", this.$store.state.userInfo.id)
+    this.$store.dispatch("getRestaurants", this.$cookie.get("token_access"));
+    this.$store.dispatch("getlocation", this.$cookie.get("token_access"));
+    if (this.$store.state.isConnected && this.$store.state.userInfo.id) {
+      this.$store.dispatch("getRestaurantsVisited", {'id': this.$store.state.userInfo.id, "token": this.$cookie.get("token_access")})
       this.$cookies.set("token_user", this.$store.state.userInfo.token, "1h");
       };
   },

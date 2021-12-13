@@ -9,6 +9,7 @@ export default {
     async signOut() {
       await signOut();
       this.$store.state.isConnected = false;
+      this.$cookie.delete('token_access');
     },
   },
 };

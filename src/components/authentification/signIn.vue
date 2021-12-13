@@ -69,6 +69,7 @@ export default {
           Vue.cookie.set('token_access', result.token)
           this.$store.state.isConnected = true;
           this.$store.state.userInfo = result;
+          console.log(result)
           this.$refs["modal-1"].hide();
         })
         .catch((error) => {
@@ -83,8 +84,9 @@ export default {
     if (this.$store.state.isConnected) {
      return this.$cookies.set("token_access", this.$store.state.userInfo.token, "1h");
     }
-    if (this.$cookie.get("token_access") !== null){
+    if (this.$cookie.get("token_access") !== null && !this.$store.state.isConnected){
       this.$store.state.isConnected = true;
+      this.$store.dispatch("getFollower_Following", this.$cookie.get("token_access"))
     }
     
   }

@@ -177,14 +177,13 @@ export default {
   mounted() {
     if (this.restaurantId) {
       window.localStorage.setItem("restoId", this.restaurantId);
-      this.$store.dispatch("getInfoRestaurant", this.restaurantId);
+      this.$store.dispatch("getInfoRestaurant", {'id' : this.restaurantId, "token":this.$cookie.get("token_access")});
     } else {
       this.$store.dispatch(
-        "getInfoRestaurant",
-        window.localStorage.getItem("restoId")
+        "getInfoRestaurant", {'id' : window.localStorage.getItem("restoId"), "token":this.$cookie.get("token_access")}
       );
     }
-    if (this.$store.state.userInfo) {this.$store.dispatch("getList", this.$store.state.userInfo.id );}
+    if (this.$store.state.userInfo) {this.$store.dispatch("getList", {'id' : this.$store.state.userInfo.id, "token":this.$cookie.get("token_access")} );}
   },
 };
 </script>
