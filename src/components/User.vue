@@ -117,7 +117,7 @@
         </b-input-group>
       </div>
     </div>
-    <div>
+    <div id="follow">
       <div>
         <h2>Following</h2>
         <ul id="followingList" v-if="listFollowing.length != 0">
@@ -319,5 +319,10 @@ export default {
 .padding {
   padding: 10px;
   margin: 10px;
+}
+
+#follow {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
