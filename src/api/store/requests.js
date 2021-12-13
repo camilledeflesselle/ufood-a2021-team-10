@@ -9,7 +9,9 @@ import { getCoordinates } from "../api/localisation.js";
 import { testToken } from "../api/restaurants.js";
 
 import { useCookies } from "vue3-cookies";
-
+import VueCookies from 'vue-cookies'
+Vue.use(VueCookies)
+Vue.$cookies.config('7d')
 Vue.use(Vuex);
 
 const owner = {
