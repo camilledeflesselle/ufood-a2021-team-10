@@ -9,9 +9,9 @@ import { getCoordinates } from "../api/localisation.js";
 import { testToken } from "../api/restaurants.js";
 
 import { useCookies } from "vue3-cookies";
-import VueCookies from 'vue-cookies'
-Vue.use(VueCookies)
-Vue.$cookies.config('7d')
+import VueCookies from "vue-cookies";
+Vue.use(VueCookies);
+Vue.$cookies.config("7d");
 Vue.use(Vuex);
 
 const owner = {
@@ -61,35 +61,33 @@ export const store = new Vuex.Store({
   actions: {
     async getList({ commit }, ob) {
       let id = ob.id;
-      let token = ob.token
+      let token = ob.token;
       const response = await axios.get(`${endpoint2}/users/${id}/favorites`, {
         headers: {
-          Authorization: token
+          Authorization: token,
         },
       });
       commit("SET_LIST", response.data);
     },
     async getRestaurants({ commit }, token) {
-
-      const response = await axios.get(`${endpoint2
-      }/restaurants`, {
+      const response = await axios.get(`${endpoint2}/restaurants`, {
         params: {
           limit: 100,
         },
         headers: {
-          Authorization: token
+          Authorization: token,
         },
       });
       commit("SET_restaurants", response.data);
     },
     async getRestaurantsVisited({ commit }, ob) {
       let id = ob.id;
-      let token = ob.token
+      let token = ob.token;
       const response = await axios.get(
         `${endpoint2}/users/${id}/restaurants/visits`,
         {
           headers: {
-            Authorization: token
+            Authorization: token,
           },
         }
       );
@@ -97,10 +95,10 @@ export const store = new Vuex.Store({
     },
     async getInfoRestaurant({ commit }, ob) {
       let id = ob.id;
-      let token = ob.token
+      let token = ob.token;
       const response = await axios.get(`${endpoint2}/restaurants/${id}`, {
         headers: {
-          Authorization: token
+          Authorization: token,
         },
       });
       commit("SET_info_restaurant", response.data);
@@ -124,8 +122,8 @@ export const store = new Vuex.Store({
       commit("SET_list_usages", response.data);
     },
     async followUser({ commit }, ob) {
-      let id = ob.id
-      let token = ob.token
+      let id = ob.id;
+      let token = ob.token;
       try {
         const response = await axios.post(
           `${endpoint2}/follow`,
@@ -133,7 +131,7 @@ export const store = new Vuex.Store({
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: token
+              Authorization: token,
             },
           }
         );
@@ -141,12 +139,12 @@ export const store = new Vuex.Store({
       } catch (err) {}
     },
     async unfollowUser({ commit }, ob) {
-      let id = ob.id
-      let token = ob.token
+      let id = ob.id;
+      let token = ob.token;
       try {
         const response = await axios.delete(`${endpoint2}/follow/${id}`, {
           headers: {
-            Authorization: token
+            Authorization: token,
           },
         });
         this.dispatch("getFollower_Following", token);
@@ -164,6 +162,25 @@ export const store = new Vuex.Store({
       } catch (err) {
         console.log(err);
       }
+    },
+    async getFollower_Following1({ commit }, token) {
+      try {
+        const response = await axios.get(`${endpoint2}/tokeninfo`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        const response1 = await axios.get(
+          `${endpoint2}/users/${response.data.id}`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+
+        commit("SET_list_follower_following", response1.data);
+      } catch (err) {}
     },
   },
 });

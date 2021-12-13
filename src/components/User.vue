@@ -19,7 +19,7 @@
             v-model="list.name"
             placeholder="Change name..."
           ></b-form-input>
-         
+
           <b-input-group-append>
             <b-button
               size="lg"
@@ -79,7 +79,13 @@
                     <b-button
                       right="true"
                       size="sm"
-                      @click="deleteRestaurantFromList(restaurant.id, list.id, userInfo.id)"
+                      @click="
+                        deleteRestaurantFromList(
+                          restaurant.id,
+                          list.id,
+                          userInfo.id
+                        )
+                      "
                       variant="danger"
                       >Delete X</b-button
                     >
@@ -100,7 +106,6 @@
             v-model="inputValue"
             placeholder="Choose a name..."
             variant="success"
-            
           ></b-form-input>
           <b-button
             size="lg"
@@ -163,11 +168,7 @@
           <p class="card-text"></p>
           <p>{{ viewNumberVisitsRestaurant(resto.restaurant_id) }} visite</p>
 
-          <b-dropdown
-            text="Add to favorites"
-            variant="primary"
-            class="mt-3"
-          >
+          <b-dropdown text="Add to favorites" variant="primary" class="mt-3">
             <b-dropdown-item
               v-for="list in ListFavorites.items"
               :key="list.id"
@@ -255,7 +256,9 @@ export default {
     },
     async deleteListFavorites(id) {
       await deleteListFavorites(id);
-      this.$store.state.ListFavorites = await getListFavorites(this.userInfo.id);
+      this.$store.state.ListFavorites = await getListFavorites(
+        this.userInfo.id
+      );
     },
     restaurantInfo(idRestaurant) {
       const data = this.$store.state.restaurants;
@@ -320,6 +323,10 @@ export default {
       this.$store.dispatch("getRestaurantsVisited", {'id': this.userInfo.id, "token": this.$cookie.get("token_access")});
     }
     this.$store.dispatch("getRestaurants", this.$cookie.get("token_access"));
+    this.$store.dispatch(
+      "getFollower_Following",
+      this.$cookie.get("token_access")
+    );
   },
   watch: {
     isConnected(newval, oldVal) {
